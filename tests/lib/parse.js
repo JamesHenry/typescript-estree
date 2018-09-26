@@ -22,8 +22,8 @@ const parser = require('../../parser'),
 describe('parse()', () => {
   describe('basic functionality', () => {
     it('should parse an empty string', () => {
-      expect(parser.parse('').body).toEqual([]);
-      expect(parser.parse('', {}).body).toEqual([]);
+      expect(parser.parse('').ast.body).toEqual([]);
+      expect(parser.parse('', {}).ast.body).toEqual([]);
     });
   });
 

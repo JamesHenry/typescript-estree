@@ -60,7 +60,7 @@ function parseWithTypeScriptESTree(text, parserOptions) {
         },
         parserOptions
       )
-    );
+    ).ast;
   } catch (e) {
     throw createError(e.message, e.lineNumber, e.column);
   }

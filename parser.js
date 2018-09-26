@@ -11,7 +11,8 @@
 const astNodeTypes = require('./lib/ast-node-types'),
   ts = require('typescript'),
   convert = require('./lib/ast-converter'),
-  semver = require('semver');
+  semver = require('semver'),
+  calculateProjectParserOptions = require("./lib/tsconfig-parser");
 
 const SUPPORTED_TYPESCRIPT_VERSIONS = require('./package.json').devDependencies
   .typescript;
@@ -40,8 +41,8 @@ function resetExtra() {
     strict: false,
     ecmaFeatures: {},
     useJSXTextNode: false,
-    log: console.log
-  };
+    log: console.log,
+    project: false
 }
 
 //------------------------------------------------------------------------------
@@ -107,6 +108,10 @@ function generateAST(code, options) {
     } else if (options.loggerFn === false) {
       extra.log = Function.prototype;
     }
+
+    if (typeof options.project === "boolean") {
+      extra.project = options.project;
+    }
   }
 
   if (!isRunningSupportedTypeScriptVersion && !warnedAboutTSVersion) {
@@ -124,56 +129,60 @@ function generateAST(code, options) {
     warnedAboutTSVersion = true;
   }
 
-  // Even if jsx option is set in typescript compiler, filename still has to
-  // contain .tsx file extension
-  const FILENAME = extra.ecmaFeatures.jsx ? 'estree.tsx' : 'estree.ts';
+  let FILENAME, program;
+  if (extra.project) {
+    FILENAME = options.filePath;
+    program = calculateProjectParserOptions(options);
+  }
 
-  const compilerHost = {
-    fileExists() {
-      return true;
-    },
-    getCanonicalFileName() {
-      return FILENAME;
-    },
-    getCurrentDirectory() {
-      return '';
-    },
-    getDefaultLibFileName() {
-      return 'lib.d.ts';
-    },
+  if (program === undefined) {
+    // Even if jsx option is set in typescript compiler, filename still has to
+    // contain .tsx file extension
+    const FILENAME = (extra.ecmaFeatures.jsx) ? "estree.tsx" : "estree.ts";
 
-    // TODO: Support Windows CRLF
-    getNewLine() {
-      return '\n';
-    },
-    getSourceFile(filename) {
-      return ts.createSourceFile(filename, code, ts.ScriptTarget.Latest, true);
-    },
-    readFile() {
-      return null;
-    },
-    useCaseSensitiveFileNames() {
-      return true;
-    },
-    writeFile() {
-      return null;
-    }
-  };
+    const compilerHost = {
+      fileExists() {
+        return true;
+      },
+      getCanonicalFileName() {
+        return FILENAME;
+      },
+      getCurrentDirectory() {
+        return "";
+      },
+      getDefaultLibFileName() {
+        return "lib.d.ts";
+      },
 
-  const program = ts.createProgram(
-    [FILENAME],
-    {
+      // TODO: Support Windows CRLF
+      getNewLine() {
+        return "\n";
+      },
+      getSourceFile(filename) {
+        return ts.createSourceFile(filename, code, ts.ScriptTarget.Latest, true);
+      },
+      readFile() {
+        return null;
+      },
+      useCaseSensitiveFileNames() {
+        return true;
+      },
+      writeFile() {
+        return null;
+      }
+    };
+
+    program = ts.createProgram([FILENAME], {
       noResolve: true,
       target: ts.ScriptTarget.Latest,
-      jsx: extra.ecmaFeatures.jsx ? 'preserve' : undefined
-    },
-    compilerHost
-  );
+      jsx: extra.ecmaFeatures.jsx ? "preserve" : undefined
+    }, compilerHost);
+  }
 
   const ast = program.getSourceFile(FILENAME);
 
   extra.code = code;
-  return convert(ast, extra);
+  return { ast: convert(ast, extra), program: extra.project ? program : undefined };
 }
 
 //------------------------------------------------------------------------------
@@ -183,7 +192,8 @@ function generateAST(code, options) {
 exports.version = require('./package.json').version;
 
 exports.parse = function parse(code, options) {
-  return generateAST(code, options);
+  const result = generateAST(code, options);
+  return { ast: result.ast, services: { program: result.program, esTreeNodeToTSNodeMap: convert.esTreeNodeToTSNodeMap, tsNodeToESTreeNodeMap: convert.tsNodeToESTreeNodeMap}}
 };
 
 exports.AST_NODE_TYPES = astNodeTypes;

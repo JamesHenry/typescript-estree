@@ -46,7 +46,7 @@ function createSnapshotTestBlock(code, config) {
    * @returns {Object} the AST object
    */
   function parse() {
-    const ast = parser.parse(code, config);
+    const ast = parser.parse(code, config).ast;
     return getRaw(ast);
   }
 

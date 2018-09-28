@@ -43,6 +43,7 @@ function resetExtra() {
     useJSXTextNode: false,
     log: console.log,
     project: false
+  }
 }
 
 //------------------------------------------------------------------------------

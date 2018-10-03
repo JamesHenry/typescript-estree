@@ -183,7 +183,8 @@ function generateAST(code, options) {
   const ast = program.getSourceFile(FILENAME);
 
   extra.code = code;
-  return { ast: convert(ast, extra), program: extra.project ? program : undefined };
+  const { estree, astMaps } = convert(ast, extra);
+  return { estree, program: extra.project ? program : undefined, astMaps };
 }
 
 //------------------------------------------------------------------------------
@@ -194,7 +195,7 @@ exports.version = require('./package.json').version;
 
 exports.parse = function parse(code, options) {
   const result = generateAST(code, options);
-  return { ast: result.ast, services: { program: result.program, esTreeNodeToTSNodeMap: convert.esTreeNodeToTSNodeMap, tsNodeToESTreeNodeMap: convert.tsNodeToESTreeNodeMap}}
+  return { ast: result.estree, services: { program: result.program, esTreeNodeToTSNodeMap: result.astMaps.esTreeNodeToTSNodeMap, tsNodeToESTreeNodeMap: result.astMaps.tsNodeToESTreeNodeMap}}
 };
 
 exports.AST_NODE_TYPES = astNodeTypes;

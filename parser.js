@@ -133,7 +133,7 @@ function generateAST(code, options) {
   let program, ast;
   if (extra.project) {
     const FILENAME = options.filePath;
-    program = calculateProjectParserOptions(options);
+    program = calculateProjectParserOptions(code, options);
     ast = program ? program.getSourceFile(FILENAME) : undefined;
   }
 
@@ -152,6 +152,9 @@ function generateAST(code, options) {
       getCurrentDirectory() {
         return '';
       },
+      getDirectories() {
+        return [];
+      },
       getDefaultLibFileName() {
         return 'lib.d.ts';
       },
@@ -169,7 +172,7 @@ function generateAST(code, options) {
         );
       },
       readFile() {
-        return null;
+        return undefined;
       },
       useCaseSensitiveFileNames() {
         return true;
@@ -184,7 +187,7 @@ function generateAST(code, options) {
       {
         noResolve: true,
         target: ts.ScriptTarget.Latest,
-        jsx: extra.ecmaFeatures.jsx ? 'preserve' : undefined
+        jsx: extra.ecmaFeatures.jsx ? ts.JsxEmit.Preserve : undefined
       },
       compilerHost
     );

@@ -42,7 +42,7 @@ function resetExtra() {
     ecmaFeatures: {},
     useJSXTextNode: false,
     log: console.log,
-    project: false
+    project: []
   };
 }
 
@@ -110,7 +110,9 @@ function generateAST(code, options) {
       extra.log = Function.prototype;
     }
 
-    if (typeof options.project === 'boolean') {
+    if (typeof options.project === 'string') {
+      extra.project = [options.project];
+    } else if (Array.isArray(options.project)) {
       extra.project = options.project;
     }
   }
@@ -130,11 +132,21 @@ function generateAST(code, options) {
     warnedAboutTSVersion = true;
   }
 
-  let program, ast;
-  if (extra.project) {
+  let relevantProgram = undefined;
+  let ast = undefined;
+  const shouldProvideParserServices = extra.project && extra.project.length > 0;
+
+  if (shouldProvideParserServices) {
     const FILENAME = options.filePath;
-    program = calculateProjectParserOptions(code, options);
-    ast = program ? program.getSourceFile(FILENAME) : undefined;
+    const programs = calculateProjectParserOptions(code, options, extra);
+    for (const program of programs) {
+      ast = program.getSourceFile(FILENAME);
+
+      if (ast !== undefined) {
+        relevantProgram = program;
+        break;
+      }
+    }
   }
 
   if (ast === undefined) {
@@ -182,7 +194,7 @@ function generateAST(code, options) {
       }
     };
 
-    program = ts.createProgram(
+    relevantProgram = ts.createProgram(
       [FILENAME],
       {
         noResolve: true,
@@ -192,12 +204,18 @@ function generateAST(code, options) {
       compilerHost
     );
 
-    ast = program.getSourceFile(FILENAME);
+    ast = relevantProgram.getSourceFile(FILENAME);
   }
 
   extra.code = code;
   const { estree, astMaps } = convert(ast, extra);
-  return { estree, program: extra.project ? program : undefined, astMaps };
+  return {
+    estree,
+    program: shouldProvideParserServices ? relevantProgram : undefined,
+    astMaps: shouldProvideParserServices
+      ? astMaps
+      : { esTreeNodeToTSNodeMap: undefined, tsNodeToESTreeNodeMap: undefined }
+  };
 }
 
 //------------------------------------------------------------------------------

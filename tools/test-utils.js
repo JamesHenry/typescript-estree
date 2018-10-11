@@ -34,12 +34,16 @@ function getRaw(ast) {
   );
 }
 
+function parseCode(code, config) {
+  return parser.parse(code, config);
+}
+
 /**
  * Returns a function which can be used as the callback of a Jest test() block,
  * and which performs an assertion on the snapshot for the given code and config.
  * @param {string} code The source code to parse
  * @param {*} config the parser configuration
- * @returns {Function} callback for Jest test() block
+ * @returns {jest.ProvidesCallback} callback for Jest test() block
  */
 function createSnapshotTestBlock(code, config) {
   /**
@@ -69,5 +73,6 @@ function createSnapshotTestBlock(code, config) {
 
 module.exports = {
   getRaw,
-  createSnapshotTestBlock
+  createSnapshotTestBlock,
+  parseCode
 };

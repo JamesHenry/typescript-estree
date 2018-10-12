@@ -31,7 +31,7 @@ const testFiles = shelljs
     filename.substring(FIXTURES_DIR.length - 1, filename.length - 7)
   );
 
-function createConfig(fileName) {
+function createOptions(fileName) {
   return {
     loc: true,
     range: true,
@@ -57,7 +57,7 @@ describe('semanticInfo', () => {
     const code = shelljs.cat(fullFileName);
     test(
       `fixtures/${filename}.src`,
-      testUtils.createSnapshotTestBlock(code, createConfig(fullFileName))
+      testUtils.createSnapshotTestBlock(code, createOptions(fullFileName))
     );
   });
 
@@ -66,7 +66,7 @@ describe('semanticInfo', () => {
     const fileName = path.resolve(FIXTURES_DIR, 'isolated-file.src.ts');
     const parseResult = testUtils.parseCode(
       shelljs.cat(fileName),
-      createConfig(fileName)
+      createOptions(fileName)
     );
 
     // get type checker
@@ -106,20 +106,43 @@ describe('semanticInfo', () => {
     );
     expect(tsBoundName).toBeDefined();
 
-    const boundNameType = checker.getTypeAtLocation(tsBoundName);
-    expect(boundNameType.flags).toBe(ts.TypeFlags.Object);
-    expect(boundNameType.objectFlags).toBe(ts.ObjectFlags.Reference);
-    expect(boundNameType.typeArguments).toHaveLength(1);
-    expect(boundNameType.typeArguments[0].flags).toBe(ts.TypeFlags.Number);
+    checkNumberArrayType(checker, tsBoundName);
 
     expect(parseResult.services.tsNodeToESTreeNodeMap.get(tsBoundName)).toBe(
       boundName
     );
   });
 
+  test('imported-file tests', () => {
+    const fileName = path.resolve(FIXTURES_DIR, 'import-file.src.ts');
+    const parseResult = testUtils.parseCode(
+      shelljs.cat(fileName),
+      createOptions(fileName)
+    );
+
+    // get type checker
+    expect(parseResult).toHaveProperty('services.program.getTypeChecker');
+    const checker = parseResult.services.program.getTypeChecker();
+
+    // get array node (ast shape validated by snapshot)
+    const arrayBoundName = parseResult.ast.body[1].expression.callee.object;
+    expect(arrayBoundName.name).toBe('arr');
+
+    expect(parseResult).toHaveProperty('services.esTreeNodeToTSNodeMap');
+    const tsArrayBoundName = parseResult.services.esTreeNodeToTSNodeMap.get(
+      arrayBoundName
+    );
+    expect(tsArrayBoundName).toBeDefined();
+    checkNumberArrayType(checker, tsArrayBoundName);
+
+    expect(
+      parseResult.services.tsNodeToESTreeNodeMap.get(tsArrayBoundName)
+    ).toBe(arrayBoundName);
+  });
+
   test('non-existent project file', () => {
     const fileName = path.resolve(FIXTURES_DIR, 'isolated-file.src.ts');
-    const badConfig = createConfig(fileName);
+    const badConfig = createOptions(fileName);
     badConfig.project = './tsconfigs.json';
     expect(() =>
       testUtils.parseCode(shelljs.cat(fileName), badConfig)
@@ -128,7 +151,7 @@ describe('semanticInfo', () => {
 
   test('fail to read project file', () => {
     const fileName = path.resolve(FIXTURES_DIR, 'isolated-file.src.ts');
-    const badConfig = createConfig(fileName);
+    const badConfig = createOptions(fileName);
     badConfig.project = '.';
     expect(() =>
       testUtils.parseCode(shelljs.cat(fileName), badConfig)
@@ -137,10 +160,25 @@ describe('semanticInfo', () => {
 
   test('malformed project file', () => {
     const fileName = path.resolve(FIXTURES_DIR, 'isolated-file.src.ts');
-    const badConfig = createConfig(fileName);
+    const badConfig = createOptions(fileName);
     badConfig.project = './badTSConfig/tsconfig.json';
     expect(() =>
       testUtils.parseCode(shelljs.cat(fileName), badConfig)
     ).toThrowErrorMatchingSnapshot();
   });
 });
+
+/**
+ * Verifies that the type of a TS node is number[] as expected
+ * @param {ts.TypeChecker} checker
+ * @param {ts.Node} tsNode
+ */
+function checkNumberArrayType(checker, tsNode) {
+  const nodeType = /** @type {ts.ObjectType & ts.TypeReference} */ (checker.getTypeAtLocation(
+    tsNode
+  ));
+  expect(nodeType.flags).toBe(ts.TypeFlags.Object);
+  expect(nodeType.objectFlags).toBe(ts.ObjectFlags.Reference);
+  expect(nodeType.typeArguments).toHaveLength(1);
+  expect(nodeType.typeArguments[0].flags).toBe(ts.TypeFlags.Number);
+}

@@ -125,6 +125,7 @@ describe('semanticInfo', () => {
     const checker = parseResult.services.program.getTypeChecker();
 
     // get array node (ast shape validated by snapshot)
+    // node is defined in other file than the parsed one
     const arrayBoundName = parseResult.ast.body[1].expression.callee.object;
     expect(arrayBoundName.name).toBe('arr');
 

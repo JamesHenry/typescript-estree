@@ -116,4 +116,31 @@ describe('semanticInfo', () => {
       boundName
     );
   });
+
+  test('non-existent project file', () => {
+    const fileName = path.resolve(FIXTURES_DIR, 'isolated-file.src.ts');
+    const badConfig = createConfig(fileName);
+    badConfig.project = './tsconfigs.json';
+    expect(() =>
+      testUtils.parseCode(shelljs.cat(fileName), badConfig)
+    ).toThrowErrorMatchingSnapshot();
+  });
+
+  test('fail to read project file', () => {
+    const fileName = path.resolve(FIXTURES_DIR, 'isolated-file.src.ts');
+    const badConfig = createConfig(fileName);
+    badConfig.project = '.';
+    expect(() =>
+      testUtils.parseCode(shelljs.cat(fileName), badConfig)
+    ).toThrowErrorMatchingSnapshot();
+  });
+
+  test('malformed project file', () => {
+    const fileName = path.resolve(FIXTURES_DIR, 'isolated-file.src.ts');
+    const badConfig = createConfig(fileName);
+    badConfig.project = './badTSConfig/tsconfig.json';
+    expect(() =>
+      testUtils.parseCode(shelljs.cat(fileName), badConfig)
+    ).toThrowErrorMatchingSnapshot();
+  });
 });

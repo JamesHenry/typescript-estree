@@ -1,5 +1,7 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
+exports[`semanticInfo fail to read project file 1`] = `"Could not read provided tsconfig.json: E:\\\\typescript-estree\\\\tests\\\\fixtures\\\\semanticInfo"`;
+
 exports[`semanticInfo fixtures/isolated-file.src 1`] = `
 Object {
   "body": Array [
@@ -353,3 +355,7 @@ Object {
   "type": "Program",
 }
 `;
+
+exports[`semanticInfo malformed project file 1`] = `"Parsing E:\\\\typescript-estree\\\\tests\\\\fixtures\\\\semanticInfo\\\\badTSConfig\\\\tsconfig.json resulted in errors."`;
+
+exports[`semanticInfo non-existent project file 1`] = `"Could not read provided tsconfig.json: E:\\\\typescript-estree\\\\tests\\\\fixtures\\\\semanticInfo\\\\tsconfigs.json"`;

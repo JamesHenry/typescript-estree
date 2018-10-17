@@ -1,6 +1,6 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
-exports[`semanticInfo fail to read project file 1`] = `"Could not read provided tsconfig.json: E:\\\\typescript-estree\\\\tests\\\\fixtures\\\\semanticInfo"`;
+exports[`semanticInfo fail to read project file 1`] = `"File 'E:\\\\typescript-estree\\\\tests\\\\fixtures\\\\semanticInfo' not found."`;
 
 exports[`semanticInfo fixtures/export-file.src 1`] = `
 Object {
@@ -1132,6 +1132,6 @@ Object {
 }
 `;
 
-exports[`semanticInfo malformed project file 1`] = `"Parsing E:\\\\typescript-estree\\\\tests\\\\fixtures\\\\semanticInfo\\\\badTSConfig\\\\tsconfig.json resulted in errors."`;
+exports[`semanticInfo malformed project file 1`] = `"Compiler option 'compileOnSave' requires a value of type boolean."`;
 
-exports[`semanticInfo non-existent project file 1`] = `"Could not read provided tsconfig.json: E:\\\\typescript-estree\\\\tests\\\\fixtures\\\\semanticInfo\\\\tsconfigs.json"`;
+exports[`semanticInfo non-existent project file 1`] = `"File 'E:\\\\typescript-estree\\\\tests\\\\fixtures\\\\semanticInfo\\\\tsconfigs.json' not found."`;

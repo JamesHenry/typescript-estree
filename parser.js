@@ -112,7 +112,10 @@ function generateAST(code, options) {
 
     if (typeof options.project === 'string') {
       extra.project = [options.project];
-    } else if (Array.isArray(options.project)) {
+    } else if (
+      Array.isArray(options.project) &&
+      options.project.every(projectPath => typeof projectPath === 'string')
+    ) {
       extra.project = options.project;
     }
   }

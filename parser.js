@@ -12,7 +12,8 @@ const astNodeTypes = require('./lib/ast-node-types'),
   ts = require('typescript'),
   convert = require('./lib/ast-converter'),
   semver = require('semver'),
-  calculateProjectParserOptions = require('./lib/tsconfig-parser');
+  calculateProjectParserOptions = require('./lib/tsconfig-parser'),
+  util = require('./lib/node-utils');
 
 const SUPPORTED_TYPESCRIPT_VERSIONS = require('./package.json').devDependencies
   .typescript;
@@ -52,17 +53,13 @@ function resetExtra() {
  * @returns {{ast: ts.SourceFile, program: ts.Program} | undefined} If found, returns the source file corresponding to the code and the containing program
  */
 function getASTFromProject(code, options) {
-  for (const program of calculateProjectParserOptions(
-    code,
-    options,
-    extra.project
-  )) {
-    const ast = program.getSourceFile(options.filePath);
-
-    if (ast) {
-      return { ast, program };
+  return util.firstDefined(
+    calculateProjectParserOptions(code, options, extra.project),
+    currentProgram => {
+      const ast = currentProgram.getSourceFile(options.filePath);
+      return ast && { ast, program: currentProgram };
     }
-  }
+  );
 }
 
 /**

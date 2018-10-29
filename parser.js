@@ -46,6 +46,97 @@ function resetExtra() {
   };
 }
 
+/**
+ * @param {string} code The code of the file being linted
+ * @param {Object} options The config object
+ * @returns {{ast: ts.SourceFile, program: ts.Program} | undefined} If found, returns the source file corresponding to the code and the containing program
+ */
+function getASTFromProject(code, options) {
+  for (const program of calculateProjectParserOptions(
+    code,
+    options,
+    extra.project
+  )) {
+    const ast = program.getSourceFile(options.filePath);
+
+    if (ast) {
+      return { ast, program };
+    }
+  }
+}
+
+/**
+ * @param {string} code The code of the file being linted
+ * @returns {{ast: ts.SourceFile, program: ts.Program}} Returns a new source file and program corresponding to the linted code
+ */
+function createNewProgram(code) {
+  // Even if jsx option is set in typescript compiler, filename still has to
+  // contain .tsx file extension
+  const FILENAME = extra.ecmaFeatures.jsx ? 'estree.tsx' : 'estree.ts';
+
+  const compilerHost = {
+    fileExists() {
+      return true;
+    },
+    getCanonicalFileName() {
+      return FILENAME;
+    },
+    getCurrentDirectory() {
+      return '';
+    },
+    getDirectories() {
+      return [];
+    },
+    getDefaultLibFileName() {
+      return 'lib.d.ts';
+    },
+
+    // TODO: Support Windows CRLF
+    getNewLine() {
+      return '\n';
+    },
+    getSourceFile(filename) {
+      return ts.createSourceFile(filename, code, ts.ScriptTarget.Latest, true);
+    },
+    readFile() {
+      return undefined;
+    },
+    useCaseSensitiveFileNames() {
+      return true;
+    },
+    writeFile() {
+      return null;
+    }
+  };
+
+  const program = ts.createProgram(
+    [FILENAME],
+    {
+      noResolve: true,
+      target: ts.ScriptTarget.Latest,
+      jsx: extra.ecmaFeatures.jsx ? ts.JsxEmit.Preserve : undefined
+    },
+    compilerHost
+  );
+
+  const ast = /** @type {ts.SourceFile} */ (program.getSourceFile(FILENAME));
+
+  return { ast, program };
+}
+
+/**
+ * @param {string} code The code of the file being linted
+ * @param {Object} options The config object
+ * @param {boolean} shouldProvideParserServices True iff the program should be attempted to be calculated from provided tsconfig files
+ * @returns {{ast: ts.SourceFile, program: ts.Program}} Returns a source file and program corresponding to the linted code
+ */
+function getProgramAndAST(code, options, shouldProvideParserServices) {
+  return (
+    (shouldProvideParserServices && getASTFromProject(code, options)) ||
+    createNewProgram(code)
+  );
+}
+
 //------------------------------------------------------------------------------
 // Parser
 //------------------------------------------------------------------------------
@@ -135,90 +226,18 @@ function generateAST(code, options) {
     warnedAboutTSVersion = true;
   }
 
-  let relevantProgram = undefined;
-  let ast = undefined;
   const shouldProvideParserServices = extra.project && extra.project.length > 0;
-
-  if (shouldProvideParserServices) {
-    const FILENAME = options.filePath;
-    const programs = calculateProjectParserOptions(
-      code,
-      options,
-      extra.project
-    );
-    for (const program of programs) {
-      ast = program.getSourceFile(FILENAME);
-
-      if (ast !== undefined) {
-        relevantProgram = program;
-        break;
-      }
-    }
-  }
-
-  if (ast === undefined) {
-    // Even if jsx option is set in typescript compiler, filename still has to
-    // contain .tsx file extension
-    const FILENAME = extra.ecmaFeatures.jsx ? 'estree.tsx' : 'estree.ts';
-
-    const compilerHost = {
-      fileExists() {
-        return true;
-      },
-      getCanonicalFileName() {
-        return FILENAME;
-      },
-      getCurrentDirectory() {
-        return '';
-      },
-      getDirectories() {
-        return [];
-      },
-      getDefaultLibFileName() {
-        return 'lib.d.ts';
-      },
-
-      // TODO: Support Windows CRLF
-      getNewLine() {
-        return '\n';
-      },
-      getSourceFile(filename) {
-        return ts.createSourceFile(
-          filename,
-          code,
-          ts.ScriptTarget.Latest,
-          true
-        );
-      },
-      readFile() {
-        return undefined;
-      },
-      useCaseSensitiveFileNames() {
-        return true;
-      },
-      writeFile() {
-        return null;
-      }
-    };
-
-    relevantProgram = ts.createProgram(
-      [FILENAME],
-      {
-        noResolve: true,
-        target: ts.ScriptTarget.Latest,
-        jsx: extra.ecmaFeatures.jsx ? ts.JsxEmit.Preserve : undefined
-      },
-      compilerHost
-    );
-
-    ast = relevantProgram.getSourceFile(FILENAME);
-  }
+  const { ast, program } = getProgramAndAST(
+    code,
+    options,
+    shouldProvideParserServices
+  );
 
   extra.code = code;
   const { estree, astMaps } = convert(ast, extra);
   return {
     estree,
-    program: shouldProvideParserServices ? relevantProgram : undefined,
+    program: shouldProvideParserServices ? program : undefined,
     astMaps: shouldProvideParserServices
       ? astMaps
       : { esTreeNodeToTSNodeMap: undefined, tsNodeToESTreeNodeMap: undefined }

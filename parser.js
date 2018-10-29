@@ -141,7 +141,11 @@ function generateAST(code, options) {
 
   if (shouldProvideParserServices) {
     const FILENAME = options.filePath;
-    const programs = calculateProjectParserOptions(code, options, extra);
+    const programs = calculateProjectParserOptions(
+      code,
+      options,
+      extra.project
+    );
     for (const program of programs) {
       ast = program.getSourceFile(FILENAME);
 

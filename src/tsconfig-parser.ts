@@ -1,8 +1,8 @@
 'use strict';
 
-const path = require('path');
-const fs = require('fs');
-const ts = require('typescript');
+import path from 'path';
+import ts from 'typescript';
+import { ParserOptions } from './temp-types-based-on-js-source';
 
 //------------------------------------------------------------------------------
 // Environment calculation
@@ -12,14 +12,17 @@ const ts = require('typescript');
  * Maps tsconfig paths to their corresponding file contents and resulting watches
  * @type {Map<string, ts.WatchOfConfigFile<ts.SemanticDiagnosticsBuilderProgram>>}
  */
-const knownWatchProgramMap = new Map();
+const knownWatchProgramMap = new Map<
+  string,
+  ts.WatchOfConfigFile<ts.SemanticDiagnosticsBuilderProgram>
+>();
 
 /**
  * Maps file paths to their set of corresponding watch callbacks
  * There may be more than one per file if a file is shared between projects
  * @type {Map<string, ts.FileWatcherCallback>}
  */
-const watchCallbackTrackingMap = new Map();
+const watchCallbackTrackingMap = new Map<string, ts.FileWatcherCallback>();
 
 /**
  * Holds information about the file currently being linted
@@ -35,7 +38,7 @@ const currentLintOperationState = {
  * @param {ts.Diagnostic} diagnostic The diagnostic raised when creating a program
  * @returns {void}
  */
-function diagnosticReporter(diagnostic) {
+function diagnosticReporter(diagnostic: ts.Diagnostic): void {
   throw new Error(
     ts.flattenDiagnosticMessageText(diagnostic.messageText, ts.sys.newLine)
   );
@@ -52,11 +55,11 @@ const noopFileWatcher = { close: () => {} };
  * @param {string[]} projects Provided tsconfig paths
  * @returns {ts.Program[]} The programs corresponding to the supplied tsconfig paths
  */
-module.exports = function calculateProjectParserOptions(
-  code,
-  options,
-  projects
-) {
+export default function calculateProjectParserOptions(
+  code: string,
+  options: ParserOptions & { cwd?: string },
+  projects: string[]
+): ts.Program[] {
   const results = [];
   const cwd = options.cwd || process.cwd();
 
@@ -144,4 +147,4 @@ module.exports = function calculateProjectParserOptions(
   }
 
   return results;
-};
+}

@@ -5,25 +5,15 @@
  * @copyright jQuery Foundation and other contributors, https://jquery.org/
  * MIT License
  */
-
-'use strict';
-
-//------------------------------------------------------------------------------
-// Requirements
-//------------------------------------------------------------------------------
-
-const parser = require('../parser');
-
-//------------------------------------------------------------------------------
-//   Private
-//--------------------------------------------------------------------------------
+import * as parser from '../src/parser';
+import { ParserOptions } from '../src/temp-types-based-on-js-source';
 
 /**
  * Returns a raw copy of the given AST
  * @param  {Object} ast the AST object
  * @returns {Object}     copy of the AST object
  */
-function getRaw(ast) {
+export function getRaw(ast: any) {
   return JSON.parse(
     JSON.stringify(ast, (key, value) => {
       if ((key === 'start' || key === 'end') && typeof value === 'number') {
@@ -34,7 +24,7 @@ function getRaw(ast) {
   );
 }
 
-function parseCode(code, config) {
+export function parseCode(code: string, config: ParserOptions) {
   return parser.parse(code, config);
 }
 
@@ -42,10 +32,10 @@ function parseCode(code, config) {
  * Returns a function which can be used as the callback of a Jest test() block,
  * and which performs an assertion on the snapshot for the given code and config.
  * @param {string} code The source code to parse
- * @param {*} config the parser configuration
- * @returns {jest.ProvidesCallback} callback for Jest test() block
+ * @param {ParserOptions} config the parser configuration
+ * @returns {jest.ProvidesCallback} callback for Jest it() block
  */
-function createSnapshotTestBlock(code, config) {
+export function createSnapshotTestBlock(code: string, config: ParserOptions) {
   /**
    * @returns {Object} the AST object
    */
@@ -70,9 +60,3 @@ function createSnapshotTestBlock(code, config) {
     }
   };
 }
-
-module.exports = {
-  getRaw,
-  createSnapshotTestBlock,
-  parseCode
-};

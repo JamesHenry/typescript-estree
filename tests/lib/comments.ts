@@ -1,26 +1,20 @@
 /**
- * @fileoverview Tests for basic expressions
+ * @fileoverview Tests for parsing and attaching comments.
  * @author Nicholas C. Zakas
  * @author James Henry <https://github.com/JamesHenry>
  * @copyright jQuery Foundation and other contributors, https://jquery.org/
  * MIT License
  */
-
-'use strict';
-
-//------------------------------------------------------------------------------
-// Requirements
-//------------------------------------------------------------------------------
-
-const path = require('path'),
-  shelljs = require('shelljs'),
-  testUtils = require('../../tools/test-utils');
+import path from 'path';
+import shelljs from 'shelljs';
+import { ParserOptions } from '../../src/temp-types-based-on-js-source';
+import { createSnapshotTestBlock } from '../../tools/test-utils';
 
 //------------------------------------------------------------------------------
 // Setup
 //------------------------------------------------------------------------------
 
-const FIXTURES_DIR = './tests/fixtures/basics';
+const FIXTURES_DIR = './tests/fixtures/comments';
 
 const testFiles = shelljs
   .find(FIXTURES_DIR)
@@ -34,21 +28,19 @@ const testFiles = shelljs
 // Tests
 //------------------------------------------------------------------------------
 
-describe('basics', () => {
+describe('Comments', () => {
   testFiles.forEach(filename => {
-    // Uncomment and fill in filename to focus on a single file
-    // var filename = "jsx/invalid-matching-placeholder-in-closing-tag";
     const code = shelljs.cat(`${path.resolve(FIXTURES_DIR, filename)}.src.js`);
     const config = {
       loc: true,
       range: true,
       tokens: true,
-      ecmaFeatures: {},
-      errorOnUnknownASTType: true
+      comment: true,
+      jsx: true
     };
-    test(
+    it(
       `fixtures/${filename}.src`,
-      testUtils.createSnapshotTestBlock(code, config)
+      createSnapshotTestBlock(code, config as ParserOptions)
     );
   });
 });

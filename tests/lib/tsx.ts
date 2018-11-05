@@ -4,16 +4,10 @@
  * @copyright jQuery Foundation and other contributors, https://jquery.org/
  * MIT License
  */
-
-'use strict';
-
-//------------------------------------------------------------------------------
-// Requirements
-//------------------------------------------------------------------------------
-
-const path = require('path'),
-  shelljs = require('shelljs'),
-  testUtils = require('../../tools/test-utils');
+import path from 'path';
+import shelljs from 'shelljs';
+import { ParserOptions } from '../../src/temp-types-based-on-js-source';
+import { createSnapshotTestBlock } from '../../tools/test-utils';
 
 //------------------------------------------------------------------------------
 // Setup
@@ -35,8 +29,6 @@ const testFiles = shelljs
 
 describe('TSX', () => {
   testFiles.forEach(filename => {
-    // Uncomment and fill in filename to focus on a single file
-    // var filename = "jsx/invalid-matching-placeholder-in-closing-tag";
     const code = shelljs.cat(
       `${path.resolve(TSX_FIXTURES_DIR, filename)}.src.tsx`
     );
@@ -46,13 +38,11 @@ describe('TSX', () => {
       tokens: true,
       errorOnUnknownASTType: true,
       useJSXTextNode: true,
-      ecmaFeatures: {
-        jsx: true
-      }
+      jsx: true
     };
-    test(
+    it(
       `fixtures/${filename}.src`,
-      testUtils.createSnapshotTestBlock(code, config)
+      createSnapshotTestBlock(code, config as ParserOptions)
     );
   });
 });

@@ -9,10 +9,11 @@
 // Requirements
 //------------------------------------------------------------------------------
 
-const path = require('path'),
-  shelljs = require('shelljs'),
-  testUtils = require('../../tools/test-utils'),
-  ts = require('typescript');
+import path from 'path';
+import shelljs from 'shelljs';
+import { parseCode, createSnapshotTestBlock } from '../../tools/test-utils';
+import ts from 'typescript';
+import { ParserOptions } from '../../src/temp-types-based-on-js-source';
 
 //------------------------------------------------------------------------------
 // Setup
@@ -28,16 +29,20 @@ const testFiles = shelljs
     filename.substring(FIXTURES_DIR.length - 1, filename.length - 7)
   );
 
-function createOptions(fileName) {
+function createOptions(fileName: string): ParserOptions & { cwd?: string } {
   return {
     loc: true,
     range: true,
     tokens: true,
-    ecmaFeatures: {},
+    comment: true,
+    ecmaFeatures: { jsx: false },
+    jsx: false,
+    useJSXTextNode: false,
     errorOnUnknownASTType: true,
     filePath: fileName,
     cwd: path.join(process.cwd(), FIXTURES_DIR),
-    project: './tsconfig.json'
+    project: './tsconfig.json',
+    loggerFn: false
   };
 }
 
@@ -54,14 +59,14 @@ describe('semanticInfo', () => {
     const code = shelljs.cat(fullFileName);
     test(
       `fixtures/${filename}.src`,
-      testUtils.createSnapshotTestBlock(code, createOptions(fullFileName))
+      createSnapshotTestBlock(code, createOptions(fullFileName))
     );
   });
 
   // case-specific tests
   test('isolated-file tests', () => {
     const fileName = path.resolve(FIXTURES_DIR, 'isolated-file.src.ts');
-    const parseResult = testUtils.parseCode(
+    const parseResult = parseCode(
       shelljs.cat(fileName),
       createOptions(fileName)
     );
@@ -112,7 +117,7 @@ describe('semanticInfo', () => {
 
   test('imported-file tests', () => {
     const fileName = path.resolve(FIXTURES_DIR, 'import-file.src.ts');
-    const parseResult = testUtils.parseCode(
+    const parseResult = parseCode(
       shelljs.cat(fileName),
       createOptions(fileName)
     );
@@ -143,7 +148,7 @@ describe('semanticInfo', () => {
     const badConfig = createOptions(fileName);
     badConfig.project = './tsconfigs.json';
     expect(() =>
-      testUtils.parseCode(shelljs.cat(fileName), badConfig)
+      parseCode(shelljs.cat(fileName), badConfig)
     ).toThrowErrorMatchingSnapshot();
   });
 
@@ -152,7 +157,7 @@ describe('semanticInfo', () => {
     const badConfig = createOptions(fileName);
     badConfig.project = '.';
     expect(() =>
-      testUtils.parseCode(shelljs.cat(fileName), badConfig)
+      parseCode(shelljs.cat(fileName), badConfig)
     ).toThrowErrorMatchingSnapshot();
   });
 
@@ -161,7 +166,7 @@ describe('semanticInfo', () => {
     const badConfig = createOptions(fileName);
     badConfig.project = './badTSConfig/tsconfig.json';
     expect(() =>
-      testUtils.parseCode(shelljs.cat(fileName), badConfig)
+      parseCode(shelljs.cat(fileName), badConfig)
     ).toThrowErrorMatchingSnapshot();
   });
 });
@@ -171,12 +176,14 @@ describe('semanticInfo', () => {
  * @param {ts.TypeChecker} checker
  * @param {ts.Node} tsNode
  */
-function checkNumberArrayType(checker, tsNode) {
-  const nodeType = /** @type {ts.ObjectType & ts.TypeReference} */ (checker.getTypeAtLocation(
-    tsNode
-  ));
+function checkNumberArrayType(checker: ts.TypeChecker, tsNode: ts.Node) {
+  const nodeType = checker.getTypeAtLocation(tsNode);
   expect(nodeType.flags).toBe(ts.TypeFlags.Object);
-  expect(nodeType.objectFlags).toBe(ts.ObjectFlags.Reference);
-  expect(nodeType.typeArguments).toHaveLength(1);
-  expect(nodeType.typeArguments[0].flags).toBe(ts.TypeFlags.Number);
+  expect((nodeType as ts.ObjectType).objectFlags).toBe(
+    ts.ObjectFlags.Reference
+  );
+  expect((nodeType as ts.TypeReference).typeArguments).toHaveLength(1);
+  expect((nodeType as ts.TypeReference).typeArguments![0].flags).toBe(
+    ts.TypeFlags.Number
+  );
 }

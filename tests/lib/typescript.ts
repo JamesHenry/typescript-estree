@@ -5,16 +5,10 @@
  * @copyright jQuery Foundation and other contributors, https://jquery.org/
  * MIT License
  */
-
-'use strict';
-
-//------------------------------------------------------------------------------
-// Requirements
-//------------------------------------------------------------------------------
-
-const path = require('path'),
-  shelljs = require('shelljs'),
-  testUtils = require('../../tools/test-utils');
+import path from 'path';
+import shelljs from 'shelljs';
+import { ParserOptions } from '../../src/temp-types-based-on-js-source';
+import { createSnapshotTestBlock } from '../../tools/test-utils';
 
 //------------------------------------------------------------------------------
 // Setup
@@ -36,19 +30,16 @@ const testFiles = shelljs
 
 describe('typescript', () => {
   testFiles.forEach(filename => {
-    // Uncomment and fill in filename to focus on a single file
-    // var filename = "jsx/invalid-matching-placeholder-in-closing-tag";
     const code = shelljs.cat(`${path.resolve(FIXTURES_DIR, filename)}.src.ts`);
     const config = {
       loc: true,
       range: true,
       tokens: true,
-      ecmaFeatures: {},
       errorOnUnknownASTType: true
     };
-    test(
+    it(
       `fixtures/${filename}.src`,
-      testUtils.createSnapshotTestBlock(code, config)
+      createSnapshotTestBlock(code, config as ParserOptions)
     );
   });
 });

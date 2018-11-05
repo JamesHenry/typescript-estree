@@ -147,18 +147,18 @@ describe('semanticInfo', () => {
     const fileName = path.resolve(FIXTURES_DIR, 'isolated-file.src.ts');
     const badConfig = createOptions(fileName);
     badConfig.project = './tsconfigs.json';
-    expect(() =>
-      parseCode(shelljs.cat(fileName), badConfig)
-    ).toThrowErrorMatchingSnapshot();
+    expect(() => parseCode(shelljs.cat(fileName), badConfig)).toThrowError(
+      /File .+tsconfigs\.json' not found/
+    );
   });
 
   test('fail to read project file', () => {
     const fileName = path.resolve(FIXTURES_DIR, 'isolated-file.src.ts');
     const badConfig = createOptions(fileName);
     badConfig.project = '.';
-    expect(() =>
-      parseCode(shelljs.cat(fileName), badConfig)
-    ).toThrowErrorMatchingSnapshot();
+    expect(() => parseCode(shelljs.cat(fileName), badConfig)).toThrowError(
+      /File .+semanticInfo' not found/
+    );
   });
 
   test('malformed project file', () => {

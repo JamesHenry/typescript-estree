@@ -12,7 +12,7 @@ import convert from './ast-converter';
 import util from './node-utils';
 import { Extra, ParserOptions } from './temp-types-based-on-js-source';
 
-const packageJSON: typeof import('../package.json') = require('../package.json');
+const packageJSON = require('../package.json');
 
 const SUPPORTED_TYPESCRIPT_VERSIONS = packageJSON.devDependencies.typescript;
 const ACTIVE_TYPESCRIPT_VERSION = ts.version;

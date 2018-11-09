@@ -66,7 +66,8 @@ export interface Extra {
   strict: boolean;
   jsx: boolean;
   log: Function;
-  project: string[];
+  projects: string[];
+  tsconfigRootDir: string;
 }
 
 export interface ParserOptions {
@@ -75,10 +76,10 @@ export interface ParserOptions {
   tokens: boolean;
   comment: boolean;
   jsx: boolean;
-  ecmaFeatures: { jsx: boolean };
   errorOnUnknownASTType: boolean;
   useJSXTextNode: boolean;
   loggerFn: Function | false;
   project: string | string[];
   filePath: string;
+  tsconfigRootDir: string;
 }

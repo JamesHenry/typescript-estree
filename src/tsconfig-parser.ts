@@ -2,7 +2,7 @@
 
 import path from 'path';
 import ts from 'typescript';
-import { ParserOptions } from './temp-types-based-on-js-source';
+import { Extra } from './temp-types-based-on-js-source';
 
 //------------------------------------------------------------------------------
 // Environment calculation
@@ -47,37 +47,36 @@ function diagnosticReporter(diagnostic: ts.Diagnostic): void {
 const noopFileWatcher = { close: () => {} };
 
 /**
- * Calculate project environments using options provided by eslint and paths from config
+ * Calculate project environments using options provided by consumer and paths from config
  * @param {string} code The code being linted
- * @param {Object} options Options provided by ESLint core
- * @param {string} options.cwd The current working directory for the eslint process
- * @param {string} options.filePath The path of the file being parsed
- * @param {string[]} projects Provided tsconfig paths
+ * @param {string} filePath The path of the file being parsed
+ * @param {string} extra.tsconfigRootDir The root directory for relative tsconfig paths
+ * @param {string[]} extra.project Provided tsconfig paths
  * @returns {ts.Program[]} The programs corresponding to the supplied tsconfig paths
  */
 export default function calculateProjectParserOptions(
   code: string,
-  options: ParserOptions & { cwd?: string },
-  projects: string[]
+  filePath: string,
+  extra: Extra
 ): ts.Program[] {
   const results = [];
-  const cwd = options.cwd || process.cwd();
+  const tsconfigRootDir = extra.tsconfigRootDir;
 
   // preserve reference to code and file being linted
   currentLintOperationState.code = code;
-  currentLintOperationState.filePath = options.filePath;
+  currentLintOperationState.filePath = filePath;
 
   // Update file version if necessary
   // TODO: only update when necessary, currently marks as changed on every lint
-  const watchCallback = watchCallbackTrackingMap.get(options.filePath);
+  const watchCallback = watchCallbackTrackingMap.get(filePath);
   if (typeof watchCallback !== 'undefined') {
-    watchCallback(options.filePath, ts.FileWatcherEventKind.Changed);
+    watchCallback(filePath, ts.FileWatcherEventKind.Changed);
   }
 
-  for (let tsconfigPath of projects) {
-    // if absolute paths aren't provided, make relative to cwd
+  for (let tsconfigPath of extra.projects) {
+    // if absolute paths aren't provided, make relative to tsconfigRootDir
     if (!path.isAbsolute(tsconfigPath)) {
-      tsconfigPath = path.join(cwd, tsconfigPath);
+      tsconfigPath = path.join(tsconfigRootDir, tsconfigPath);
     }
 
     const existingWatch = knownWatchProgramMap.get(tsconfigPath);

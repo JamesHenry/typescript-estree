@@ -35,12 +35,11 @@ function createOptions(fileName: string): ParserOptions & { cwd?: string } {
     range: true,
     tokens: true,
     comment: true,
-    ecmaFeatures: { jsx: false },
     jsx: false,
     useJSXTextNode: false,
     errorOnUnknownASTType: true,
     filePath: fileName,
-    cwd: path.join(process.cwd(), FIXTURES_DIR),
+    tsconfigRootDir: path.join(process.cwd(), FIXTURES_DIR),
     project: './tsconfig.json',
     loggerFn: false
   };

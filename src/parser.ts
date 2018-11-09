@@ -12,7 +12,7 @@ import convert from './ast-converter';
 import util from './node-utils';
 import { Extra, ParserOptions } from './temp-types-based-on-js-source';
 
-import packageJSON from '../package.json';
+const packageJSON: typeof import('../package.json') = require('../package.json');
 
 const SUPPORTED_TYPESCRIPT_VERSIONS = packageJSON.devDependencies.typescript;
 const ACTIVE_TYPESCRIPT_VERSION = ts.version;
@@ -39,9 +39,10 @@ function resetExtra(): void {
     jsx: false,
     useJSXTextNode: false,
     log: console.log,
-    project: [],
+    projects: [],
     errorOnUnknownASTType: false,
-    code: ''
+    code: '',
+    tsconfigRootDir: process.cwd()
   };
 }
 
@@ -52,7 +53,7 @@ function resetExtra(): void {
  */
 function getASTFromProject(code: string, options: ParserOptions) {
   return util.firstDefined(
-    calculateProjectParserOptions(code, options, extra.project),
+    calculateProjectParserOptions(code, options.filePath, extra),
     (currentProgram: ts.Program) => {
       const ast = currentProgram.getSourceFile(options.filePath);
       return ast && { ast, program: currentProgram };
@@ -114,7 +115,7 @@ function createNewProgram(code: string) {
     compilerHost
   );
 
-  const ast = /** @type {ts.SourceFile} */ (program.getSourceFile(FILENAME));
+  const ast = program.getSourceFile(FILENAME)!;
 
   return { ast, program };
 }
@@ -172,14 +173,6 @@ function generateAST(code: string, options: ParserOptions): any {
       extra.jsx = true;
     }
 
-    if (
-      typeof options.ecmaFeatures === 'object' &&
-      typeof options.ecmaFeatures.jsx === 'boolean' &&
-      options.ecmaFeatures.jsx
-    ) {
-      extra.jsx = true;
-    }
-
     /**
      * Allow the user to cause the parser to error if it encounters an unknown AST Node Type
      * (used in testing).
@@ -205,12 +198,16 @@ function generateAST(code: string, options: ParserOptions): any {
     }
 
     if (typeof options.project === 'string') {
-      extra.project = [options.project];
+      extra.projects = [options.project];
     } else if (
       Array.isArray(options.project) &&
       options.project.every(projectPath => typeof projectPath === 'string')
     ) {
-      extra.project = options.project;
+      extra.projects = options.project;
+    }
+
+    if (typeof options.tsconfigRootDir === 'string') {
+      extra.tsconfigRootDir = options.tsconfigRootDir;
     }
   }
 
@@ -229,7 +226,8 @@ function generateAST(code: string, options: ParserOptions): any {
     warnedAboutTSVersion = true;
   }
 
-  const shouldProvideParserServices = extra.project && extra.project.length > 0;
+  const shouldProvideParserServices =
+    extra.projects && extra.projects.length > 0;
   const { ast, program } = getProgramAndAST(
     code,
     options,

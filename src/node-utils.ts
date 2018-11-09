@@ -410,7 +410,7 @@ function hasStaticModifierFlag(node: ts.Node): boolean {
  * Had to copy this from TS instead of using TS's version because theirs doesn't pass the ast to getChildren
  * @param {ts.Token} previousToken The previous TSToken
  * @param {ts.Node} parent The parent TSNode
- * @param {ts.SourceFileLike} ast The TS AST
+ * @param {ts.SourceFile} ast The TS AST
  * @returns {ts.Token} the next TSToken
  */
 function findNextToken(

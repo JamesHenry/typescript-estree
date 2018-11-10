@@ -8,7 +8,13 @@
 import semver from 'semver';
 import ts from 'typescript';
 import convert from './ast-converter';
-import { Extra, ParserOptions } from './temp-types-based-on-js-source';
+import {
+  Extra,
+  ParserOptions,
+  ESTreeToken,
+  ESTreeComment
+} from './temp-types-based-on-js-source';
+import { Program } from './estree/spec';
 
 const packageJSON = require('../package.json');
 
@@ -46,13 +52,21 @@ function resetExtra(): void {
 // Parser
 //------------------------------------------------------------------------------
 
+type ParserResult<T extends ParserOptions> = Program &
+  (T['range'] extends true ? { range: [number, number] } : {}) &
+  (T['tokens'] extends true ? { tokens: ESTreeToken[] } : {}) &
+  (T['comment'] extends true ? { comments: ESTreeComment[] } : {});
+
 /**
  * Parses the given source code to produce a valid AST
  * @param {string} code    TypeScript code
  * @param {ParserOptions} options configuration object for the parser
  * @returns {Object}         the AST
  */
-function generateAST(code: string, options: ParserOptions): any {
+function generateAST<T extends ParserOptions = ParserOptions>(
+  code: string,
+  options?: T
+): ParserResult<T> {
   const toString = String;
 
   if (typeof code !== 'string' && !((code as any) instanceof String)) {
@@ -182,6 +196,9 @@ export { version };
 
 const version = packageJSON.version;
 
-export function parse(code: string, options: ParserOptions) {
-  return generateAST(code, options);
+export function parse<T extends ParserOptions = ParserOptions>(
+  code: string,
+  options?: T
+) {
+  return generateAST<T>(code, options);
 }

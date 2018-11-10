@@ -69,12 +69,12 @@ export interface Extra {
 }
 
 export interface ParserOptions {
-  range: boolean;
-  loc: boolean;
-  tokens: boolean;
-  comment: boolean;
-  jsx: boolean;
-  errorOnUnknownASTType: boolean;
-  useJSXTextNode: boolean;
-  loggerFn: Function | false;
+  range?: boolean;
+  loc?: boolean;
+  tokens?: boolean;
+  comment?: boolean;
+  jsx?: boolean;
+  errorOnUnknownASTType?: boolean;
+  useJSXTextNode?: boolean;
+  loggerFn?: Function | false;
 }

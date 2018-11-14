@@ -11,7 +11,10 @@
 
 import path from 'path';
 import shelljs from 'shelljs';
-import { parseCode, createSnapshotTestBlock } from '../../tools/test-utils';
+import {
+  parseCodeAndGenerateServices,
+  createSnapshotTestBlock
+} from '../../tools/test-utils';
 import ts from 'typescript';
 import { ParserOptions } from '../../src/temp-types-based-on-js-source';
 
@@ -58,14 +61,18 @@ describe('semanticInfo', () => {
     const code = shelljs.cat(fullFileName);
     test(
       `fixtures/${filename}.src`,
-      createSnapshotTestBlock(code, createOptions(fullFileName))
+      createSnapshotTestBlock(
+        code,
+        createOptions(fullFileName),
+        /*generateServices*/ true
+      )
     );
   });
 
   // case-specific tests
   test('isolated-file tests', () => {
     const fileName = path.resolve(FIXTURES_DIR, 'isolated-file.src.ts');
-    const parseResult = parseCode(
+    const parseResult = parseCodeAndGenerateServices(
       shelljs.cat(fileName),
       createOptions(fileName)
     );
@@ -116,7 +123,7 @@ describe('semanticInfo', () => {
 
   test('imported-file tests', () => {
     const fileName = path.resolve(FIXTURES_DIR, 'import-file.src.ts');
-    const parseResult = parseCode(
+    const parseResult = parseCodeAndGenerateServices(
       shelljs.cat(fileName),
       createOptions(fileName)
     );
@@ -146,18 +153,18 @@ describe('semanticInfo', () => {
     const fileName = path.resolve(FIXTURES_DIR, 'isolated-file.src.ts');
     const badConfig = createOptions(fileName);
     badConfig.project = './tsconfigs.json';
-    expect(() => parseCode(shelljs.cat(fileName), badConfig)).toThrowError(
-      /File .+tsconfigs\.json' not found/
-    );
+    expect(() =>
+      parseCodeAndGenerateServices(shelljs.cat(fileName), badConfig)
+    ).toThrowError(/File .+tsconfigs\.json' not found/);
   });
 
   test('fail to read project file', () => {
     const fileName = path.resolve(FIXTURES_DIR, 'isolated-file.src.ts');
     const badConfig = createOptions(fileName);
     badConfig.project = '.';
-    expect(() => parseCode(shelljs.cat(fileName), badConfig)).toThrowError(
-      /File .+semanticInfo' not found/
-    );
+    expect(() =>
+      parseCodeAndGenerateServices(shelljs.cat(fileName), badConfig)
+    ).toThrowError(/File .+semanticInfo' not found/);
   });
 
   test('malformed project file', () => {
@@ -165,7 +172,7 @@ describe('semanticInfo', () => {
     const badConfig = createOptions(fileName);
     badConfig.project = './badTSConfig/tsconfig.json';
     expect(() =>
-      parseCode(shelljs.cat(fileName), badConfig)
+      parseCodeAndGenerateServices(shelljs.cat(fileName), badConfig)
     ).toThrowErrorMatchingSnapshot();
   });
 });

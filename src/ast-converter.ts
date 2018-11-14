@@ -8,6 +8,7 @@
 import convert, { getASTMaps, resetASTMaps } from './convert';
 import { convertComments } from './convert-comments';
 import nodeUtils from './node-utils';
+import ts from 'typescript';
 import { Extra } from './temp-types-based-on-js-source';
 
 /**
@@ -23,13 +24,17 @@ function convertError(error: any) {
   );
 }
 
-export default (ast: any, extra: Extra) => {
+export default (
+  ast: ts.SourceFile,
+  extra: Extra,
+  shouldProvideParserServices: boolean
+) => {
   /**
    * The TypeScript compiler produced fundamental parse errors when parsing the
    * source.
    */
-  if (ast.parseDiagnostics.length) {
-    throw convertError(ast.parseDiagnostics[0]);
+  if ((ast as any).parseDiagnostics.length) {
+    throw convertError((ast as any).parseDiagnostics[0]);
   }
 
   /**
@@ -41,7 +46,8 @@ export default (ast: any, extra: Extra) => {
     ast,
     additionalOptions: {
       errorOnUnknownASTType: extra.errorOnUnknownASTType || false,
-      useJSXTextNode: extra.useJSXTextNode || false
+      useJSXTextNode: extra.useJSXTextNode || false,
+      shouldProvideParserServices
     }
   });
 
@@ -59,8 +65,11 @@ export default (ast: any, extra: Extra) => {
     estree.comments = convertComments(ast, extra.code);
   }
 
-  const astMaps = getASTMaps();
-  resetASTMaps();
+  let astMaps = undefined;
+  if (shouldProvideParserServices) {
+    astMaps = getASTMaps();
+    resetASTMaps();
+  }
 
   return { estree, astMaps };
 };

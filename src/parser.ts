@@ -144,10 +144,15 @@ function getProgramAndAST(
 /**
  * Parses the given source code to produce a valid AST
  * @param {string} code    TypeScript code
+ * @param {boolean} shouldGenerateServices Flag determining whether to generate ast maps and program or not
  * @param {ParserOptions} options configuration object for the parser
  * @returns {Object}         the AST
  */
-function generateAST(code: string, options: ParserOptions): any {
+function generateAST(
+  code: string,
+  options: ParserOptions,
+  shouldGenerateServices = false
+): any {
   const toString = String;
 
   if (typeof code !== 'string' && !((code as any) instanceof String)) {
@@ -227,7 +232,7 @@ function generateAST(code: string, options: ParserOptions): any {
   }
 
   const shouldProvideParserServices =
-    extra.projects && extra.projects.length > 0;
+    shouldGenerateServices && extra.projects && extra.projects.length > 0;
   const { ast, program } = getProgramAndAST(
     code,
     options,
@@ -235,7 +240,7 @@ function generateAST(code: string, options: ParserOptions): any {
   );
 
   extra.code = code;
-  const { estree, astMaps } = convert(ast, extra);
+  const { estree, astMaps } = convert(ast, extra, shouldProvideParserServices);
   return {
     estree,
     program: shouldProvideParserServices ? program : undefined,
@@ -255,7 +260,11 @@ export { version };
 const version = packageJSON.version;
 
 export function parse(code: string, options: ParserOptions) {
-  const result = generateAST(code, options);
+  return generateAST(code, options).estree;
+}
+
+export function parseAndGenerateServices(code: string, options: ParserOptions) {
+  const result = generateAST(code, options, /*shouldGenerateServices*/ true);
   return {
     ast: result.estree,
     services: {

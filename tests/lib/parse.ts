@@ -16,8 +16,8 @@ import { createSnapshotTestBlock } from '../../tools/test-utils';
 describe('parse()', () => {
   describe('basic functionality', () => {
     it('should parse an empty string', () => {
-      expect((parser as any).parse('').ast.body).toEqual([]);
-      expect(parser.parse('', {} as any).ast.body).toEqual([]);
+      expect((parser as any).parse('').body).toEqual([]);
+      expect(parser.parse('', {} as any).body).toEqual([]);
     });
   });
 

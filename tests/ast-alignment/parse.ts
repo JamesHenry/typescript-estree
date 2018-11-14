@@ -57,7 +57,7 @@ function parseWithTypeScriptESTree(
         jsx: true
       },
       parserOptions
-    ) as any).ast;
+    ) as any);
   } catch (e) {
     throw createError(e.message, e.lineNumber, e.column);
   }

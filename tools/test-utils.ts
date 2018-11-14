@@ -24,8 +24,11 @@ export function getRaw(ast: any) {
   );
 }
 
-export function parseCode(code: string, config: ParserOptions) {
-  return parser.parse(code, config);
+export function parseCodeAndGenerateServices(
+  code: string,
+  config: ParserOptions
+) {
+  return parser.parseAndGenerateServices(code, config);
 }
 
 /**
@@ -35,12 +38,18 @@ export function parseCode(code: string, config: ParserOptions) {
  * @param {ParserOptions} config the parser configuration
  * @returns {jest.ProvidesCallback} callback for Jest it() block
  */
-export function createSnapshotTestBlock(code: string, config: ParserOptions) {
+export function createSnapshotTestBlock(
+  code: string,
+  config: ParserOptions,
+  generateServices?: true
+) {
   /**
    * @returns {Object} the AST object
    */
   function parse() {
-    const ast = parser.parse(code, config).ast;
+    const ast = generateServices
+      ? parser.parseAndGenerateServices(code, config).ast
+      : parser.parse(code, config);
     return getRaw(ast);
   }
 

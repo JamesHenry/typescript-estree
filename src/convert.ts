@@ -24,6 +24,19 @@ export function getASTMaps() {
   return { esTreeNodeToTSNodeMap, tsNodeToESTreeNodeMap };
 }
 
+interface ConvertAdditionalOptions {
+  errorOnUnknownASTType: boolean;
+  useJSXTextNode: boolean;
+  shouldProvideParserServices: boolean;
+}
+
+interface ConvertConfig {
+  node: ts.Node;
+  parent?: ts.Node | null;
+  ast: ts.SourceFile;
+  additionalOptions: ConvertAdditionalOptions;
+}
+
 /**
  * Converts a TypeScript node into an ESTree node
  * @param  {Object} config configuration options for the conversion
@@ -33,7 +46,7 @@ export function getASTMaps() {
  * @param  {Object} config.additionalOptions additional options for the conversion
  * @returns {ESTreeNode|null}        the converted ESTreeNode
  */
-export default function convert(config: any): ESTreeNode | null {
+export default function convert(config: ConvertConfig): ESTreeNode | null {
   const node = config.node as ts.Node;
   const parent = config.parent;
   const ast = config.ast;
@@ -895,7 +908,7 @@ export default function convert(config: any): ESTreeNode | null {
     }
 
     case SyntaxKind.ComputedPropertyName:
-      if (parent.kind === SyntaxKind.ObjectLiteralExpression) {
+      if (parent!.kind === SyntaxKind.ObjectLiteralExpression) {
         Object.assign(result, {
           type: AST_NODE_TYPES.Property,
           key: convertChild((node as any).name),
@@ -1000,7 +1013,7 @@ export default function convert(config: any): ESTreeNode | null {
         (method as any).returnType = convertTypeAnnotation((node as any).type);
       }
 
-      if (parent.kind === SyntaxKind.ObjectLiteralExpression) {
+      if (parent!.kind === SyntaxKind.ObjectLiteralExpression) {
         (method as any).params = (node as any).parameters.map(convertChild);
 
         Object.assign(result, {
@@ -1233,7 +1246,7 @@ export default function convert(config: any): ESTreeNode | null {
       break;
 
     case SyntaxKind.BindingElement:
-      if (parent.kind === SyntaxKind.ArrayBindingPattern) {
+      if (parent!.kind === SyntaxKind.ArrayBindingPattern) {
         const arrayItem = convert({
           node: (node as any).name,
           parent,
@@ -1255,7 +1268,7 @@ export default function convert(config: any): ESTreeNode | null {
         } else {
           return arrayItem;
         }
-      } else if (parent.kind === SyntaxKind.ObjectBindingPattern) {
+      } else if (parent!.kind === SyntaxKind.ObjectBindingPattern) {
         if ((node as any).dotDotDotToken) {
           Object.assign(result, {
             type: AST_NODE_TYPES.RestElement,
@@ -1875,7 +1888,7 @@ export default function convert(config: any): ESTreeNode | null {
       break;
 
     case SyntaxKind.PropertyAccessExpression:
-      if (nodeUtils.isJSXToken(parent)) {
+      if (nodeUtils.isJSXToken(parent!)) {
         const jsxMemberExpression = {
           type: AST_NODE_TYPES.MemberExpression,
           object: convertChild((node as any).expression),
@@ -1974,7 +1987,7 @@ export default function convert(config: any): ESTreeNode | null {
         type: AST_NODE_TYPES.Literal,
         raw: ast.text.slice((result as any).range[0], (result as any).range[1])
       });
-      if (parent.name && parent.name === node) {
+      if ((parent as any).name && (parent as any).name === node) {
         (result as any).value = (node as any).text;
       } else {
         (result as any).value = nodeUtils.unescapeStringLiteralText(
@@ -2524,8 +2537,10 @@ export default function convert(config: any): ESTreeNode | null {
       deeplyCopy();
   }
 
-  tsNodeToESTreeNodeMap.set(node, result);
-  esTreeNodeToTSNodeMap.set(result, node);
+  if (additionalOptions.shouldProvideParserServices) {
+    tsNodeToESTreeNodeMap.set(node, result);
+    esTreeNodeToTSNodeMap.set(result, node);
+  }
 
   return result as any;
 }

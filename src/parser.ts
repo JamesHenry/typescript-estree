@@ -5,6 +5,7 @@
  * @copyright jQuery Foundation and other contributors, https://jquery.org/
  * MIT License
  */
+import calculateProjectParserOptions from './tsconfig-parser';
 import semver from 'semver';
 import ts from 'typescript';
 import convert from './ast-converter';
@@ -15,6 +16,7 @@ import {
   ESTreeComment
 } from './temp-types-based-on-js-source';
 import { Program } from './estree/spec';
+import util from './node-utils';
 
 const packageJSON = require('../package.json');
 
@@ -43,16 +45,115 @@ function resetExtra(): void {
     jsx: false,
     useJSXTextNode: false,
     log: console.log,
+    projects: [],
     errorOnUnknownASTType: false,
-    code: ''
+    code: '',
+    tsconfigRootDir: process.cwd()
   };
+}
+
+/**
+ * @param {string} code The code of the file being linted
+ * @param {Object} options The config object
+ * @returns {{ast: ts.SourceFile, program: ts.Program} | undefined} If found, returns the source file corresponding to the code and the containing program
+ */
+function getASTFromProject(code: string, options: ParserOptions) {
+  return util.firstDefined(
+    calculateProjectParserOptions(
+      code,
+      options.filePath || (options.jsx ? 'estree.ts' : 'estree.tsx'),
+      extra
+    ),
+    (currentProgram: ts.Program) => {
+      const ast = currentProgram.getSourceFile(
+        options.filePath || (options.jsx ? 'estree.ts' : 'estree.tsx')
+      );
+      return ast && { ast, program: currentProgram };
+    }
+  );
+}
+
+/**
+ * @param {string} code The code of the file being linted
+ * @returns {{ast: ts.SourceFile, program: ts.Program}} Returns a new source file and program corresponding to the linted code
+ */
+function createNewProgram(code: string) {
+  // Even if jsx option is set in typescript compiler, filename still has to
+  // contain .tsx file extension
+  const FILENAME = extra.jsx ? 'estree.tsx' : 'estree.ts';
+
+  const compilerHost = {
+    fileExists() {
+      return true;
+    },
+    getCanonicalFileName() {
+      return FILENAME;
+    },
+    getCurrentDirectory() {
+      return '';
+    },
+    getDirectories() {
+      return [];
+    },
+    getDefaultLibFileName() {
+      return 'lib.d.ts';
+    },
+
+    // TODO: Support Windows CRLF
+    getNewLine() {
+      return '\n';
+    },
+    getSourceFile(filename: string) {
+      return ts.createSourceFile(filename, code, ts.ScriptTarget.Latest, true);
+    },
+    readFile() {
+      return undefined;
+    },
+    useCaseSensitiveFileNames() {
+      return true;
+    },
+    writeFile() {
+      return null;
+    }
+  };
+
+  const program = ts.createProgram(
+    [FILENAME],
+    {
+      noResolve: true,
+      target: ts.ScriptTarget.Latest,
+      jsx: extra.jsx ? ts.JsxEmit.Preserve : undefined
+    },
+    compilerHost
+  );
+
+  const ast = program.getSourceFile(FILENAME)!;
+
+  return { ast, program };
+}
+
+/**
+ * @param {string} code The code of the file being linted
+ * @param {Object} options The config object
+ * @param {boolean} shouldProvideParserServices True iff the program should be attempted to be calculated from provided tsconfig files
+ * @returns {{ast: ts.SourceFile, program: ts.Program}} Returns a source file and program corresponding to the linted code
+ */
+function getProgramAndAST(
+  code: string,
+  options: ParserOptions,
+  shouldProvideParserServices: boolean
+) {
+  return (
+    (shouldProvideParserServices && getASTFromProject(code, options)) ||
+    createNewProgram(code)
+  );
 }
 
 //------------------------------------------------------------------------------
 // Parser
 //------------------------------------------------------------------------------
 
-type ParserResult<T extends ParserOptions> = Program &
+type AST<T extends ParserOptions> = Program &
   (T['range'] extends true ? { range: [number, number] } : {}) &
   (T['tokens'] extends true ? { tokens: ESTreeToken[] } : {}) &
   (T['comment'] extends true ? { comments: ESTreeComment[] } : {});
@@ -60,13 +161,29 @@ type ParserResult<T extends ParserOptions> = Program &
 /**
  * Parses the given source code to produce a valid AST
  * @param {string} code    TypeScript code
+ * @param {boolean} shouldGenerateServices Flag determining whether to generate ast maps and program or not
  * @param {ParserOptions} options configuration object for the parser
  * @returns {Object}         the AST
  */
 function generateAST<T extends ParserOptions = ParserOptions>(
   code: string,
-  options?: T
-): ParserResult<T> {
+  options: T = {} as T,
+  shouldGenerateServices = false
+): {
+  estree: AST<T>;
+  program: typeof shouldGenerateServices extends true
+    ? ts.Program
+    : (ts.Program | undefined);
+  astMaps: typeof shouldGenerateServices extends true
+    ? {
+        esTreeNodeToTSNodeMap: WeakMap<object, any>;
+        tsNodeToESTreeNodeMap: WeakMap<object, any>;
+      }
+    : {
+        esTreeNodeToTSNodeMap?: WeakMap<object, any>;
+        tsNodeToESTreeNodeMap?: WeakMap<object, any>;
+      };
+} {
   const toString = String;
 
   if (typeof code !== 'string' && !((code as any) instanceof String)) {
@@ -115,6 +232,19 @@ function generateAST<T extends ParserOptions = ParserOptions>(
     } else if (options.loggerFn === false) {
       extra.log = Function.prototype;
     }
+
+    if (typeof options.project === 'string') {
+      extra.projects = [options.project];
+    } else if (
+      Array.isArray(options.project) &&
+      options.project.every(projectPath => typeof projectPath === 'string')
+    ) {
+      extra.projects = options.project;
+    }
+
+    if (typeof options.tsconfigRootDir === 'string') {
+      extra.tsconfigRootDir = options.tsconfigRootDir;
+    }
   }
 
   if (!isRunningSupportedTypeScriptVersion && !warnedAboutTSVersion) {
@@ -132,59 +262,23 @@ function generateAST<T extends ParserOptions = ParserOptions>(
     warnedAboutTSVersion = true;
   }
 
-  // Even if jsx option is set in typescript compiler, filename still has to
-  // contain .tsx file extension
-  const FILENAME = extra.jsx ? 'estree.tsx' : 'estree.ts';
-
-  const compilerHost = {
-    fileExists() {
-      return true;
-    },
-    getCanonicalFileName() {
-      return FILENAME;
-    },
-    getCurrentDirectory() {
-      return '';
-    },
-    getDefaultLibFileName() {
-      return 'lib.d.ts';
-    },
-
-    // TODO: Support Windows CRLF
-    getNewLine() {
-      return '\n';
-    },
-    getSourceFile(filename: string) {
-      return ts.createSourceFile(filename, code, ts.ScriptTarget.Latest, true);
-    },
-    readFile() {
-      return undefined;
-    },
-    useCaseSensitiveFileNames() {
-      return true;
-    },
-    writeFile() {
-      return null;
-    },
-    getDirectories() {
-      return [];
-    }
-  };
-
-  const program = ts.createProgram(
-    [FILENAME],
-    {
-      noResolve: true,
-      target: ts.ScriptTarget.Latest,
-      jsx: extra.jsx ? ts.JsxEmit.Preserve : undefined
-    },
-    compilerHost
+  const shouldProvideParserServices =
+    shouldGenerateServices && extra.projects && extra.projects.length > 0;
+  const { ast, program } = getProgramAndAST(
+    code,
+    options,
+    shouldProvideParserServices
   );
 
-  const ast = program.getSourceFile(FILENAME);
-
   extra.code = code;
-  return convert(ast, extra);
+  const { estree, astMaps } = convert(ast, extra, shouldProvideParserServices);
+  return {
+    estree,
+    program: shouldProvideParserServices ? program : undefined,
+    astMaps: shouldProvideParserServices
+      ? astMaps!
+      : { esTreeNodeToTSNodeMap: undefined, tsNodeToESTreeNodeMap: undefined }
+  };
 }
 
 //------------------------------------------------------------------------------
@@ -200,5 +294,17 @@ export function parse<T extends ParserOptions = ParserOptions>(
   code: string,
   options?: T
 ) {
-  return generateAST<T>(code, options);
+  return generateAST<T>(code, options).estree;
+}
+
+export function parseAndGenerateServices(code: string, options: ParserOptions) {
+  const result = generateAST(code, options, /*shouldGenerateServices*/ true);
+  return {
+    ast: result.estree,
+    services: {
+      program: result.program,
+      esTreeNodeToTSNodeMap: result.astMaps.esTreeNodeToTSNodeMap,
+      tsNodeToESTreeNodeMap: result.astMaps.tsNodeToESTreeNodeMap
+    }
+  };
 }

@@ -147,6 +147,7 @@ let fixturePatternConfigsToTest = [
     ]
   }),
 
+  createFixturePatternConfigFor('javascript/bigIntLiterals'),
   createFixturePatternConfigFor('ecma-features/binaryLiterals'),
   createFixturePatternConfigFor('ecma-features/blockBindings'),
 
@@ -490,7 +491,9 @@ let fixturePatternConfigsToTest = [
     fileType: 'ts'
   }),
   createFixturePatternConfigFor('typescript/decorators/parameter-decorators', {
-    fileType: 'ts'
+    fileType: 'ts',
+    // babylon: Stage 2 decorators cannot be used to decorate parameters
+    ignore: ['**/*']
   }),
   createFixturePatternConfigFor('typescript/decorators/property-decorators', {
     fileType: 'ts'

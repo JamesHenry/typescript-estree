@@ -491,9 +491,7 @@ let fixturePatternConfigsToTest = [
     fileType: 'ts'
   }),
   createFixturePatternConfigFor('typescript/decorators/parameter-decorators', {
-    fileType: 'ts',
-    // babylon: Stage 2 decorators cannot be used to decorate parameters
-    ignore: ['**/*']
+    fileType: 'ts'
   }),
   createFixturePatternConfigFor('typescript/decorators/property-decorators', {
     fileType: 'ts'

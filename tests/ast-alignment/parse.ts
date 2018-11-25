@@ -28,7 +28,7 @@ function parseWithBabylonPluginTypescript(text: string, parserOptions?: any) {
           'jsx',
           'typescript',
           'objectRestSpread',
-          ['decorators', { decoratorsBeforeExport: true }],
+          'decorators-legacy',
           'classProperties',
           'asyncGenerators',
           'dynamicImport',

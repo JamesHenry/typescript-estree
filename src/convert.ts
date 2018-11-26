@@ -2103,8 +2103,8 @@ export default function convert(config: ConvertConfig): ESTreeNode | null {
     case SyntaxKind.JsxFragment:
       Object.assign(result, {
         type: AST_NODE_TYPES.JSXFragment,
-        openingElement: convertChild((node as any).openingElement),
-        closingElement: convertChild((node as any).closingElement),
+        openingFragment: convertChild((node as ts.JsxFragment).openingFragment),
+        closingFragment: convertChild((node as ts.JsxFragment).closingFragment),
         children: (node as any).children.map(convertChild)
       });
       break;
@@ -2150,8 +2150,7 @@ export default function convert(config: ConvertConfig): ESTreeNode | null {
 
     case SyntaxKind.JsxOpeningFragment:
       Object.assign(result, {
-        type: AST_NODE_TYPES.JSXOpeningFragment,
-        selfClosing: false
+        type: AST_NODE_TYPES.JSXOpeningFragment
       });
       break;
     case SyntaxKind.JsxClosingFragment:

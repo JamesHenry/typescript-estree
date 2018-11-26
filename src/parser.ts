@@ -31,6 +31,15 @@ let extra: Extra;
 let warnedAboutTSVersion = false;
 
 /**
+ * Compute the filename based on the parser options
+ *
+ * @param options Parser options
+ */
+function getFileName({ jsx }: { jsx?: boolean }) {
+  return jsx ? 'estree.tsx' : 'estree.ts';
+}
+
+/**
  * Resets the extra config object
  * @returns {void}
  */
@@ -61,12 +70,12 @@ function getASTFromProject(code: string, options: ParserOptions) {
   return util.firstDefined(
     calculateProjectParserOptions(
       code,
-      options.filePath || (options.jsx ? 'estree.ts' : 'estree.tsx'),
+      options.filePath || getFileName(options),
       extra
     ),
     (currentProgram: ts.Program) => {
       const ast = currentProgram.getSourceFile(
-        options.filePath || (options.jsx ? 'estree.ts' : 'estree.tsx')
+        options.filePath || getFileName(options)
       );
       return ast && { ast, program: currentProgram };
     }
@@ -80,7 +89,7 @@ function getASTFromProject(code: string, options: ParserOptions) {
 function createNewProgram(code: string) {
   // Even if jsx option is set in typescript compiler, filename still has to
   // contain .tsx file extension
-  const FILENAME = extra.jsx ? 'estree.tsx' : 'estree.ts';
+  const FILENAME = getFileName(extra);
 
   const compilerHost = {
     fileExists() {

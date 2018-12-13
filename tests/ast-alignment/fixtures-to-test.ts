@@ -396,11 +396,6 @@ let fixturePatternConfigsToTest = [
       'class-with-implements',
       'class-with-extends-and-implements',
       /**
-       * Babylon: TSDeclareFunction + declare: true
-       * tsep: DeclareFunction
-       */
-      'declare-function',
-      /**
        * Babylon: TSTypeReference + identifier
        * tsep: TSUnknownKeyword
        */
@@ -505,6 +500,18 @@ let fixturePatternConfigsToTest = [
       'decorator-on-interface-declaration', // babylon parse errors
       'interface-property-modifiers', // babylon parse errors
       'enum-with-keywords' // babylon parse errors
+    ]
+  }),
+
+  createFixturePatternConfigFor('typescript/declare', {
+    fileType: 'ts',
+    ignore: [
+      /**
+       * AST difference
+       */
+      'type-alias',
+      'interface',
+      'abstract-class'
     ]
   }),
 

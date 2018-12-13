@@ -24,6 +24,7 @@
     "@commitlint/config-conventional": "^7.1.2",
     "@commitlint/travis-cli": "^7.1.2",
     "@types/babel-code-frame": "^6.20.1",
+    "@types/estree": "^0.0.39",
     "@types/jest": "^23.3.9",
     "@types/lodash.isplainobject": "^4.0.4",
     "@types/lodash.unescape": "^4.0.4",

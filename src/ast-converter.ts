@@ -42,7 +42,7 @@ export default (
    */
   const estree: any = convert({
     node: ast,
-    parent: null,
+    parent: undefined,
     ast,
     additionalOptions: {
       errorOnUnknownASTType: extra.errorOnUnknownASTType || false,

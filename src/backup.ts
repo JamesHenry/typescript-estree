@@ -36,7 +36,7 @@ interface ConvertAdditionalOptions {
 
 interface ConvertConfig {
   node: ts.Node;
-  parent?: ts.Node;
+  parent?: ts.Node | null;
   ast: ts.SourceFile;
   additionalOptions: ConvertAdditionalOptions;
 }
@@ -66,19 +66,29 @@ export default function convert(config: ConvertConfig): ESNode | null {
   /**
    * Create a new ESTree node
    */
-  let location = {
+  let result: ESNode = {
+    type: '',
     range: [node.getStart(ast), node.end],
     loc: nodeUtils.getLoc(node, ast)
   };
+
+  /**
+   * Copies the result object into an ESTree node with just a type property.
+   * This is used only for leaf nodes that have no other properties.
+   * @returns {void}
+   */
+  function simplyCopy(): void {
+    Object.assign(result, {
+      type: SyntaxKind[node.kind]
+    });
+  }
 
   /**
    * Converts a TypeScript node into an ESTree node.
    * @param  {R} child the child ts.Node
    * @returns {T|null}       the converted ESTree node
    */
-  function convertChild<T extends es.Node = any, R extends ts.Node = ts.Node>(
-    child: R
-  ): T {
+  function convertChild<T = any, R extends ts.Node = ts.Node>(child: R): T {
     return convert({ node: child, parent: node, ast, additionalOptions });
   }
 
@@ -87,10 +97,9 @@ export default function convert(config: ConvertConfig): ESNode | null {
    * @param  {ts.Node} child the child ts.Node
    * @returns {T|null}       the converted ESTree node
    */
-  function tryConvertChild<
-    T extends es.Node = any,
-    R extends ts.Node = ts.Node
-  >(child?: R): T | null {
+  function tryConvertChild<T = any, R extends ts.Node = ts.Node>(
+    child?: R
+  ): T | null {
     if (!child) {
       return null;
     }
@@ -302,13 +311,12 @@ export default function convert(config: ConvertConfig): ESNode | null {
     }
     return decorators.map(decorator => {
       const expression = convertChild<es.Expression>(decorator.expression);
-      const result: es.Decorator = {
+      return {
         type: AST_NODE_TYPES.Decorator,
         range: [decorator.getStart(ast), decorator.end],
         loc: nodeUtils.getLoc(decorator, ast),
         expression
       };
-      return result;
     });
   }
 
@@ -619,7 +627,7 @@ export default function convert(config: ConvertConfig): ESNode | null {
           // expression is present in case only
           test:
             node.kind === SyntaxKind.CaseClause
-              ? convertChild<es.Expression>(node.expression)
+              ? convertChild(node.expression)
               : null,
           consequent: node.statements.map(convertChild)
         };
@@ -631,7 +639,7 @@ export default function convert(config: ConvertConfig): ESNode | null {
       case SyntaxKind.ThrowStatement: {
         const result: es.ThrowStatement = {
           type: AST_NODE_TYPES.ThrowStatement,
-          argument: tryConvertChild<es.Expression>(node.expression)
+          argument: tryConvertChild(node.expression)
         };
         return result;
       }
@@ -984,12 +992,12 @@ export default function convert(config: ConvertConfig): ESNode | null {
           SyntaxKind.AbstractKeyword,
           node
         );
-        const result: es.TSAbstractClassProperty | es.ClassProperty = {
+        const result: es.BaseClassProperty = {
           type: isAbstract
             ? AST_NODE_TYPES.TSAbstractClassProperty
             : AST_NODE_TYPES.ClassProperty,
           key: convertChild(node.name),
-          value: tryConvertChild(node.initializer),
+          value: convertChild(node.initializer),
           computed: nodeUtils.isComputedProperty(node.name),
           static: nodeUtils.hasStaticModifierFlag(node),
           readonly:
@@ -1039,33 +1047,32 @@ export default function convert(config: ConvertConfig): ESNode | null {
         );
 
         const methodLoc = ast.getLineAndCharacterOfPosition(
-          (openingParen as any).getStart(ast)
-        );
-        const nodeIsMethod = node.kind === SyntaxKind.MethodDeclaration;
-
-        const method: es.FunctionExpression = {
-          type: AST_NODE_TYPES.FunctionExpression,
-          id: null,
-          generator: !!node.asteriskToken,
-          expression: false,
-          async: nodeUtils.hasModifier(SyntaxKind.AsyncKeyword, node),
-          body: tryConvertChild(node.body),
-          range: [node.parameters.pos - 1, result.range[1]],
-          loc: {
-            start: {
-              line: methodLoc.line + 1,
-              column: methodLoc.character
-            },
-            end: result.loc.end
-          }
-        };
+            (openingParen as any).getStart(ast)
+          ),
+          nodeIsMethod = node.kind === SyntaxKind.MethodDeclaration,
+          method = {
+            type: AST_NODE_TYPES.FunctionExpression,
+            id: null,
+            generator: !!node.asteriskToken,
+            expression: false,
+            async: nodeUtils.hasModifier(SyntaxKind.AsyncKeyword, node),
+            body: convertChild(node.body),
+            range: [node.parameters.pos - 1, result.range[1]],
+            loc: {
+              start: {
+                line: methodLoc.line + 1,
+                column: methodLoc.character
+              },
+              end: result.loc.end
+            }
+          };
 
         if (node.type) {
-          method.returnType = convertTypeAnnotation(node.type);
+          (method as any).returnType = convertTypeAnnotation(node.type);
         }
 
         if (parent!.kind === SyntaxKind.ObjectLiteralExpression) {
-          method.params = node.parameters.map(convertChild);
+          (method as any).params = node.parameters.map(convertChild);
 
           Object.assign(result, {
             type: AST_NODE_TYPES.Property,
@@ -1139,7 +1146,7 @@ export default function convert(config: ConvertConfig): ESNode | null {
           );
         }
 
-        return result;
+        break;
       }
 
       // TypeScript uses this even for static methods named "constructor"
@@ -1162,7 +1169,7 @@ export default function convert(config: ConvertConfig): ESNode | null {
             generator: false,
             expression: false,
             async: false,
-            body: tryConvertChild(node.body),
+            body: convertChild(node.body),
             range: [node.parameters.pos - 1, result.range[1]],
             loc: {
               start: {
@@ -1244,13 +1251,13 @@ export default function convert(config: ConvertConfig): ESNode | null {
           result.accessibility = accessibility;
         }
 
-        return result;
+        break;
       }
 
       case SyntaxKind.FunctionExpression: {
         const result: es.FunctionExpression = {
           type: AST_NODE_TYPES.FunctionExpression,
-          id: tryConvertChild<es.Identifier>(node.name),
+          id: convertChild(node.name),
           generator: !!node.asteriskToken,
           params: convertParameters(node.parameters),
           body: convertChild(node.body),
@@ -1288,9 +1295,8 @@ export default function convert(config: ConvertConfig): ESNode | null {
       }
 
       // occurs with missing array elements like [,]
-      case SyntaxKind.OmittedExpression: {
+      case SyntaxKind.OmittedExpression:
         return null; // TODO: throw error
-      }
 
       case SyntaxKind.ObjectBindingPattern: {
         const result: es.ObjectPattern = {
@@ -1360,7 +1366,7 @@ export default function convert(config: ConvertConfig): ESNode | null {
             };
           }
         }
-        return result;
+        break;
       }
 
       case SyntaxKind.ArrowFunction: {
@@ -1437,7 +1443,7 @@ export default function convert(config: ConvertConfig): ESNode | null {
           result.expressions.push(convertChild(templateSpan.expression));
           result.quasis.push(convertChild(templateSpan.literal));
         });
-        return result;
+        break;
       }
 
       case SyntaxKind.TaggedTemplateExpression: {
@@ -1495,7 +1501,7 @@ export default function convert(config: ConvertConfig): ESNode | null {
           type,
           argument: convertChild(node.expression)
         });
-        return result;
+        break;
       }
       case SyntaxKind.SpreadAssignment: {
         let type = AST_NODE_TYPES.SpreadElement;
@@ -1520,7 +1526,7 @@ export default function convert(config: ConvertConfig): ESNode | null {
           type,
           argument: convertChild(node.expression)
         });
-        return result;
+        break;
       }
 
       case SyntaxKind.Parameter: {
@@ -1578,7 +1584,7 @@ export default function convert(config: ConvertConfig): ESNode | null {
           return result;
         }
 
-        return result;
+        break;
       }
 
       // Classes
@@ -1693,7 +1699,9 @@ export default function convert(config: ConvertConfig): ESNode | null {
         }
 
         // check for exports
-        return nodeUtils.fixExports(node, result, ast);
+        result = nodeUtils.fixExports(node, result as any, ast);
+
+        break;
       }
 
       // Modules
@@ -1705,7 +1713,7 @@ export default function convert(config: ConvertConfig): ESNode | null {
         return result;
       }
 
-      case SyntaxKind.ImportDeclaration: {
+      case SyntaxKind.ImportDeclaration:
         const result: es.ImportDeclaration = {
           type: AST_NODE_TYPES.ImportDeclaration,
           source: convertChild(node.moduleSpecifier),
@@ -1733,8 +1741,7 @@ export default function convert(config: ConvertConfig): ESNode | null {
           }
         }
 
-        return result;
-      }
+        break;
 
       case SyntaxKind.NamespaceImport: {
         const result: es.ImportNamespaceSpecifier = {
@@ -1821,9 +1828,7 @@ export default function convert(config: ConvertConfig): ESNode | null {
 
       case SyntaxKind.PrefixUnaryExpression:
       case SyntaxKind.PostfixUnaryExpression: {
-        const operator = nodeUtils.getTextForTokenKind(node.operator) as
-          | es.UnaryOperator
-          | es.UpdateOperator;
+        const operator = nodeUtils.getTextForTokenKind(node.operator);
         const result: es.UpdateExpression | es.UnaryExpression = {
           /**
            * ESTree uses UpdateExpression for ++/--
@@ -1871,7 +1876,7 @@ export default function convert(config: ConvertConfig): ESNode | null {
       case SyntaxKind.TypeOperator: {
         const result: es.TSTypeOperator = {
           type: AST_NODE_TYPES.TSTypeOperator,
-          operator: nodeUtils.getTextForTokenKind(node.operator) as any,
+          operator: nodeUtils.getTextForTokenKind(node.operator),
           typeAnnotation: convertChild(node.type)
         };
         return result;
@@ -1879,7 +1884,7 @@ export default function convert(config: ConvertConfig): ESNode | null {
 
       // Binary Operations
 
-      case SyntaxKind.BinaryExpression: {
+      case SyntaxKind.BinaryExpression:
         // TypeScript uses BinaryExpression for sequences as well
         if (nodeUtils.isComma(node.operatorToken)) {
           const result: es.SequenceExpression = {
@@ -1905,34 +1910,23 @@ export default function convert(config: ConvertConfig): ESNode | null {
           } else {
             result.expressions.push(right);
           }
-          return result;
         } else if (
           node.operatorToken &&
           node.operatorToken.kind === SyntaxKind.AsteriskAsteriskEqualsToken
         ) {
           const result: es.AssignmentExpression = {
             type: AST_NODE_TYPES.AssignmentExpression,
-            operator: nodeUtils.getTextForTokenKind(
-              node.operatorToken.kind
-            ) as es.AssignmentOperator,
+            operator: nodeUtils.getTextForTokenKind(node.operatorToken.kind),
             left: convertChild(node.left),
             right: convertChild(node.right)
           };
-          return result;
         } else {
-          // @ts-ignore
-          const result:
-            | es.AssignmentExpression
-            | es.LogicalExpression
-            | es.BinaryExpression
-            | es.AssignmentPattern = {
+          Object.assign(result, {
             type: nodeUtils.getBinaryExpressionType(node.operatorToken),
-            operator: nodeUtils.getTextForTokenKind(
-              node.operatorToken.kind
-            ) as any,
+            operator: nodeUtils.getTextForTokenKind(node.operatorToken.kind),
             left: convertChild(node.left),
             right: convertChild(node.right)
-          };
+          });
 
           // if the binary expression is in a destructured array, switch it
           if (result.type === AST_NODE_TYPES.AssignmentExpression) {
@@ -1964,14 +1958,13 @@ export default function convert(config: ConvertConfig): ESNode | null {
 
             if (upperArrayIsInAssignment) {
               delete result.operator;
-              (result as any).type = AST_NODE_TYPES.AssignmentPattern;
+              result.type = AST_NODE_TYPES.AssignmentPattern;
             }
           }
-          return result;
         }
-      }
+        break;
 
-      case SyntaxKind.PropertyAccessExpression: {
+      case SyntaxKind.PropertyAccessExpression:
         if (nodeUtils.isJSXToken(parent!)) {
           const jsxMemberExpression = {
             type: AST_NODE_TYPES.MemberExpression,
@@ -1999,8 +1992,7 @@ export default function convert(config: ConvertConfig): ESNode | null {
           };
           return result;
         }
-        return result;
-      }
+        break;
 
       case SyntaxKind.ElementAccessExpression: {
         const result: es.MemberExpression = {
@@ -2070,9 +2062,8 @@ export default function convert(config: ConvertConfig): ESNode | null {
       // Literals
 
       case SyntaxKind.StringLiteral: {
-        const result: es.SimpleLiteral = {
+        const result: es.Literal = {
           type: AST_NODE_TYPES.Literal,
-          value: '',
           raw: ast.text.slice(result.range[0], result.range[1])
         };
 
@@ -2168,19 +2159,9 @@ export default function convert(config: ConvertConfig): ESNode | null {
         return result;
       }
 
-      case SyntaxKind.EmptyStatement: {
-        const result: es.EmptyStatement = {
-          type: AST_NODE_TYPES.EmptyStatement
-        };
-        return result;
-      }
-
-      case SyntaxKind.DebuggerStatement: {
-        const result: es.DebuggerStatement = {
-          type: AST_NODE_TYPES.DebuggerStatement
-        };
-        return result;
-      }
+      case SyntaxKind.EmptyStatement:
+      case SyntaxKind.DebuggerStatement:
+        return simplyCopy();
 
       // JSX
 
@@ -2290,7 +2271,7 @@ export default function convert(config: ConvertConfig): ESNode | null {
           expression
         });
 
-        return result;
+        break;
       }
 
       case SyntaxKind.JsxAttribute: {
@@ -2353,9 +2334,13 @@ export default function convert(config: ConvertConfig): ESNode | null {
 
       // TypeScript specific
 
-      case SyntaxKind.ParenthesizedExpression: {
-        return buildEsNode(node.expression, parent) as es.Expression;
-      }
+      case SyntaxKind.ParenthesizedExpression:
+        return convert({
+          node: node.expression,
+          parent,
+          ast,
+          additionalOptions
+        });
 
       case SyntaxKind.TypeAliasDeclaration: {
         const result: es.TSTypeAliasDeclaration = {
@@ -2406,7 +2391,7 @@ export default function convert(config: ConvertConfig): ESNode | null {
           );
         }
 
-        return result;
+        break;
       }
 
       case SyntaxKind.PropertySignature: {
@@ -2433,7 +2418,7 @@ export default function convert(config: ConvertConfig): ESNode | null {
           result.accessibility = accessibility;
         }
 
-        return result;
+        break;
       }
 
       case SyntaxKind.IndexSignature: {
@@ -2454,7 +2439,7 @@ export default function convert(config: ConvertConfig): ESNode | null {
           result.accessibility = accessibility;
         }
 
-        return result;
+        break;
       }
 
       case SyntaxKind.ConstructSignature: {
@@ -2470,7 +2455,7 @@ export default function convert(config: ConvertConfig): ESNode | null {
           );
         }
 
-        return result;
+        break;
       }
 
       case SyntaxKind.InterfaceDeclaration: {
@@ -2543,7 +2528,7 @@ export default function convert(config: ConvertConfig): ESNode | null {
         // check for exports
         result = nodeUtils.fixExports(node, result as any, ast);
 
-        return result;
+        break;
       }
 
       case SyntaxKind.FirstTypeNode: {
@@ -2559,7 +2544,7 @@ export default function convert(config: ConvertConfig): ESNode | null {
         result.typeAnnotation.loc = result.typeAnnotation.typeAnnotation.loc;
         result.typeAnnotation.range =
           result.typeAnnotation.typeAnnotation.range;
-        return result;
+        break;
       }
 
       case SyntaxKind.ImportType: {

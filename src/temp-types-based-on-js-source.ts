@@ -4,11 +4,13 @@
  * They will be gradually replaced with the more accurate types derived from the ESTree spec, and its
  * applicable extensions
  */
+import { Comment, SourceLocation } from 'estree';
+
 export interface ESTreeToken {
   type: string;
   value: string;
-  range: number[];
-  loc: ESTreeNodeLoc;
+  range: [number, number];
+  loc: SourceLocation;
   regex?: {
     pattern: string;
     flags: string;
@@ -16,43 +18,6 @@ export interface ESTreeToken {
   object?: any;
   property?: any;
   name?: any;
-}
-
-export interface ESTreeNode {
-  type: string;
-  loc: ESTreeNodeLoc;
-  range: number[];
-  declaration?: ESTreeNode;
-  specifiers?: any[];
-  source?: any;
-  typeAnnotation?: ESTreeNode | null;
-  typeParameters?: any;
-  id?: ESTreeNode | null;
-  expression?: ESTreeNode | null;
-  decorators?: any;
-  const?: boolean;
-  declare?: boolean;
-  global?: boolean;
-  modifiers?: any;
-  body?: any;
-  params?: any;
-  accessibility?: any;
-  readonly?: boolean;
-  static?: boolean;
-  export?: boolean;
-  parameter?: any;
-}
-
-export interface ESTreeComment extends ESTreeNode {}
-
-export interface LineAndColumnData {
-  line: number;
-  column: number;
-}
-
-export interface ESTreeNodeLoc {
-  start: LineAndColumnData;
-  end: LineAndColumnData;
 }
 
 export interface Extra {
@@ -63,7 +28,7 @@ export interface Extra {
   code: string;
   range: boolean;
   loc: boolean;
-  comments: ESTreeComment[];
+  comments: Comment[];
   strict: boolean;
   jsx: boolean;
   log: Function;

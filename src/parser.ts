@@ -12,10 +12,9 @@ import convert from './ast-converter';
 import {
   Extra,
   ParserOptions,
-  ESTreeToken,
-  ESTreeComment
+  ESTreeToken
 } from './temp-types-based-on-js-source';
-import { Program } from './estree/spec';
+import { Program, Comment } from 'estree';
 import util from './node-utils';
 
 const packageJSON = require('../package.json');
@@ -165,7 +164,7 @@ function getProgramAndAST(
 type AST<T extends ParserOptions> = Program &
   (T['range'] extends true ? { range: [number, number] } : {}) &
   (T['tokens'] extends true ? { tokens: ESTreeToken[] } : {}) &
-  (T['comment'] extends true ? { comments: ESTreeComment[] } : {});
+  (T['comment'] extends true ? { comments: Comment[] } : {});
 
 /**
  * Parses the given source code to produce a valid AST
@@ -193,10 +192,8 @@ function generateAST<T extends ParserOptions = ParserOptions>(
         tsNodeToESTreeNodeMap?: WeakMap<object, any>;
       };
 } {
-  const toString = String;
-
   if (typeof code !== 'string' && !((code as any) instanceof String)) {
-    code = toString(code);
+    code = String(code);
   }
 
   resetExtra();

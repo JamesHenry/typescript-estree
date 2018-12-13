@@ -6,12 +6,9 @@
  */
 
 import ts from 'typescript';
+import es, { Position } from 'estree';
 import nodeUtils from './node-utils';
-import {
-  ESTreeComment,
-  ESTreeToken,
-  LineAndColumnData
-} from './temp-types-based-on-js-source';
+import { ESTreeToken } from './temp-types-based-on-js-source';
 
 /**
  * Converts a TypeScript comment to an Esprima comment.
@@ -19,8 +16,8 @@ import {
  * @param {string} text The text of the comment.
  * @param {number} start The index at which the comment starts.
  * @param {number} end The index at which the comment ends.
- * @param {LineAndColumnData} startLoc The location at which the comment starts.
- * @param {LineAndColumnData} endLoc The location at which the comment ends.
+ * @param {Position} startLoc The location at which the comment starts.
+ * @param {Position} endLoc The location at which the comment ends.
  * @returns {Object} The comment object.
  * @private
  */
@@ -29,10 +26,10 @@ function convertTypeScriptCommentToEsprimaComment(
   text: string,
   start: number,
   end: number,
-  startLoc: LineAndColumnData,
-  endLoc: LineAndColumnData
-): ESTreeComment {
-  const comment: Partial<ESTreeToken> = {
+  startLoc: Position,
+  endLoc: Position
+): es.Comment {
+  const comment: es.Comment = {
     type: block ? 'Block' : 'Line',
     value: text
   };
@@ -48,7 +45,7 @@ function convertTypeScriptCommentToEsprimaComment(
     };
   }
 
-  return comment as ESTreeComment;
+  return comment;
 }
 
 /**
@@ -63,7 +60,7 @@ function getCommentFromTriviaScanner(
   triviaScanner: ts.Scanner,
   ast: ts.SourceFile,
   code: string
-): ESTreeComment {
+): es.Comment {
   const kind = triviaScanner.getToken();
   const isBlock = kind === ts.SyntaxKind.MultiLineCommentTrivia;
   const range = {
@@ -100,8 +97,8 @@ function getCommentFromTriviaScanner(
 export function convertComments(
   ast: ts.SourceFile,
   code: string
-): ESTreeComment[] {
-  const comments: ESTreeComment[] = [];
+): es.Comment[] {
+  const comments: es.Comment[] = [];
 
   /**
    * Create a TypeScript Scanner, with skipTrivia set to false so that

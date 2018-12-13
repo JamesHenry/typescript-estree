@@ -352,8 +352,6 @@ function isTypeKeyword(kind: number): boolean {
  */
 function getDeclarationKind(node: ts.Node): string {
   switch (node.kind) {
-    case SyntaxKind.TypeAliasDeclaration:
-      return 'type';
     case SyntaxKind.VariableDeclarationList:
       if (node.flags & ts.NodeFlags.Let) {
         return 'let';

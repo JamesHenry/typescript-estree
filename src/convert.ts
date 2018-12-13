@@ -2245,40 +2245,26 @@ export default function convert(config: ConvertConfig): ESTreeNode | null {
         additionalOptions
       });
 
-    /**
-     * Convert TypeAliasDeclaration node into VariableDeclaration
-     * to allow core rules such as "semi" to work automatically
-     */
     case SyntaxKind.TypeAliasDeclaration: {
-      const typeAliasDeclarator = {
-        type: AST_NODE_TYPES.VariableDeclarator,
+      Object.assign(result, {
+        type: AST_NODE_TYPES.TSTypeAliasDeclaration,
         id: convertChild(node.name),
-        init: convertChild(node.type),
-        range: [node.name.getStart(ast), node.end]
-      };
+        typeAnnotation: convertChild(node.type)
+      });
 
-      (typeAliasDeclarator as any).loc = nodeUtils.getLocFor(
-        typeAliasDeclarator.range[0],
-        typeAliasDeclarator.range[1],
-        ast
-      );
+      if (nodeUtils.hasModifier(SyntaxKind.DeclareKeyword, node)) {
+        result.declare = true;
+      }
 
       // Process typeParameters
       if (node.typeParameters && node.typeParameters.length) {
-        (typeAliasDeclarator as any).typeParameters = convertTSTypeParametersToTypeParametersDeclaration(
+        (result as any).typeParameters = convertTSTypeParametersToTypeParametersDeclaration(
           node.typeParameters
         );
       }
 
-      Object.assign(result, {
-        type: AST_NODE_TYPES.VariableDeclaration,
-        kind: nodeUtils.getDeclarationKind(node),
-        declarations: [typeAliasDeclarator]
-      });
-
       // check for exports
       result = nodeUtils.fixExports(node, result as any, ast);
-
       break;
     }
 

@@ -426,7 +426,6 @@ let fixturePatternConfigsToTest = [
       'export-type-class-declaration',
       'abstract-interface',
       'export-type-alias-declaration',
-      'unique-symbol',
       'keyof-operator',
       /**
        * tsep bug - Program.body[0].expression.left.properties[0].value.right is currently showing up

@@ -350,7 +350,7 @@ function isTypeKeyword(kind: number): boolean {
  * @param  {ts.Node}  node TypeScript AST node
  * @returns {string}     declaration kind
  */
-function getDeclarationKind(node: ts.Node): string {
+function getDeclarationKind(node: ts.Node): 'type' | 'let' | 'const' | 'var' {
   switch (node.kind) {
     case SyntaxKind.TypeAliasDeclaration:
       return 'type';
@@ -372,7 +372,9 @@ function getDeclarationKind(node: ts.Node): string {
  * @param {ts.Node} node The ts.Node
  * @returns {string | null} accessibility "public", "protected", "private", or null
  */
-function getTSNodeAccessibility(node: ts.Node): string | null {
+function getTSNodeAccessibility(
+  node: ts.Node
+): 'public' | 'protected' | 'private' | null {
   const modifiers = node.modifiers;
   if (!modifiers) {
     return null;
@@ -387,7 +389,7 @@ function getTSNodeAccessibility(node: ts.Node): string | null {
       case SyntaxKind.PrivateKeyword:
         return 'private';
       default:
-        continue;
+        break;
     }
   }
   return null;

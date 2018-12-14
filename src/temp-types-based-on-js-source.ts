@@ -7,7 +7,7 @@
 export interface ESTreeToken {
   type: string;
   value: string;
-  range: number[];
+  range: [number, number];
   loc: ESTreeNodeLoc;
   regex?: {
     pattern: string;

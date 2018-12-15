@@ -951,7 +951,7 @@ export default function convert(config: ConvertConfig): ESTreeNode | null {
         key: convertChild(node.name),
         value: convertChild(node.initializer),
         computed: nodeUtils.isComputedProperty(node.name),
-        static: nodeUtils.hasStaticModifierFlag(node),
+        static: nodeUtils.hasModifier(SyntaxKind.StaticKeyword, node),
         readonly:
           nodeUtils.hasModifier(SyntaxKind.ReadonlyKeyword, node) || undefined
       });
@@ -1061,7 +1061,7 @@ export default function convert(config: ConvertConfig): ESTreeNode | null {
           key: convertChild(node.name),
           value: method,
           computed: nodeUtils.isComputedProperty(node.name),
-          static: nodeUtils.hasStaticModifierFlag(node),
+          static: nodeUtils.hasModifier(SyntaxKind.StaticKeyword, node),
           kind: 'method'
         });
 
@@ -1106,7 +1106,10 @@ export default function convert(config: ConvertConfig): ESTreeNode | null {
 
     // TypeScript uses this even for static methods named "constructor"
     case SyntaxKind.Constructor: {
-      const constructorIsStatic = nodeUtils.hasStaticModifierFlag(node),
+      const constructorIsStatic = nodeUtils.hasModifier(
+          SyntaxKind.StaticKeyword,
+          node
+        ),
         constructorIsAbstract = nodeUtils.hasModifier(
           SyntaxKind.AbstractKeyword,
           node

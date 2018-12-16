@@ -1504,6 +1504,18 @@ export default function convert(config: ConvertConfig): ESTreeNode | null {
       }
 
       if (node.modifiers) {
+        const offending = node.modifiers.find(
+          m =>
+            m.kind === SyntaxKind.StaticKeyword ||
+            m.kind === SyntaxKind.ExportKeyword
+        );
+        if (offending) {
+          throw nodeUtils.createError(
+            ast,
+            offending.pos,
+            `Parameter properties may not have the '${offending.getText()}' modifier`
+          );
+        }
         return {
           type: AST_NODE_TYPES.TSParameterProperty,
           range: [node.getStart(ast), node.end],
@@ -1512,10 +1524,6 @@ export default function convert(config: ConvertConfig): ESTreeNode | null {
           readonly:
             nodeUtils.hasModifier(SyntaxKind.ReadonlyKeyword, node) ||
             undefined,
-          static:
-            nodeUtils.hasModifier(SyntaxKind.StaticKeyword, node) || undefined,
-          export:
-            nodeUtils.hasModifier(SyntaxKind.ExportKeyword, node) || undefined,
           parameter: result
         };
       }

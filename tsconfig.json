@@ -5,7 +5,11 @@
     "declaration": true,
     "outDir": "./dist",
     "strict": true,
-    "esModuleInterop": true
+    "esModuleInterop": true,
+    "baseUrl": "./",
+    "paths": {
+      "*": ["types/*"]
+    }
   },
   "include": ["src"]
 }

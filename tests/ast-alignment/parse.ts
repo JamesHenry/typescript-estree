@@ -1,7 +1,10 @@
 import codeFrame from 'babel-code-frame';
 import * as parser from '../../src/parser';
 import * as parseUtils from './utils';
-import { ParserOptions as BabelParserOptions } from '@babel/parser';
+
+import * as babel from '@babel/parser';
+import * as espree from 'espree';
+
 import { ParserOptions } from '../../src/temp-types-based-on-js-source';
 
 function createError(message: string, line: number, column: number) {
@@ -16,15 +19,14 @@ function createError(message: string, line: number, column: number) {
 
 function parseWithBabelParser(
   text: string,
-  parserOptions?: BabelParserOptions
+  parserOptions?: babel.ParserOptions
 ) {
   parserOptions = parserOptions || {};
-  const babylon = require('@babel/parser');
-  return babylon.parse(
+  return babel.parse(
     text,
     Object.assign(
       {
-        sourceType: 'script',
+        sourceType: 'unambiguous',
         allowImportExportEverywhere: true,
         allowReturnOutsideFunction: true,
         ranges: true,
@@ -39,6 +41,31 @@ function parseWithBabelParser(
           'estree',
           'bigInt'
         ]
+      },
+      parserOptions
+    )
+  );
+}
+
+function parseWithEspreeParser(
+  text: string,
+  parserOptions?: espree.ParserOptions
+) {
+  parserOptions = parserOptions || {};
+  return espree.parse(
+    text,
+    Object.assign(
+      {
+        loc: true,
+        range: true,
+        tokens: false,
+        comment: false,
+        ecmaVersion: 10,
+        ecmaFeatures: {
+          jsx: true,
+          globalReturn: true,
+          impliedStrict: true
+        }
       },
       parserOptions
     )
@@ -71,7 +98,8 @@ function parseWithTypeScriptESTree(
 interface ASTComparisonParseOptions {
   parser: string;
   typeScriptESTreeOptions?: ParserOptions;
-  babelParserOptions?: BabelParserOptions;
+  babelParserOptions?: babel.ParserOptions;
+  espreeParserOptions?: espree.ParserOptions;
 }
 
 export function parse(text: string, opts: ASTComparisonParseOptions) {
@@ -96,9 +124,14 @@ export function parse(text: string, opts: ASTComparisonParseOptions) {
           parseWithBabelParser(text, opts.babelParserOptions)
         );
         break;
+      case 'espree':
+        result.ast = parseUtils.normalizeNodeTypes(
+          parseWithEspreeParser(text, opts.espreeParserOptions)
+        );
+        break;
       default:
         throw new Error(
-          'Please provide a valid parser: either "typescript-estree" or "@babel/parser"'
+          'Please provide a valid parser: either "typescript-estree", "@babel/parser" or "espree"'
         );
     }
   } catch (error) {

@@ -399,16 +399,6 @@ let fixturePatternConfigsToTest = [
       'class-with-implements',
       'class-with-extends-and-implements',
       /**
-       * Babylon: TSDeclareFunction + declare: true
-       * tsep: DeclareFunction
-       */
-      'declare-function',
-      /**
-       * Babylon: TSTypeReference + identifier
-       * tsep: TSUnknownKeyword
-       */
-      'unknown-type-annotation',
-      /**
        * Other major AST differences (e.g. fundamentally different node types)
        */
       'class-with-mixin',
@@ -421,15 +411,9 @@ let fixturePatternConfigsToTest = [
       'interface-with-jsdoc',
       'interface-with-optional-properties',
       'interface-without-type-annotation',
-      'type-alias-declaration-with-constrained-type-parameter',
-      'type-alias-declaration',
-      'type-alias-object-without-annotation',
       'typed-this',
       'export-type-function-declaration',
-      'export-type-class-declaration',
       'abstract-interface',
-      'export-type-alias-declaration',
-      'unique-symbol',
       'keyof-operator',
       /**
        * tsep bug - Program.body[0].expression.left.properties[0].value.right is currently showing up
@@ -459,6 +443,8 @@ let fixturePatternConfigsToTest = [
     parseWithSourceTypeModule: [
       'export-named-enum',
       'export-assignment',
+      'export-type-alias-declaration',
+      'export-type-class-declaration',
       'export-default-class-with-generic',
       'export-default-class-with-multiple-generics',
       'export-named-class-with-generic',
@@ -486,7 +472,7 @@ let fixturePatternConfigsToTest = [
     fileType: 'ts',
     ignore: [
       /**
-       * currently babylon not supported
+       * there is difference in range between babel and tsep
        */
       'tagged-template-expression-type-arguments'
     ]
@@ -508,6 +494,24 @@ let fixturePatternConfigsToTest = [
       'decorator-on-interface-declaration', // babylon parse errors
       'interface-property-modifiers', // babylon parse errors
       'enum-with-keywords' // babylon parse errors
+    ]
+  }),
+
+  createFixturePatternConfigFor('typescript/declare', {
+    fileType: 'ts',
+    ignore: [
+      /**
+       * AST difference
+       * tsep: TSAbstractClassDeclaration
+       * babel: ClassDeclaration[abstract=true]
+       */
+      'interface',
+      /**
+       * AST difference
+       * tsep: heritage = []
+       * babel: heritage = undefined
+       */
+      'abstract-class'
     ]
   }),
 

@@ -10,8 +10,6 @@ const jsxFilesWithKnownIssues: string[] = jsxKnownIssues.map(f =>
 
 const tester = new FixturesTester();
 
-tester.registerTest('basics');
-
 tester.registerTest('comments', {
   ignoreBabel: [
     /**
@@ -22,6 +20,8 @@ tester.registerTest('comments', {
     'template-string-block' // Purely AST diffs
   ]
 });
+
+tester.registerTest('javascript/basics');
 
 tester.registerTest('javascript/templateStrings', {
   ignoreBabel: ['**/*']

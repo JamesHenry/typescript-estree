@@ -1,4 +1,5 @@
 import glob from 'glob';
+import fs from 'fs';
 import path from 'path';
 
 export interface CreateFixturePatternConfig {
@@ -18,6 +19,8 @@ export interface FixturePatternConfig {
   ignoreSourceType: boolean;
 }
 
+const fixturesDirPath = path.join(__dirname, '../fixtures');
+
 export class FixturesTester {
   protected babelFixtures: FixturePatternConfig[] = [];
   protected espreeFixtures: FixturePatternConfig[] = [];
@@ -28,6 +31,10 @@ export class FixturesTester {
     fixturesSubPath: string,
     config: CreateFixturePatternConfig = {}
   ) {
+    if (!fs.existsSync(path.join(fixturesDirPath, fixturesSubPath))) {
+      throw new Error(`Registered path '${path.join(__dirname, fixturesSubPath)}' was not found`);
+    }
+
     const ignoreBabel = config.ignoreBabel || [];
     const ignoreEspree = config.ignoreEspree || [];
     const fileType = config.fileType || 'js';
@@ -63,8 +70,6 @@ export class FixturesTester {
   }
 
   protected processFixtures(fixtures: FixturePatternConfig[]): Fixture[] {
-    const fixturesDirPath = path.join(__dirname, '../fixtures');
-
     return fixtures
       .map(fixtures => {
         return glob

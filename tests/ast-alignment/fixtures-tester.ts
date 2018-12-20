@@ -32,7 +32,12 @@ export class FixturesTester {
     config: CreateFixturePatternConfig = {}
   ) {
     if (!fs.existsSync(path.join(fixturesDirPath, fixturesSubPath))) {
-      throw new Error(`Registered path '${path.join(__dirname, fixturesSubPath)}' was not found`);
+      throw new Error(
+        `Registered path '${path.join(
+          __dirname,
+          fixturesSubPath
+        )}' was not found`
+      );
     }
 
     const ignoreBabel = config.ignoreBabel || [];

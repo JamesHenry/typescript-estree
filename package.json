@@ -56,6 +56,7 @@
     "build": "tsc",
     "test": "npm run unit-tests && npm run ast-alignment-tests",
     "unit-tests": "jest",
+    "unit-tests-brk": "node --inspect-brk ./node_modules/jest/bin/jest.js --runInBand",
     "ast-alignment-tests": "jest --config=./tests/ast-alignment/jest.config.js",
     "precommit": "npm test && lint-staged",
     "cz": "git-cz",

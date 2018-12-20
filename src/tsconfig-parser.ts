@@ -90,7 +90,7 @@ export default function calculateProjectParserOptions(
     // create compiler host
     const watchCompilerHost = ts.createWatchCompilerHost(
       tsconfigPath,
-      /*optionsToExtend*/ undefined,
+      /*optionsToExtend*/ { allowNonTsExtensions: true } as ts.CompilerOptions,
       ts.sys,
       ts.createSemanticDiagnosticsBuilderProgram,
       diagnosticReporter,
@@ -135,6 +135,32 @@ export default function calculateProjectParserOptions(
 
     // ensure fileWatchers aren't created for directories
     watchCompilerHost.watchDirectory = () => noopFileWatcher;
+
+    // allow files with custom extensions to be included in program (uses internal ts api)
+    const oldOnDirectoryStructureHostCreate = (watchCompilerHost as any)
+      .onCachedDirectoryStructureHostCreate;
+    (watchCompilerHost as any).onCachedDirectoryStructureHostCreate = (
+      host: any
+    ) => {
+      const oldReadDirectory = host.readDirectory;
+      host.readDirectory = (
+        path: string,
+        extensions?: ReadonlyArray<string>,
+        exclude?: ReadonlyArray<string>,
+        include?: ReadonlyArray<string>,
+        depth?: number
+      ) =>
+        oldReadDirectory(
+          path,
+          !extensions
+            ? undefined
+            : extensions.concat(extra.extraFileExtensions),
+          exclude,
+          include,
+          depth
+        );
+      oldOnDirectoryStructureHostCreate(host);
+    };
 
     // create program
     const programWatch = ts.createWatchProgram(watchCompilerHost);

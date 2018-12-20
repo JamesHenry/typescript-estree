@@ -57,7 +57,8 @@ function resetExtra(): void {
     projects: [],
     errorOnUnknownASTType: false,
     code: '',
-    tsconfigRootDir: process.cwd()
+    tsconfigRootDir: process.cwd(),
+    extraFileExtensions: []
   };
 }
 
@@ -67,19 +68,17 @@ function resetExtra(): void {
  * @returns {{ast: ts.SourceFile, program: ts.Program} | undefined} If found, returns the source file corresponding to the code and the containing program
  */
 function getASTFromProject(code: string, options: ParserOptions) {
-  return util.firstDefined(
-    calculateProjectParserOptions(
-      code,
-      options.filePath || getFileName(options),
-      extra
-    ),
-    (currentProgram: ts.Program) => {
-      const ast = currentProgram.getSourceFile(
-        options.filePath || getFileName(options)
-      );
-      return ast && { ast, program: currentProgram };
-    }
+  const programs = calculateProjectParserOptions(
+    code,
+    options.filePath || getFileName(options),
+    extra
   );
+  return util.firstDefined(programs, currentProgram => {
+    const ast = currentProgram.getSourceFile(
+      options.filePath || getFileName(options)
+    );
+    return ast && { ast, program: currentProgram };
+  });
 }
 
 /**
@@ -253,6 +252,13 @@ function generateAST<T extends ParserOptions = ParserOptions>(
 
     if (typeof options.tsconfigRootDir === 'string') {
       extra.tsconfigRootDir = options.tsconfigRootDir;
+    }
+
+    if (
+      Array.isArray(options.extraFileExtensions) &&
+      options.extraFileExtensions.every(ext => typeof ext === 'string')
+    ) {
+      extra.extraFileExtensions = options.extraFileExtensions;
     }
   }
 

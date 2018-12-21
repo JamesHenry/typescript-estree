@@ -190,7 +190,8 @@ let fixturePatternConfigsToTest = [
        * as well, but the TypeScript compiler is so forgiving during parsing that typescript-estree
        * does not actually error on them and will produce an AST.
        */
-      'error-complex-destructured-spread-first' // babel parse errors
+      'error-complex-destructured-spread-first', // babel parse errors
+      'not-final-array' // babel parse errors
     ]
   }),
 

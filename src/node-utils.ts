@@ -205,11 +205,14 @@ function isESTreeClassMember(node: ts.Node): boolean {
 
 /**
  * Checks if a ts.Node has a modifier
- * @param {ts.SyntaxKind} modifierKind TypeScript SyntaxKind modifier
+ * @param {ts.KeywordSyntaxKind} modifierKind TypeScript SyntaxKind modifier
  * @param {ts.Node} node TypeScript AST node
  * @returns {boolean} has the modifier specified
  */
-function hasModifier(modifierKind: ts.SyntaxKind, node: ts.Node): boolean {
+function hasModifier(
+  modifierKind: ts.KeywordSyntaxKind,
+  node: ts.Node
+): boolean {
   return (
     !!node.modifiers &&
     !!node.modifiers.length &&

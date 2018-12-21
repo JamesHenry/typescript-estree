@@ -17,7 +17,6 @@ import {
 } from '../../tools/test-utils';
 import ts from 'typescript';
 import { ParserOptions } from '../../src/temp-types-based-on-js-source';
-import { Node, Program } from '../../src/estree/spec';
 
 //------------------------------------------------------------------------------
 // Setup

@@ -96,6 +96,7 @@ export const AST_NODE_TYPES: { [key: string]: string } = {
   /**
    * TS-prefixed nodes
    */
+  TSAbstractClassDeclaration: 'TSAbstractClassDeclaration',
   TSAbstractClassProperty: 'TSAbstractClassProperty',
   TSAbstractKeyword: 'TSAbstractKeyword',
   TSAbstractMethodDefinition: 'TSAbstractMethodDefinition',

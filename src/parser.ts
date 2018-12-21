@@ -5,7 +5,10 @@
  * @copyright jQuery Foundation and other contributors, https://jquery.org/
  * MIT License
  */
-import calculateProjectParserOptions from './tsconfig-parser';
+import {
+  calculateProjectParserOptions,
+  createProgram
+} from './tsconfig-parser';
 import semver from 'semver';
 import ts from 'typescript';
 import convert from './ast-converter';
@@ -83,6 +86,18 @@ function getASTFromProject(code: string, options: ParserOptions) {
 
 /**
  * @param {string} code The code of the file being linted
+ * @param {Object} options The config object
+ * @returns {{ast: ts.SourceFile, program: ts.Program} | undefined} If found, returns the source file corresponding to the code and the containing program
+ */
+function getASTAndDefaultProject(code: string, options: ParserOptions) {
+  const fileName = options.filePath || getFileName(options);
+  const program = createProgram(code, fileName, extra);
+  const ast = program && program.getSourceFile(fileName);
+  return ast && { ast, program };
+}
+
+/**
+ * @param {string} code The code of the file being linted
  * @returns {{ast: ts.SourceFile, program: ts.Program}} Returns a new source file and program corresponding to the linted code
  */
 function createNewProgram(code: string) {
@@ -153,6 +168,7 @@ function getProgramAndAST(
 ) {
   return (
     (shouldProvideParserServices && getASTFromProject(code, options)) ||
+    (shouldProvideParserServices && getASTAndDefaultProject(code, options)) ||
     createNewProgram(code)
   );
 }

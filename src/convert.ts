@@ -2513,6 +2513,43 @@ export default function convert(config: ConvertConfig): ESTreeNode | null {
       break;
     }
 
+    // TypeScript specific types
+    case SyntaxKind.OptionalType: {
+      Object.assign(result, {
+        type: AST_NODE_TYPES.TSOptionalType,
+        typeAnnotation: convertChild(node.type)
+      });
+      break;
+    }
+    case SyntaxKind.ParenthesizedType: {
+      Object.assign(result, {
+        type: AST_NODE_TYPES.TSParenthesizedType,
+        typeAnnotation: convertChild(node.type)
+      });
+      break;
+    }
+    case SyntaxKind.TupleType: {
+      Object.assign(result, {
+        type: AST_NODE_TYPES.TSTupleType,
+        elementTypes: node.elementTypes.map(convertChild)
+      });
+      break;
+    }
+    case SyntaxKind.UnionType: {
+      Object.assign(result, {
+        type: AST_NODE_TYPES.TSUnionType,
+        types: node.types.map(convertChild)
+      });
+      break;
+    }
+    case SyntaxKind.IntersectionType: {
+      Object.assign(result, {
+        type: AST_NODE_TYPES.TSIntersectionType,
+        types: node.types.map(convertChild)
+      });
+      break;
+    }
+
     default:
       deeplyCopy();
   }

@@ -528,6 +528,10 @@ let fixturePatternConfigsToTest = [
        */
       'declare-namespace-with-exported-function'
     ]
+  }),
+
+  createFixturePatternConfigFor('typescript/types', {
+    fileType: 'ts'
   })
 ];
 

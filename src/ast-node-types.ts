@@ -86,6 +86,13 @@ export const AST_NODE_TYPES: { [key: string]: string } = {
   ThisExpression: 'ThisExpression',
   ThrowStatement: 'ThrowStatement',
   TryStatement: 'TryStatement',
+  UnaryExpression: 'UnaryExpression',
+  UpdateExpression: 'UpdateExpression',
+  VariableDeclaration: 'VariableDeclaration',
+  VariableDeclarator: 'VariableDeclarator',
+  WhileStatement: 'WhileStatement',
+  WithStatement: 'WithStatement',
+  YieldExpression: 'YieldExpression',
   /**
    * TS-prefixed nodes
    */
@@ -140,15 +147,12 @@ export const AST_NODE_TYPES: { [key: string]: string } = {
   TSTypeParameterInstantiation: 'TSTypeParameterInstantiation',
   TSTypePredicate: 'TSTypePredicate',
   TSTypeReference: 'TSTypeReference',
+  TSIntersectionType: 'TSIntersectionType',
+  TSTupleType: 'TSTupleType',
+  TSOptionalType: 'TSOptionalType',
+  TSParenthesizedType: 'TSParenthesizedType',
   TSUnionType: 'TSUnionType',
   TSUndefinedKeyword: 'TSUndefinedKeyword',
   TSUnknownKeyword: 'TSUnknownKeyword',
-  TSVoidKeyword: 'TSVoidKeyword',
-  UnaryExpression: 'UnaryExpression',
-  UpdateExpression: 'UpdateExpression',
-  VariableDeclaration: 'VariableDeclaration',
-  VariableDeclarator: 'VariableDeclarator',
-  WhileStatement: 'WhileStatement',
-  WithStatement: 'WithStatement',
-  YieldExpression: 'YieldExpression'
+  TSVoidKeyword: 'TSVoidKeyword'
 };

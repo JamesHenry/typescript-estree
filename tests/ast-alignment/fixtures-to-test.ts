@@ -438,7 +438,13 @@ let fixturePatternConfigsToTest = [
        * Not yet supported in Babylon https://github.com/babel/babel/issues/7749
        */
       'import-type',
-      'import-type-with-type-parameters-in-type-reference'
+      'import-type-with-type-parameters-in-type-reference',
+      /**
+       * babel is not supporting it yet
+       * Babel: TSTypeReference -> Identifier
+       * tsep: TSBigIntKeyword
+       */
+      'typed-keyword-bigint'
     ],
     parseWithSourceTypeModule: [
       'export-named-enum',

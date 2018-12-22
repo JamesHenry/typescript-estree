@@ -286,13 +286,7 @@ tester.addFixturePatternConfig('jsx-useJSXTextNode');
  */
 
 tester.addFixturePatternConfig('tsx', {
-  fileType: 'tsx',
-  ignore: [
-    /**
-     * currently babylon not supported
-     */
-    'generic-jsx-element'
-  ]
+  fileType: 'tsx'
 });
 
 /* ================================================== */
@@ -313,11 +307,11 @@ tester.addFixturePatternConfig('typescript/basics', {
      */
     'abstract-class-with-abstract-constructor', // babel parse errors
     'class-with-export-parameter-properties', // babel parse errors
+    'class-with-implements-and-extends', // babel parse errors
     'class-with-optional-methods', // babel parse errors
     'class-with-static-parameter-properties', // babel parse errors
     'interface-with-all-property-types', // babel parse errors
     'interface-with-construct-signature-with-parameter-accessibility', // babel parse errors
-    'class-with-implements-and-extends', // babel parse errors
     /**
      * typescript-estree erroring, but babylon not.
      */

@@ -444,7 +444,19 @@ let fixturePatternConfigsToTest = [
        * Babel: TSTypeReference -> Identifier
        * tsep: TSBigIntKeyword
        */
-      'typed-keyword-bigint'
+      'typed-keyword-bigint',
+      /**
+       * https://github.com/babel/babel/issues/9228
+       * Babel: BooleanLiteral
+       * tsep: Literal
+       */
+      'typed-keyword-true',
+      /**
+       * https://github.com/babel/babel/issues/9228
+       * Babel: BooleanLiteral
+       * tsep: Literal
+       */
+      'typed-keyword-false'
     ],
     parseWithSourceTypeModule: [
       'export-named-enum',

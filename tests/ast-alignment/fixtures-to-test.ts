@@ -440,19 +440,19 @@ let fixturePatternConfigsToTest = [
       'import-type',
       'import-type-with-type-parameters-in-type-reference',
       /**
-       * babel is not supporting it yet
+       * babel is not supporting it yet https://github.com/babel/babel/pull/9230
        * Babel: TSTypeReference -> Identifier
        * tsep: TSBigIntKeyword
        */
       'typed-keyword-bigint',
       /**
-       * https://github.com/babel/babel/issues/9228
+       * Awaiting feedback on Babel issue https://github.com/babel/babel/issues/9228
        * Babel: BooleanLiteral
        * tsep: Literal
        */
       'typed-keyword-true',
       /**
-       * https://github.com/babel/babel/issues/9228
+       * Not yet supported in Babel https://github.com/babel/babel/issues/9228
        * Babel: BooleanLiteral
        * tsep: Literal
        */

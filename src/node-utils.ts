@@ -337,6 +337,7 @@ function isTypeKeyword(kind: number): boolean {
   switch (kind) {
     case SyntaxKind.AnyKeyword:
     case SyntaxKind.BooleanKeyword:
+    case SyntaxKind.BigIntKeyword:
     case SyntaxKind.NeverKeyword:
     case SyntaxKind.NumberKeyword:
     case SyntaxKind.ObjectKeyword:

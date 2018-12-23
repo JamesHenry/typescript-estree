@@ -200,6 +200,8 @@ let fixturePatternConfigsToTest = [
   createFixturePatternConfigFor('javascript/experimentalDynamicImport'),
   createFixturePatternConfigFor('javascript/exponentiationOperators'),
 
+  createFixturePatternConfigFor('javascript/experimentalOptionalCatchBinding'),
+
   createFixturePatternConfigFor('javascript/forOf', {
     ignore: [
       /**
@@ -295,6 +297,8 @@ let fixturePatternConfigsToTest = [
     ]
   }),
 
+  createFixturePatternConfigFor('javascript/objectLiteral'),
+
   createFixturePatternConfigFor('javascript/objectLiteralComputedProperties'),
 
   createFixturePatternConfigFor('javascript/objectLiteralDuplicateProperties', {
@@ -345,11 +349,7 @@ let fixturePatternConfigsToTest = [
       /**
        * AST difference
        */
-      'react-typed-props',
-      /**
-       * currently babylon not supported
-       */
-      'generic-jsx-element'
+      'react-typed-props'
     ]
   }),
 
@@ -415,12 +415,6 @@ let fixturePatternConfigsToTest = [
       'export-type-function-declaration',
       'abstract-interface',
       'keyof-operator',
-      /**
-       * tsep bug - Program.body[0].expression.left.properties[0].value.right is currently showing up
-       * as `ArrayPattern`, babylon, acorn and espree say it should be `ArrayExpression`
-       * TODO: Fix this
-       */
-      'destructuring-assignment',
       /**
        * Babylon bug for optional or abstract methods?
        */

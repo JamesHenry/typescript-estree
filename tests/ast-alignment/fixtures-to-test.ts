@@ -105,7 +105,7 @@ function createFixturePatternConfigFor(
  * An array of FixturePatternConfigs
  */
 let fixturePatternConfigsToTest = [
-  createFixturePatternConfigFor('basics'),
+  createFixturePatternConfigFor('javascript/basics'),
 
   createFixturePatternConfigFor('comments', {
     ignore: [

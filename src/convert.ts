@@ -799,7 +799,9 @@ export default function convert(config: ConvertConfig): ESTreeNode | null {
       let arrayIsInAssignment;
 
       if (arrayAssignNode) {
-        if (node.parent.kind === SyntaxKind.CallExpression) {
+        if (node.parent.kind === SyntaxKind.ShorthandPropertyAssignment) {
+          arrayIsInAssignment = false;
+        } else if (node.parent.kind === SyntaxKind.CallExpression) {
           arrayIsInAssignment = false;
         } else if (
           nodeUtils.getBinaryExpressionType(
@@ -849,7 +851,9 @@ export default function convert(config: ConvertConfig): ESTreeNode | null {
       let objectIsInAssignment = false;
 
       if (objectAssignNode) {
-        if ((objectAssignNode as any).left === node) {
+        if (node.parent.kind === SyntaxKind.ShorthandPropertyAssignment) {
+          objectIsInAssignment = false;
+        } else if ((objectAssignNode as any).left === node) {
           objectIsInAssignment = true;
         } else if (node.parent.kind === SyntaxKind.CallExpression) {
           objectIsInAssignment = false;
@@ -1576,7 +1580,7 @@ export default function convert(config: ConvertConfig): ESTreeNode | null {
 
       const openBrace = nodeUtils.findNextToken(lastClassToken, ast, ast)!;
       const superClass = heritageClauses.find(
-        (clause: any) => clause.token === SyntaxKind.ExtendsKeyword
+        clause => clause.token === SyntaxKind.ExtendsKeyword
       );
 
       if (superClass) {
@@ -1596,7 +1600,7 @@ export default function convert(config: ConvertConfig): ESTreeNode | null {
       }
 
       const implementsClause = heritageClauses.find(
-        (clause: any) => clause.token === SyntaxKind.ImplementsKeyword
+        clause => clause.token === SyntaxKind.ImplementsKeyword
       );
 
       Object.assign(result, {
@@ -1849,16 +1853,18 @@ export default function convert(config: ConvertConfig): ESTreeNode | null {
 
         // if the binary expression is in a destructured array, switch it
         if (result.type === AST_NODE_TYPES.AssignmentExpression) {
-          const upperArrayNode = nodeUtils.findAncestorOfKind(
-              node,
-              SyntaxKind.ArrayLiteralExpression
-            ),
-            upperArrayAssignNode =
-              upperArrayNode &&
-              nodeUtils.findAncestorOfKind(
-                upperArrayNode,
-                SyntaxKind.BinaryExpression
-              );
+          const upperArrayNode = nodeUtils.findFirstMatchingAncestor(
+            node,
+            parent =>
+              parent.kind === SyntaxKind.ArrayLiteralExpression ||
+              parent.kind === SyntaxKind.ObjectLiteralExpression
+          );
+          const upperArrayAssignNode =
+            upperArrayNode &&
+            nodeUtils.findAncestorOfKind(
+              upperArrayNode,
+              SyntaxKind.BinaryExpression
+            );
 
           let upperArrayIsInAssignment;
 

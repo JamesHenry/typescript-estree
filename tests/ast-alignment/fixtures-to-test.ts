@@ -63,10 +63,7 @@ function createFixturePatternConfigFor(
   config.ignoreSourceType = config.ignoreSourceType || [];
   /**
    * The TypeScript compiler gives us the "externalModuleIndicator" to allow typescript-estree do dynamically detect the "sourceType".
-   * Babylon does not have an equivalent feature (although perhaps it might come in the future https://github.com/babel/babylon/issues/440),
-   * so we have to specify the "sourceType" we want to use.
-   *
-   * By default we have configured babylon to use "script", but for any fixtures specified in the parseWithSourceTypeModule array we need "module".
+   * Babel has similar feature sourceType='unambiguous' but its not perfect, and in some specific cases we sill have to enforce it.
    *
    * First merge the fixtures which need to be parsed with sourceType: "module" into the
    * ignore list, and then add their full config into the global array.

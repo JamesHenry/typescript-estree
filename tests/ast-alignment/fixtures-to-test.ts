@@ -105,7 +105,7 @@ function createFixturePatternConfigFor(
  * An array of FixturePatternConfigs
  */
 let fixturePatternConfigsToTest = [
-  createFixturePatternConfigFor('basics'),
+  createFixturePatternConfigFor('javascript/basics'),
 
   createFixturePatternConfigFor('comments', {
     ignore: [
@@ -122,6 +122,8 @@ let fixturePatternConfigsToTest = [
   createFixturePatternConfigFor('javascript/templateStrings', {
     ignore: ['**/*']
   }),
+
+  createFixturePatternConfigFor('javascript/directives'),
 
   createFixturePatternConfigFor('javascript/experimentalObjectRestSpread', {
     ignore: [

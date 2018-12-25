@@ -142,6 +142,7 @@ export default {
   getLocFor,
   getLoc,
   isToken,
+  canContainDirective,
   isJSXToken,
   getDeclarationKind,
   getTSNodeAccessibility,
@@ -290,6 +291,34 @@ function getLocFor(
       column: endLoc.character
     }
   };
+}
+
+/**
+ * Check whatever node can contain directive
+ * @param {ts.Node} node
+ * @returns {boolean} returns true if node can contain directive
+ */
+function canContainDirective(node: ts.Node): boolean {
+  switch (node.kind) {
+    case ts.SyntaxKind.SourceFile:
+    case ts.SyntaxKind.ModuleBlock:
+      return true;
+    case ts.SyntaxKind.Block:
+      switch (node.parent.kind) {
+        case ts.SyntaxKind.Constructor:
+        case ts.SyntaxKind.GetAccessor:
+        case ts.SyntaxKind.SetAccessor:
+        case ts.SyntaxKind.ArrowFunction:
+        case ts.SyntaxKind.FunctionExpression:
+        case ts.SyntaxKind.FunctionDeclaration:
+        case ts.SyntaxKind.MethodDeclaration:
+          return true;
+        default:
+          return false;
+      }
+    default:
+      return false;
+  }
 }
 
 /**

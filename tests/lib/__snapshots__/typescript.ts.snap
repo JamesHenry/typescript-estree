@@ -72207,7 +72207,7 @@ Object {
     Object {
       "loc": Object {
         "end": Object {
-          "column": 15,
+          "column": 8,
           "line": 1,
         },
         "start": Object {
@@ -77295,7 +77295,7 @@ Object {
     Object {
       "loc": Object {
         "end": Object {
-          "column": 8,
+          "column": 15,
           "line": 1,
         },
         "start": Object {

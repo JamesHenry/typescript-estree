@@ -2549,6 +2549,13 @@ export default function convert(config: ConvertConfig): ESTreeNode | null {
       });
       break;
     }
+    case SyntaxKind.RestType: {
+      Object.assign(result, {
+        type: AST_NODE_TYPES.TSRestType,
+        typeAnnotation: convertChild(node.type)
+      });
+      break;
+    }
 
     default:
       deeplyCopy();

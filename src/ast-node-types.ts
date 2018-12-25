@@ -138,6 +138,7 @@ export const AST_NODE_TYPES: { [key: string]: string } = {
   TSQualifiedName: 'TSQualifiedName',
   TSQuestionToken: 'TSQuestionToken',
   TSReadonlyKeyword: 'TSReadonlyKeyword',
+  TSRestType: 'TSRestType',
   TSStaticKeyword: 'TSStaticKeyword',
   TSStringKeyword: 'TSStringKeyword',
   TSSymbolKeyword: 'TSSymbolKeyword',

@@ -28,9 +28,9 @@ const jsxFilesWithKnownIssues = jsxKnownIssues.map(f => f.replace('jsx/', ''));
 /**
  * Current random error difference on jsx/invalid-no-tag-name.src.js
  * TSEP - SyntaxError
- * Babylon - RangeError
+ * Babel - RangeError
  *
- * Reported here: https://github.com/babel/babylon/issues/674
+ * Reported here: https://github.com/babel/babel/issues/6680
  */
 jsxFilesWithKnownIssues.push('invalid-no-tag-name');
 
@@ -122,7 +122,7 @@ let fixturePatternConfigsToTest = [
   createFixturePatternConfigFor('javascript/arrowFunctions', {
     ignore: [
       /**
-       * Expected babylon parse errors - all of these files below produce parse errors in espree
+       * Expected babel parse errors - all of these files below produce parse errors in espree
        * as well, but the TypeScript compiler is so forgiving during parsing that typescript-estree
        * does not actually error on them and will produce an AST.
        */
@@ -144,7 +144,7 @@ let fixturePatternConfigsToTest = [
        */
       'class-one-method-super', // babel parse errors
       /**
-       * Expected babylon parse errors - all of these files below produce parse errors in espree
+       * Expected babel parse errors - all of these files below produce parse errors in espree
        * as well, but the TypeScript compiler is so forgiving during parsing that typescript-estree
        * does not actually error on them and will produce an AST.
        */
@@ -158,7 +158,7 @@ let fixturePatternConfigsToTest = [
   createFixturePatternConfigFor('javascript/destructuring', {
     ignore: [
       /**
-       * Expected babylon parse errors - all of these files below produce parse errors in espree
+       * Expected babel parse errors - all of these files below produce parse errors in espree
        * as well, but the TypeScript compiler is so forgiving during parsing that typescript-estree
        * does not actually error on them and will produce an AST.
        */
@@ -174,7 +174,7 @@ let fixturePatternConfigsToTest = [
   createFixturePatternConfigFor('javascript/destructuring-and-spread', {
     ignore: [
       /**
-       * Expected babylon parse errors - all of these files below produce parse errors in espree
+       * Expected babel parse errors - all of these files below produce parse errors in espree
        * as well, but the TypeScript compiler is so forgiving during parsing that typescript-estree
        * does not actually error on them and will produce an AST.
        */
@@ -190,7 +190,7 @@ let fixturePatternConfigsToTest = [
   createFixturePatternConfigFor('javascript/forOf', {
     ignore: [
       /**
-       * TypeScript, espree and acorn parse this fine - esprima, flow and babylon do not...
+       * TypeScript, espree and acorn parse this fine - esprima, flow and babel do not...
        */
       'for-of-with-function-initializer' // babel parse errors
     ]
@@ -202,7 +202,7 @@ let fixturePatternConfigsToTest = [
   createFixturePatternConfigFor('javascript/modules', {
     ignore: [
       /**
-       * Expected babylon parse errors - all of these files below produce parse errors in espree
+       * Expected babel parse errors - all of these files below produce parse errors in espree
        * as well, but the TypeScript compiler is so forgiving during parsing that typescript-estree
        * does not actually error on them and will produce an AST.
        */
@@ -216,7 +216,7 @@ let fixturePatternConfigsToTest = [
   createFixturePatternConfigFor('javascript/newTarget', {
     ignore: [
       /**
-       * Expected babylon parse errors - all of these files below produce parse errors in espree
+       * Expected babel parse errors - all of these files below produce parse errors in espree
        * as well, but the TypeScript compiler is so forgiving during parsing that typescript-estree
        * does not actually error on them and will produce an AST.
        */
@@ -231,7 +231,7 @@ let fixturePatternConfigsToTest = [
   createFixturePatternConfigFor('javascript/objectLiteralDuplicateProperties', {
     ignore: [
       /**
-       * Expected babylon parse errors - all of these files below produce parse errors in espree
+       * Expected babel parse errors - all of these files below produce parse errors in espree
        * as well, but the TypeScript compiler is so forgiving during parsing that typescript-estree
        * does not actually error on them and will produce an AST.
        */
@@ -250,7 +250,7 @@ let fixturePatternConfigsToTest = [
   createFixturePatternConfigFor('javascript/restParams', {
     ignore: [
       /**
-       * Expected babylon parse errors - all of these files below produce parse errors in espree
+       * Expected babel parse errors - all of these files below produce parse errors in espree
        * as well, but the TypeScript compiler is so forgiving during parsing that typescript-estree
        * does not actually error on them and will produce an AST.
        */
@@ -293,7 +293,7 @@ let fixturePatternConfigsToTest = [
     fileType: 'ts',
     ignore: [
       /**
-       * Other babylon parse errors relating to invalid syntax.
+       * Other babel parse errors relating to invalid syntax.
        */
       'abstract-class-with-abstract-constructor', // babel parse errors
       'class-with-export-parameter-properties', // babel parse errors
@@ -303,21 +303,21 @@ let fixturePatternConfigsToTest = [
       'interface-with-all-property-types', // babel parse errors
       'interface-with-construct-signature-with-parameter-accessibility', // babel parse errors
       /**
-       * typescript-estree erroring, but babylon not.
+       * typescript-estree erroring, but babel not.
        */
       'arrow-function-with-type-parameters', // typescript-estree parse errors
       /**
-       * Babylon: ClassDeclaration + abstract: true
+       * Babel: ClassDeclaration + abstract: true
        * tsep: TSAbstractClassDeclaration
        */
       'abstract-class-with-abstract-properties',
       /**
-       * Babylon: ClassProperty + abstract: true
+       * Babel: ClassProperty + abstract: true
        * tsep: TSAbstractClassProperty
        */
       'abstract-class-with-abstract-readonly-property',
       /**
-       * Babylon: TSExpressionWithTypeArguments
+       * Babel: TSExpressionWithTypeArguments
        * tsep: ClassImplements
        */
       'class-with-implements-generic-multiple',
@@ -343,25 +343,25 @@ let fixturePatternConfigsToTest = [
       'keyof-operator',
       /**
        * tsep bug - Program.body[0].expression.left.properties[0].value.right is currently showing up
-       * as `ArrayPattern`, babylon, acorn and espree say it should be `ArrayExpression`
+       * as `ArrayPattern`, babel, acorn and espree say it should be `ArrayExpression`
        * TODO: Fix this
        */
       'destructuring-assignment',
       /**
-       * Babylon bug for optional or abstract methods?
+       * Babel bug for optional or abstract methods?
        */
       'abstract-class-with-abstract-method', // babel parse errors
       'abstract-class-with-optional-method', // babel parse errors
       'declare-class-with-optional-method', // babel parse errors
       /**
-       * Awaiting feedback on Babylon issue https://github.com/babel/babel/issues/6679
+       * Awaiting feedback on Babel issue https://github.com/babel/babel/issues/6679
        */
       'class-with-private-parameter-properties',
       'class-with-protected-parameter-properties',
       'class-with-public-parameter-properties',
       'class-with-readonly-parameter-properties',
       /**
-       * Not yet supported in Babylon https://github.com/babel/babel/issues/7749
+       * Not yet supported in Babel https://github.com/babel/babel/issues/7749
        */
       'import-type',
       'import-type-with-type-parameters-in-type-reference'
@@ -406,7 +406,7 @@ let fixturePatternConfigsToTest = [
        */
       'interface-empty-extends',
       /**
-       * TypeScript-specific tests taken from "errorRecovery". Babylon is not being as forgiving as the TypeScript compiler here.
+       * TypeScript-specific tests taken from "errorRecovery". Babel is not being as forgiving as the TypeScript compiler here.
        */
       'class-empty-extends-implements', // babel parse errors
       'class-empty-extends', // babel parse errors
@@ -443,7 +443,7 @@ let fixturePatternConfigsToTest = [
        */
       'nested-internal-module',
       /**
-       * Babylon: TSDeclareFunction
+       * Babel: TSDeclareFunction
        * tsep: TSNamespaceFunctionDeclaration
        */
       'declare-namespace-with-exported-function'

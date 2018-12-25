@@ -108,10 +108,6 @@ export function preprocessBabylonAST(ast: any): any {
       predicate: always
     },
     {
-      key: 'directive',
-      predicate: always
-    },
-    {
       key: 'innerComments',
       predicate: always
     },

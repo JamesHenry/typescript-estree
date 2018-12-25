@@ -82,14 +82,19 @@ export default function convert(config: ConvertConfig): ESTreeNode | null {
 
   /**
    * Converts a TypeScript node into an ESTree node.
-   * @param  {ts.Node} child the child ts.Node
+   * @param {ts.Node} child the child ts.Node
    * @returns {ESTreeNode|null}       the converted ESTree node
    */
   function convertChild(child?: ts.Node): ESTreeNode | null {
     if (!child) {
       return null;
     }
-    return convert({ node: child, parent: node, ast, additionalOptions });
+    return convert({
+      node: child,
+      parent: node,
+      ast,
+      additionalOptions
+    });
   }
 
   /**
@@ -108,6 +113,34 @@ export default function convert(config: ConvertConfig): ESTreeNode | null {
       range: [annotationStartCol, child.end],
       typeAnnotation: annotation
     };
+  }
+
+  /**
+   * Coverts body ExpressionStatements to directives
+   */
+  function convertBodyExpressionsToDirectives() {
+    if (result.body && nodeUtils.canContainDirective(node)) {
+      const unique: string[] = [];
+
+      // directives has to be unique, if directive is registered twice pick only first one
+      result.body
+        .filter(
+          (child: ESTreeNode) =>
+            child.type === AST_NODE_TYPES.ExpressionStatement &&
+            child.expression &&
+            child.expression.type === AST_NODE_TYPES.Literal &&
+            (child.expression as any).value &&
+            typeof (child.expression as any).value === 'string'
+        )
+        .forEach(
+          (child: { directive: string; expression: { raw: string } }) => {
+            if (!unique.includes((child.expression as any).raw)) {
+              child.directive = child.expression.raw.slice(1, -1);
+              unique.push(child.expression.raw);
+            }
+          }
+        );
+    }
   }
 
   /**
@@ -519,6 +552,8 @@ export default function convert(config: ConvertConfig): ESTreeNode | null {
         }
       });
 
+      convertBodyExpressionsToDirectives();
+
       (result as any).range[1] = node.endOfFileToken.end;
       result.loc = nodeUtils.getLocFor(
         node.getStart(ast),
@@ -532,6 +567,8 @@ export default function convert(config: ConvertConfig): ESTreeNode | null {
         type: AST_NODE_TYPES.BlockStatement,
         body: node.statements.map(convertChild)
       });
+
+      convertBodyExpressionsToDirectives();
       break;
 
     case SyntaxKind.Identifier:
@@ -774,12 +811,13 @@ export default function convert(config: ConvertConfig): ESTreeNode | null {
 
     // Expressions
 
-    case SyntaxKind.ExpressionStatement:
+    case SyntaxKind.ExpressionStatement: {
       Object.assign(result, {
         type: AST_NODE_TYPES.ExpressionStatement,
         expression: convertChild(node.expression)
       });
       break;
+    }
 
     case SyntaxKind.ThisKeyword:
       Object.assign(result, {

@@ -110,6 +110,8 @@ let fixturePatternConfigsToTest = [
     ignore: ['**/*']
   }),
 
+  createFixturePatternConfigFor('javascript/directives'),
+
   createFixturePatternConfigFor('javascript/experimentalObjectRestSpread', {
     ignore: [
       /**

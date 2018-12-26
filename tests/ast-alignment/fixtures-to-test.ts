@@ -20,6 +20,8 @@ interface CreateFixturePatternConfig {
   ignoreSourceType?: string[];
 }
 
+const fixturesDirPath = path.join(__dirname, '../fixtures');
+
 /**
  * JSX fixtures which have known issues for typescript-estree
  */
@@ -57,6 +59,12 @@ function createFixturePatternConfigFor(
       'fixtureSubPath was not provided for the current fixture pattern'
     );
   }
+  if (!fs.existsSync(path.join(fixturesDirPath, fixturesSubPath))) {
+    throw new Error(
+      `Registered path '${path.join(__dirname, fixturesSubPath)}' was not found`
+    );
+  }
+
   config = config || ({} as CreateFixturePatternConfig);
   config.ignore = config.ignore || [];
   config.fileType = config.fileType || 'js';
@@ -109,6 +117,8 @@ let fixturePatternConfigsToTest = [
   createFixturePatternConfigFor('javascript/templateStrings', {
     ignore: ['**/*']
   }),
+
+  createFixturePatternConfigFor('javascript/simple-literals'),
 
   createFixturePatternConfigFor('javascript/directives'),
 
@@ -482,7 +492,6 @@ fixturePatternConfigsToTest = ([] as FixturePatternConfig[]).concat(
 );
 
 const fixturesToTest: Fixture[] = [];
-const fixturesDirPath = path.join(__dirname, '../fixtures');
 
 /**
  * Resolve the glob patterns into actual Fixture files that we can run assertions for...

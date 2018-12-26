@@ -34,6 +34,7 @@ interface ConvertAdditionalOptions {
 interface ConvertConfig {
   node: ts.Node;
   parent?: ts.Node | null;
+  inTypeMode?: boolean;
   ast: ts.SourceFile;
   additionalOptions: ConvertAdditionalOptions;
 }
@@ -80,21 +81,35 @@ export default function convert(config: ConvertConfig): ESTreeNode | null {
     });
   }
 
-  /**
-   * Converts a TypeScript node into an ESTree node.
-   * @param {ts.Node} child the child ts.Node
-   * @returns {ESTreeNode|null}       the converted ESTree node
-   */
-  function convertChild(child?: ts.Node): ESTreeNode | null {
+  function converter(child?: ts.Node, inTypeMode?: boolean): ESTreeNode | null {
     if (!child) {
       return null;
     }
     return convert({
       node: child,
       parent: node,
+      inTypeMode,
       ast,
       additionalOptions
     });
+  }
+
+  /**
+   * Converts a TypeScript node into an ESTree node.
+   * @param  {ts.Node} child the child ts.Node
+   * @returns {ESTreeNode|null}       the converted ESTree node
+   */
+  function convertChild(child?: ts.Node): ESTreeNode | null {
+    return converter(child, config.inTypeMode);
+  }
+
+  /**
+   * Converts a TypeScript node into an ESTree node.
+   * @param {ts.Node} child the child ts.Node
+   * @returns {ESTreeNode|null}       the converted ESTree node
+   */
+  function convertChildType(child?: ts.Node): ESTreeNode | null {
+    return converter(child, true);
   }
 
   /**
@@ -104,7 +119,7 @@ export default function convert(config: ConvertConfig): ESTreeNode | null {
    * @returns {ESTreeNode} The type annotation node.
    */
   function convertTypeAnnotation(child: ts.TypeNode): ESTreeNode {
-    const annotation = convertChild(child);
+    const annotation = convertChildType(child);
     const annotationStartCol = child.getFullStart() - 1;
     const loc = nodeUtils.getLocFor(annotationStartCol, child.end, ast);
     return {
@@ -182,32 +197,7 @@ export default function convert(config: ConvertConfig): ESTreeNode | null {
       type: AST_NODE_TYPES.TSTypeParameterInstantiation,
       range: [start, end],
       loc: nodeUtils.getLocFor(start, end, ast),
-      params: typeArguments.map(typeArgument => {
-        if (nodeUtils.isTypeKeyword(typeArgument.kind)) {
-          return {
-            type: AST_NODE_TYPES[`TS${SyntaxKind[typeArgument.kind]}`],
-            range: [typeArgument.getStart(ast), typeArgument.getEnd()],
-            loc: nodeUtils.getLoc(typeArgument, ast)
-          };
-        }
-        if (typeArgument.kind === SyntaxKind.ImportType) {
-          return convert({
-            node: typeArgument,
-            parent: null,
-            ast,
-            additionalOptions
-          });
-        }
-        return {
-          type: AST_NODE_TYPES.TSTypeReference,
-          range: [typeArgument.getStart(ast), typeArgument.getEnd()],
-          loc: nodeUtils.getLoc(typeArgument, ast),
-          typeName: convertChild(typeArgument.typeName || typeArgument),
-          typeParameters: typeArgument.typeArguments
-            ? convertTypeArgumentsToTypeParameters(typeArgument.typeArguments)
-            : undefined
-        };
-      })
+      params: typeArguments.map(typeArgument => convertChildType(typeArgument))
     };
   }
 
@@ -236,36 +226,9 @@ export default function convert(config: ConvertConfig): ESTreeNode | null {
         greaterThanToken!.end,
         ast
       ),
-      params: typeParameters.map(typeParameter => {
-        const name = typeParameter.name.text;
-
-        const constraint = typeParameter.constraint
-          ? convert({
-              node: typeParameter.constraint,
-              parent: typeParameter,
-              ast,
-              additionalOptions
-            })
-          : undefined;
-
-        const defaultParameter = typeParameter.default
-          ? convert({
-              node: typeParameter.default,
-              parent: typeParameter,
-              ast,
-              additionalOptions
-            })
-          : typeParameter.default;
-
-        return {
-          type: AST_NODE_TYPES.TSTypeParameter,
-          range: [typeParameter.getStart(ast), typeParameter.getEnd()],
-          loc: nodeUtils.getLoc(typeParameter, ast),
-          name,
-          constraint,
-          default: defaultParameter
-        };
-      })
+      params: typeParameters.map(typeParameter =>
+        convertChildType(typeParameter)
+      )
     };
   }
 
@@ -2091,7 +2054,7 @@ export default function convert(config: ConvertConfig): ESTreeNode | null {
       break;
 
     case SyntaxKind.NullKeyword: {
-      if (nodeUtils.isWithinTypeAnnotation(node)) {
+      if (config.inTypeMode) {
         Object.assign(result, {
           type: AST_NODE_TYPES.TSNullKeyword
         });
@@ -2279,6 +2242,45 @@ export default function convert(config: ConvertConfig): ESTreeNode | null {
 
     // TypeScript specific
 
+    case SyntaxKind.TypeReference: {
+      Object.assign(result, {
+        type: AST_NODE_TYPES.TSTypeReference,
+        typeName: convertChildType(node.typeName),
+        typeParameters: node.typeArguments
+          ? convertTypeArgumentsToTypeParameters(node.typeArguments)
+          : undefined
+      });
+      break;
+    }
+
+    case SyntaxKind.TypeParameter: {
+      Object.assign(result, {
+        type: AST_NODE_TYPES.TSTypeParameter,
+        name: node.name.text,
+        constraint: node.constraint
+          ? convertChildType(node.constraint)
+          : undefined,
+        default: node.default ? convertChildType(node.default) : undefined
+      });
+      break;
+    }
+
+    case SyntaxKind.AnyKeyword:
+    case SyntaxKind.BigIntKeyword:
+    case SyntaxKind.BooleanKeyword:
+    case SyntaxKind.NeverKeyword:
+    case SyntaxKind.NumberKeyword:
+    case SyntaxKind.ObjectKeyword:
+    case SyntaxKind.StringKeyword:
+    case SyntaxKind.SymbolKeyword:
+    case SyntaxKind.UnknownKeyword:
+    case SyntaxKind.VoidKeyword: {
+      Object.assign(result, {
+        type: `TS${SyntaxKind[node.kind]}`
+      });
+      break;
+    }
+
     case SyntaxKind.ParenthesizedExpression:
       return convert({
         node: node.expression,
@@ -2291,7 +2293,7 @@ export default function convert(config: ConvertConfig): ESTreeNode | null {
       Object.assign(result, {
         type: AST_NODE_TYPES.TSTypeAliasDeclaration,
         id: convertChild(node.name),
-        typeAnnotation: convertChild(node.type)
+        typeAnnotation: convertChildType(node.type)
       });
 
       if (nodeUtils.hasModifier(SyntaxKind.DeclareKeyword, node)) {
@@ -2561,42 +2563,42 @@ export default function convert(config: ConvertConfig): ESTreeNode | null {
     case SyntaxKind.OptionalType: {
       Object.assign(result, {
         type: AST_NODE_TYPES.TSOptionalType,
-        typeAnnotation: convertChild(node.type)
+        typeAnnotation: convertChildType(node.type)
       });
       break;
     }
     case SyntaxKind.ParenthesizedType: {
       Object.assign(result, {
         type: AST_NODE_TYPES.TSParenthesizedType,
-        typeAnnotation: convertChild(node.type)
+        typeAnnotation: convertChildType(node.type)
       });
       break;
     }
     case SyntaxKind.TupleType: {
       Object.assign(result, {
         type: AST_NODE_TYPES.TSTupleType,
-        elementTypes: node.elementTypes.map(convertChild)
+        elementTypes: node.elementTypes.map(convertChildType)
       });
       break;
     }
     case SyntaxKind.UnionType: {
       Object.assign(result, {
         type: AST_NODE_TYPES.TSUnionType,
-        types: node.types.map(convertChild)
+        types: node.types.map(convertChildType)
       });
       break;
     }
     case SyntaxKind.IntersectionType: {
       Object.assign(result, {
         type: AST_NODE_TYPES.TSIntersectionType,
-        types: node.types.map(convertChild)
+        types: node.types.map(convertChildType)
       });
       break;
     }
     case SyntaxKind.RestType: {
       Object.assign(result, {
         type: AST_NODE_TYPES.TSRestType,
-        typeAnnotation: convertChild(node.type)
+        typeAnnotation: convertChildType(node.type)
       });
       break;
     }

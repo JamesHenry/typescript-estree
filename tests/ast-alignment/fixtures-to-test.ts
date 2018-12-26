@@ -431,6 +431,10 @@ let fixturePatternConfigsToTest = [
     ]
   }),
 
+  createFixturePatternConfigFor('typescript/types', {
+    fileType: 'ts'
+  }),
+
   createFixturePatternConfigFor('typescript/declare', {
     fileType: 'ts',
     ignore: [

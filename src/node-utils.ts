@@ -160,8 +160,6 @@ export default {
   convertToken,
   convertTokens,
   getNodeContainer,
-  isWithinTypeAnnotation,
-  isTypeKeyword,
   isComment,
   isJSDocComment,
   createError,
@@ -358,29 +356,6 @@ function isJSXToken(node: ts.Node): boolean {
 }
 
 /**
- * Returns true if the given ts.Node.kind value corresponds to a type keyword
- * @param {number} kind TypeScript SyntaxKind
- * @returns {boolean} is a type keyword
- */
-function isTypeKeyword(kind: number): boolean {
-  switch (kind) {
-    case SyntaxKind.AnyKeyword:
-    case SyntaxKind.BooleanKeyword:
-    case SyntaxKind.BigIntKeyword:
-    case SyntaxKind.NeverKeyword:
-    case SyntaxKind.NumberKeyword:
-    case SyntaxKind.ObjectKeyword:
-    case SyntaxKind.StringKeyword:
-    case SyntaxKind.SymbolKeyword:
-    case SyntaxKind.UnknownKeyword:
-    case SyntaxKind.VoidKeyword:
-      return true;
-    default:
-      return false;
-  }
-}
-
-/**
  * Returns the declaration kind of the given ts.Node
  * @param  {ts.Node}  node TypeScript AST node
  * @returns {string}     declaration kind
@@ -564,19 +539,6 @@ function isOptional(node: { questionToken?: ts.QuestionToken }): boolean {
   return node.questionToken
     ? node.questionToken.kind === SyntaxKind.QuestionToken
     : false;
-}
-
-/**
- * Returns true if the given ts.Node is within the context of a "typeAnnotation",
- * which effectively means - is it coming from its parent's `type` or `types` property
- * @param  {ts.Node} node ts.Node to be checked
- * @returns {boolean}       is within "typeAnnotation context"
- */
-function isWithinTypeAnnotation(node: any): boolean {
-  return (
-    node.parent.type === node ||
-    (node.parent.types && node.parent.types.indexOf(node) > -1)
-  );
 }
 
 /**

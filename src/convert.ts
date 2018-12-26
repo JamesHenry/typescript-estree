@@ -774,13 +774,12 @@ export default function convert(config: ConvertConfig): ESTreeNode | null {
 
     // Expressions
 
-    case SyntaxKind.ExpressionStatement: {
+    case SyntaxKind.ExpressionStatement:
       Object.assign(result, {
         type: AST_NODE_TYPES.ExpressionStatement,
         expression: convertChild(node.expression)
       });
       break;
-    }
 
     case SyntaxKind.ThisKeyword:
       Object.assign(result, {

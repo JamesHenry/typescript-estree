@@ -352,7 +352,6 @@ let fixturePatternConfigsToTest = [
       'typed-this',
       'export-type-function-declaration',
       'abstract-interface',
-      'keyof-operator',
       /**
        * Babel bug for optional or abstract methods?
        */

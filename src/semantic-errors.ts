@@ -22,5 +22,10 @@ export function getFirstSemanticOrSyntacticError(
 function whitelistSupportedErrors(
   diagnostics: ReadonlyArray<ts.DiagnosticWithLocation | ts.Diagnostic>
 ): ReadonlyArray<ts.DiagnosticWithLocation | ts.Diagnostic> {
-  return diagnostics.filter(() => false);
+  return diagnostics.filter(diagnostic => {
+    switch (diagnostic.code) {
+      case 1123: // ts 3.2: "Variable declaration list cannot be empty."
+        return true;
+    }
+  });
 }

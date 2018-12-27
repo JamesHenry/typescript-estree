@@ -447,7 +447,8 @@ let fixturePatternConfigsToTest = [
       'decorator-on-enum-declaration', // babel parse errors
       'decorator-on-interface-declaration', // babel parse errors
       'interface-property-modifiers', // babel parse errors
-      'enum-with-keywords' // babel parse errors
+      'enum-with-keywords', // babel parse errors
+      'solo-const' // babel parse errors
     ]
   }),
 

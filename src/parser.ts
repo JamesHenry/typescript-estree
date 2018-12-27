@@ -21,6 +21,7 @@ import {
   Extra,
   ParserOptions
 } from './temp-types-based-on-js-source';
+import { getFirstSemanticOrSyntacticError } from './semantic-errors';
 
 const packageJSON = require('../package.json');
 
@@ -329,13 +330,9 @@ function generateAST<T extends ParserOptions = ParserOptions>(
    * there may be other syntactic or semantic issues in the code that we can optionally report on.
    */
   if (program && extra.errorOnTypeScriptSyntaticAndSemanticIssues) {
-    const syntacticDiagnostics = program.getSyntacticDiagnostics(ast);
-    if (syntacticDiagnostics.length) {
-      throw convertError(syntacticDiagnostics[0]);
-    }
-    const semanticDiagnostics = program.getSemanticDiagnostics(ast);
-    if (semanticDiagnostics.length) {
-      throw convertError(semanticDiagnostics[0]);
+    const error = getFirstSemanticOrSyntacticError(program, ast);
+    if (error) {
+      throw convertError(error);
     }
   }
 

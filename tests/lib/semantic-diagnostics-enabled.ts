@@ -7,8 +7,6 @@
 import path from 'path';
 import shelljs from 'shelljs';
 import * as parser from '../../src/parser';
-// import { ParserOptions } from '../../src/temp-types-based-on-js-source';
-// import { createSnapshotTestBlock } from '../../tools/test-utils';
 
 //------------------------------------------------------------------------------
 // Setup
@@ -37,7 +35,7 @@ describe('Parse all fixtures with "errorOnTypeScriptSyntaticAndSemanticIssues" e
       range: true,
       tokens: true,
       errorOnUnknownASTType: true,
-      errorOnTypeScriptSyntaticAndSemanticIssues: false
+      errorOnTypeScriptSyntaticAndSemanticIssues: true
     };
     it(`fixtures/${filename}.src`, () => {
       expect.assertions(1);

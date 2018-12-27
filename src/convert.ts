@@ -1654,6 +1654,8 @@ export default function convert(config: ConvertConfig): ESTreeNode | null {
         type: AST_NODE_TYPES.TSModuleBlock,
         body: node.statements.map(convertChild)
       });
+
+      convertBodyExpressionsToDirectives();
       break;
 
     case SyntaxKind.ImportDeclaration:

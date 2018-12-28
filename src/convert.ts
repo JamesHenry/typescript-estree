@@ -2478,9 +2478,31 @@ export default function convert(config: ConvertConfig): ESTreeNode | null {
     case SyntaxKind.ConstructSignature: {
       Object.assign(result, {
         type: AST_NODE_TYPES.TSConstructSignature,
-        params: convertParameters(node.parameters),
-        typeAnnotation: node.type ? convertTypeAnnotation(node.type) : null
+        params: convertParameters(node.parameters)
       });
+
+      if (node.type) {
+        (result as any).returnType = convertTypeAnnotation(node.type);
+      }
+
+      if (node.typeParameters) {
+        result.typeParameters = convertTSTypeParametersToTypeParametersDeclaration(
+          node.typeParameters
+        );
+      }
+
+      break;
+    }
+
+    case SyntaxKind.CallSignature: {
+      Object.assign(result, {
+        type: AST_NODE_TYPES.TSCallSignature,
+        params: convertParameters(node.parameters)
+      });
+
+      if (node.type) {
+        (result as any).returnType = convertTypeAnnotation(node.type);
+      }
 
       if (node.typeParameters) {
         result.typeParameters = convertTSTypeParametersToTypeParametersDeclaration(

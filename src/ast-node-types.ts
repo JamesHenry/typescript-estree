@@ -107,6 +107,7 @@ export const AST_NODE_TYPES: { [key: string]: string } = {
   TSBigIntKeyword: 'TSBigIntKeyword',
   TSConditionalType: 'TSConditionalType',
   TSConstructorType: 'TSConstructorType',
+  TSCallSignature: 'TSCallSignature',
   TSConstructSignature: 'TSConstructSignature',
   TSDeclareKeyword: 'TSDeclareKeyword',
   TSDeclareFunction: 'TSDeclareFunction',

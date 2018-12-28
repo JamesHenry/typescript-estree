@@ -398,7 +398,13 @@ let fixturePatternConfigsToTest = [
        * Not yet supported in Babel https://github.com/babel/babel/issues/9228
        * Directive field is not added to module and namespace
        */
-      'directive-in-namespace'
+      'directive-in-namespace',
+      /**
+       * Awaiting feedback on Babel issue https://github.com/babel/babel/issues/9231
+       */
+      'interface-signatures',
+      'interface-with-all-property-types',
+      'interface-with-construct-signature-with-parameter-accessibility'
     ],
     ignoreSourceType: [
       // https://github.com/babel/babel/issues/9213

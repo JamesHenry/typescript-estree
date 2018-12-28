@@ -130,6 +130,7 @@ export const AST_NODE_TYPES: { [key: string]: string } = {
   TSNeverKeyword: 'TSNeverKeyword',
   TSNullKeyword: 'TSNullKeyword',
   TSNumberKeyword: 'TSNumberKeyword',
+  TSMappedType: 'TSMappedType',
   TSObjectKeyword: 'TSObjectKeyword',
   TSParameterProperty: 'TSParameterProperty',
   TSPrivateKeyword: 'TSPrivateKeyword',

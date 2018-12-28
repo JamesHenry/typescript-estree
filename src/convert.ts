@@ -70,17 +70,6 @@ export default function convert(config: ConvertConfig): ESTreeNode | null {
     loc: nodeUtils.getLoc(node, ast)
   };
 
-  /**
-   * Copies the result object into an ESTree node with just a type property.
-   * This is used only for leaf nodes that have no other properties.
-   * @returns {void}
-   */
-  function simplyCopy(): void {
-    Object.assign(result, {
-      type: SyntaxKind[node.kind]
-    });
-  }
-
   function converter(child?: ts.Node, inTypeMode?: boolean): ESTreeNode | null {
     if (!child) {
       return null;
@@ -484,14 +473,12 @@ export default function convert(config: ConvertConfig): ESTreeNode | null {
   function fixTypeAnnotationParentLocation(
     typeAnnotationParent: ESTreeNode
   ): void {
-    const end = (node as any).type.getEnd();
-    typeAnnotationParent.range[1] = end;
-    const loc = nodeUtils.getLocFor(
+    typeAnnotationParent.range[1] = (node as any).type.getEnd();
+    typeAnnotationParent.loc = nodeUtils.getLocFor(
       typeAnnotationParent.range[0],
       typeAnnotationParent.range[1],
       ast
     );
-    typeAnnotationParent.loc = loc;
   }
 
   /**
@@ -2077,7 +2064,9 @@ export default function convert(config: ConvertConfig): ESTreeNode | null {
 
     case SyntaxKind.EmptyStatement:
     case SyntaxKind.DebuggerStatement:
-      simplyCopy();
+      Object.assign(result, {
+        type: SyntaxKind[node.kind]
+      });
       break;
 
     // JSX
@@ -2275,10 +2264,95 @@ export default function convert(config: ConvertConfig): ESTreeNode | null {
     case SyntaxKind.StringKeyword:
     case SyntaxKind.SymbolKeyword:
     case SyntaxKind.UnknownKeyword:
-    case SyntaxKind.VoidKeyword: {
+    case SyntaxKind.VoidKeyword:
+    case SyntaxKind.UndefinedKeyword: {
       Object.assign(result, {
         type: `TS${SyntaxKind[node.kind]}`
       });
+      break;
+    }
+
+    case SyntaxKind.NonNullExpression: {
+      Object.assign(result, {
+        type: AST_NODE_TYPES.TSNonNullExpression,
+        expression: convertChild(node.expression)
+      });
+      break;
+    }
+
+    case SyntaxKind.TypeLiteral: {
+      Object.assign(result, {
+        type: AST_NODE_TYPES.TSTypeLiteral,
+        members: node.members.map(convertChild)
+      });
+      break;
+    }
+
+    case SyntaxKind.ArrayType: {
+      Object.assign(result, {
+        type: AST_NODE_TYPES.TSArrayType,
+        elementType: convertChildType(node.elementType)
+      });
+      break;
+    }
+
+    case SyntaxKind.IndexedAccessType: {
+      Object.assign(result, {
+        type: AST_NODE_TYPES.TSIndexedAccessType,
+        objectType: convertChildType(node.objectType),
+        indexType: convertChildType(node.indexType)
+      });
+      break;
+    }
+
+    case SyntaxKind.ConditionalType: {
+      Object.assign(result, {
+        type: AST_NODE_TYPES.TSConditionalType,
+        checkType: convertChildType(node.checkType),
+        extendsType: convertChildType(node.extendsType),
+        trueType: convertChildType(node.trueType),
+        falseType: convertChildType(node.falseType)
+      });
+      break;
+    }
+
+    case SyntaxKind.TypeQuery: {
+      Object.assign(result, {
+        type: AST_NODE_TYPES.TSTypeQuery,
+        exprName: convertChildType(node.exprName)
+      });
+      break;
+    }
+
+    case SyntaxKind.MappedType: {
+      Object.assign(result, {
+        type: AST_NODE_TYPES.TSMappedType,
+        typeParameter: convertChildType(node.typeParameter)
+      });
+
+      if (node.readonlyToken) {
+        if (node.readonlyToken.kind === SyntaxKind.ReadonlyKeyword) {
+          (result as any).readonly = true;
+        } else {
+          (result as any).readonly = nodeUtils.getTextForTokenKind(
+            node.readonlyToken.kind
+          );
+        }
+      }
+
+      if (node.questionToken) {
+        if (node.questionToken.kind === SyntaxKind.QuestionToken) {
+          (result as any).optional = true;
+        } else {
+          (result as any).optional = nodeUtils.getTextForTokenKind(
+            node.questionToken.kind
+          );
+        }
+      }
+
+      if (node.type) {
+        result.typeAnnotation = convertChildType(node.type);
+      }
       break;
     }
 

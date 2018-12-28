@@ -1,5 +1,5 @@
 /**
- * @fileoverview Tests for TypeScript-specific constructs
+ * @fileoverview Tests for optional semantic diagnostics
  * @author James Henry <https://github.com/JamesHenry>
  * @copyright jQuery Foundation and other contributors, https://jquery.org/
  * MIT License

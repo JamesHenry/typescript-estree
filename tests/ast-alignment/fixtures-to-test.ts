@@ -69,13 +69,13 @@ class FixturesTester {
 
   protected processFixtures(fixtures: FixturePatternConfig[]): Fixture[] {
     return fixtures
-      .map(fixtures => {
+      .map(fixture => {
         return glob
-          .sync(`${fixturesDirPath}/${fixtures.pattern}`, {})
+          .sync(`${fixturesDirPath}/${fixture.pattern}`, {})
           .map(filename => {
             return {
               filename,
-              ignoreSourceType: fixtures.ignoreSourceType
+              ignoreSourceType: fixture.ignoreSourceType
             };
           });
       })

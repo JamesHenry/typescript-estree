@@ -67,23 +67,17 @@ class FixturesTester {
     });
   }
 
-  protected processFixtures(fixtures: FixturePatternConfig[]): Fixture[] {
-    return fixtures
-      .map(fixture => {
-        return glob
-          .sync(`${fixturesDirPath}/${fixture.pattern}`, {})
-          .map(filename => {
-            return {
-              filename,
-              ignoreSourceType: fixture.ignoreSourceType
-            };
-          });
-      })
-      .reduce((acc, x) => acc.concat(x), []);
-  }
-
   public getFixtures(): Fixture[] {
-    return this.processFixtures(this.fixtures);
+    return this.fixtures
+      .map(fixture =>
+        glob
+          .sync(`${fixturesDirPath}/${fixture.pattern}`, {})
+          .map(filename => ({
+            filename,
+            ignoreSourceType: fixture.ignoreSourceType
+          }))
+      )
+      .reduce((acc, x) => acc.concat(x), []);
   }
 }
 

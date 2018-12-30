@@ -151,15 +151,9 @@ export abstract class AbstractConverter {
     };
   }
 
-  createSimpleNode(node: ts.Node, tsPrefix: boolean): ESTreeNode {
-    if (tsPrefix) {
-      return this.createNode(node, {
-        type: AST_NODE_TYPES[`TS${SyntaxKind[node.kind]}`]
-      });
-    }
-
+  createSimpleNode(node: ts.Node, name: string): ESTreeNode {
     return this.createNode(node, {
-      type: AST_NODE_TYPES[`${SyntaxKind[node.kind]}`]
+      type: AST_NODE_TYPES[name]
     });
   }
 
@@ -366,6 +360,7 @@ export abstract class AbstractConverter {
 
   /**
    * Applies the given TS modifiers to the given result object.
+   * @param {ESTreeNode} result
    * @param {ts.ModifiersArray} modifiers original ts.Nodes from the node.modifiers array
    * @returns {void} the current result object will be mutated
    * @deprecated

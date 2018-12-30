@@ -224,7 +224,8 @@ export default class Converter extends AbstractConverter {
       body: this.convert(node.statement),
       // await is only available in for of statement
       await: Boolean(
-        node.awaitModifier && node.awaitModifier.kind === SyntaxKind.AwaitKeyword
+        node.awaitModifier &&
+          node.awaitModifier.kind === SyntaxKind.AwaitKeyword
       )
     });
   }
@@ -557,7 +558,7 @@ export default class Converter extends AbstractConverter {
     );
 
     const methodLoc = this.ast.getLineAndCharacterOfPosition(
-      (openingParen as any).getStart(this.ast)
+        (openingParen as any).getStart(this.ast)
       ),
       nodeIsMethod = node.kind === SyntaxKind.MethodDeclaration,
       method = {
@@ -686,8 +687,8 @@ export default class Converter extends AbstractConverter {
     const result = this.createNode(node, {});
 
     const constructorIsStatic = nodeUtils.hasModifier(
-      SyntaxKind.StaticKeyword,
-      node
+        SyntaxKind.StaticKeyword,
+        node
       ),
       constructorIsAbstract = nodeUtils.hasModifier(
         SyntaxKind.AbstractKeyword,
@@ -718,7 +719,7 @@ export default class Converter extends AbstractConverter {
       };
 
     const constructorIdentifierLocStart = this.ast.getLineAndCharacterOfPosition(
-      (firstConstructorToken as any).getStart(this.ast)
+        (firstConstructorToken as any).getStart(this.ast)
       ),
       constructorIdentifierLocEnd = this.ast.getLineAndCharacterOfPosition(
         (firstConstructorToken as any).getEnd(this.ast)
@@ -875,7 +876,7 @@ export default class Converter extends AbstractConverter {
           value: this.convert(node.name),
           computed: Boolean(
             node.propertyName &&
-            node.propertyName.kind === SyntaxKind.ComputedPropertyName
+              node.propertyName.kind === SyntaxKind.ComputedPropertyName
           ),
           method: false,
           shorthand: !node.propertyName,
@@ -973,9 +974,7 @@ export default class Converter extends AbstractConverter {
     });
 
     node.templateSpans.forEach(templateSpan => {
-      (result as any).expressions.push(
-        this.convert(templateSpan.expression)
-      );
+      (result as any).expressions.push(this.convert(templateSpan.expression));
       (result as any).quasis.push(this.convert(templateSpan.literal));
     });
     return result;
@@ -1228,7 +1227,7 @@ export default class Converter extends AbstractConverter {
     });
 
     if (implementsClause) {
-      (result as any).implements = implementsClause.types.map((el) =>
+      (result as any).implements = implementsClause.types.map(el =>
         this.convertClassImplements(el)
       );
     }
@@ -1291,9 +1290,7 @@ export default class Converter extends AbstractConverter {
           );
         } else {
           result.specifiers = (result as any).specifiers.concat(
-            node.importClause.namedBindings.elements.map(el =>
-              this.convert(el)
-            )
+            node.importClause.namedBindings.elements.map(el => this.convert(el))
           );
         }
       }
@@ -1527,7 +1524,7 @@ export default class Converter extends AbstractConverter {
       const result = this.createNode(node, {
         type: AST_NODE_TYPES.MemberExpression,
         object: this.convert(node.expression, parent),
-        property: this.convert(node.name, parent),
+        property: this.convert(node.name, parent)
       });
       const isNestedMemberExpression =
         node.expression.kind === SyntaxKind.PropertyAccessExpression;
@@ -1747,12 +1744,8 @@ export default class Converter extends AbstractConverter {
   [SyntaxKind.JsxFragment](node: ts.JsxFragment): ESTreeNode {
     return this.createNode(node, {
       type: AST_NODE_TYPES.JSXFragment,
-      openingFragment: this.convert(
-        (node as ts.JsxFragment).openingFragment
-      ),
-      closingFragment: this.convert(
-        (node as ts.JsxFragment).closingFragment
-      ),
+      openingFragment: this.convert((node as ts.JsxFragment).openingFragment),
+      closingFragment: this.convert((node as ts.JsxFragment).closingFragment),
       children: node.children.map(el => this.convert(el))
     });
   }
@@ -1913,38 +1906,38 @@ export default class Converter extends AbstractConverter {
     });
   }
 
-  [SyntaxKind.AnyKeyword](node: ts.KeywordTypeNode) {
-    return this.createSimpleNode(node, true);
+  [SyntaxKind.AnyKeyword](node: ts.KeywordTypeNode): ESTreeNode {
+    return this.createSimpleNode(node, AST_NODE_TYPES.TSAnyKeyword);
   }
-  [SyntaxKind.BigIntKeyword](node: ts.KeywordTypeNode) {
-    return this.createSimpleNode(node, true);
+  [SyntaxKind.BigIntKeyword](node: ts.KeywordTypeNode): ESTreeNode {
+    return this.createSimpleNode(node, AST_NODE_TYPES.TSBigIntKeyword);
   }
-  [SyntaxKind.BooleanKeyword](node: ts.KeywordTypeNode) {
-    return this.createSimpleNode(node, true);
+  [SyntaxKind.BooleanKeyword](node: ts.KeywordTypeNode): ESTreeNode {
+    return this.createSimpleNode(node, AST_NODE_TYPES.TSBooleanKeyword);
   }
-  [SyntaxKind.NeverKeyword](node: ts.KeywordTypeNode) {
-    return this.createSimpleNode(node, true);
+  [SyntaxKind.NeverKeyword](node: ts.KeywordTypeNode): ESTreeNode {
+    return this.createSimpleNode(node, AST_NODE_TYPES.TSNeverKeyword);
   }
-  [SyntaxKind.NumberKeyword](node: ts.KeywordTypeNode) {
-    return this.createSimpleNode(node, true);
+  [SyntaxKind.NumberKeyword](node: ts.KeywordTypeNode): ESTreeNode {
+    return this.createSimpleNode(node, AST_NODE_TYPES.TSNumberKeyword);
   }
-  [SyntaxKind.ObjectKeyword](node: ts.KeywordTypeNode) {
-    return this.createSimpleNode(node, true);
+  [SyntaxKind.ObjectKeyword](node: ts.KeywordTypeNode): ESTreeNode {
+    return this.createSimpleNode(node, AST_NODE_TYPES.TSObjectKeyword);
   }
-  [SyntaxKind.StringKeyword](node: ts.KeywordTypeNode) {
-    return this.createSimpleNode(node, true);
+  [SyntaxKind.StringKeyword](node: ts.KeywordTypeNode): ESTreeNode {
+    return this.createSimpleNode(node, AST_NODE_TYPES.TSStringKeyword);
   }
-  [SyntaxKind.SymbolKeyword](node: ts.KeywordTypeNode) {
-    return this.createSimpleNode(node, true);
+  [SyntaxKind.SymbolKeyword](node: ts.KeywordTypeNode): ESTreeNode {
+    return this.createSimpleNode(node, AST_NODE_TYPES.TSSymbolKeyword);
   }
-  [SyntaxKind.UnknownKeyword](node: ts.KeywordTypeNode) {
-    return this.createSimpleNode(node, true);
+  [SyntaxKind.UnknownKeyword](node: ts.KeywordTypeNode): ESTreeNode {
+    return this.createSimpleNode(node, AST_NODE_TYPES.TSUnknownKeyword);
   }
-  [SyntaxKind.VoidKeyword](node: ts.KeywordTypeNode) {
-    return this.createSimpleNode(node, true);
+  [SyntaxKind.VoidKeyword](node: ts.KeywordTypeNode): ESTreeNode {
+    return this.createSimpleNode(node, AST_NODE_TYPES.TSVoidKeyword);
   }
-  [SyntaxKind.UndefinedKeyword](node: ts.KeywordTypeNode) {
-    return this.createSimpleNode(node, true);
+  [SyntaxKind.UndefinedKeyword](node: ts.KeywordTypeNode): ESTreeNode {
+    return this.createSimpleNode(node, AST_NODE_TYPES.TSUndefinedKeyword);
   }
 
   [SyntaxKind.NonNullExpression](node: ts.NonNullExpression): ESTreeNode {
@@ -2191,9 +2184,9 @@ export default class Converter extends AbstractConverter {
       body: interfaceBody,
       id: this.convert(node.name),
       heritage: hasImplementsClause
-        ? interfaceHeritageClauses[0].types.map((el) =>
-          this.convertInterfaceHeritageClause(el)
-        )
+        ? interfaceHeritageClauses[0].types.map(el =>
+            this.convertInterfaceHeritageClause(el)
+          )
         : []
     });
     /**
@@ -2272,8 +2265,10 @@ export default class Converter extends AbstractConverter {
     return result;
   }
 
-  [SyntaxKind.AbstractKeyword](node: ts.Token<ts.SyntaxKind.AbstractKeyword>) {
-    return this.createSimpleNode(node, true);
+  [SyntaxKind.AbstractKeyword](
+    node: ts.Token<ts.SyntaxKind.AbstractKeyword>
+  ): ESTreeNode {
+    return this.createSimpleNode(node, AST_NODE_TYPES.TSAbstractKeyword);
   }
 
   [SyntaxKind.ModuleDeclaration](node: ts.ModuleDeclaration): ESTreeNode {

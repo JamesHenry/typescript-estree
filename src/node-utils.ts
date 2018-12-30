@@ -11,7 +11,6 @@ import {
   ESTreeNode,
   ESTreeToken
 } from './temp-types-based-on-js-source';
-import { TSNode } from './ts-nodes';
 import { AST_NODE_TYPES } from './ast-node-types';
 
 const SyntaxKind = ts.SyntaxKind;
@@ -322,12 +321,12 @@ function canContainDirective(node: ts.Node): boolean {
 /**
  * Returns line and column data for the given ts.Node or ts.Token,
  * for the given AST
- * @param  {ts.Token|TSNode} nodeOrToken the ts.Node or ts.Token
+ * @param  {ts.Token} nodeOrToken the ts.Node or ts.Token
  * @param  {ts.SourceFile} ast         the AST object
  * @returns {ESTreeLoc}             the loc data
  */
 function getLoc(
-  nodeOrToken: TSNode | ts.Token<ts.SyntaxKind>,
+  nodeOrToken: ts.Token<ts.SyntaxKind>,
   ast: ts.SourceFile
 ): ESTreeNodeLoc {
   return getLocFor(nodeOrToken.getStart(ast), nodeOrToken.end, ast);

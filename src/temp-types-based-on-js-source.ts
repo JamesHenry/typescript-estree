@@ -42,6 +42,9 @@ export interface ESTreeNode {
   export?: boolean;
   parameter?: any;
   abstract?: boolean;
+
+  typeName?: ESTreeNode | null;
+  directive?: string;
 }
 
 export interface ESTreeComment extends ESTreeNode {}

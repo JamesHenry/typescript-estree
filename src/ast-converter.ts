@@ -5,7 +5,7 @@
  * @copyright jQuery Foundation and other contributors, https://jquery.org/
  * MIT License
  */
-import convert, { getASTMaps, resetASTMaps, convertError } from './convert';
+import Converter, { convertError } from './convert';
 import { convertComments } from './convert-comments';
 import nodeUtils from './node-utils';
 import ts from 'typescript';
@@ -27,16 +27,12 @@ export default (
   /**
    * Recursively convert the TypeScript AST into an ESTree-compatible AST
    */
-  const estree: any = convert({
-    node: ast,
-    parent: null,
-    ast,
-    additionalOptions: {
-      errorOnUnknownASTType: extra.errorOnUnknownASTType || false,
-      useJSXTextNode: extra.useJSXTextNode || false,
-      shouldProvideParserServices
-    }
+  const instance = new Converter(ast, {
+    errorOnUnknownASTType: extra.errorOnUnknownASTType || false,
+    useJSXTextNode: extra.useJSXTextNode || false,
+    shouldProvideParserServices
   });
+  const estree: any = instance.convertAll(ast);
 
   /**
    * Optionally convert and include all tokens in the AST
@@ -54,8 +50,7 @@ export default (
 
   let astMaps = undefined;
   if (shouldProvideParserServices) {
-    astMaps = getASTMaps();
-    resetASTMaps();
+    astMaps = instance.getASTMaps()
   }
 
   return { estree, astMaps };

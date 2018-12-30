@@ -143,7 +143,7 @@ describe('semanticInfo', () => {
     );
   });
 
-  test('non-existent file should provide parents tests', () => {
+  test('non-existent file should provide parents nodes', () => {
     const parseResult = parseCodeAndGenerateServices(
       `function M() { return Base }`,
       createOptions('<input>')

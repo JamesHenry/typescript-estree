@@ -37,7 +37,7 @@ export default class Converter extends AbstractConverter {
 
     // filter out unknown nodes for now
     node.statements.forEach(statement => {
-      const convertedStatement = this.convertChild(statement);
+      const convertedStatement = this.convert(statement);
       if (convertedStatement) {
         result.body.push(convertedStatement);
       }
@@ -57,7 +57,7 @@ export default class Converter extends AbstractConverter {
   [SyntaxKind.Block](node: ts.Block): ESTreeNode {
     const result = this.createNode(node, {
       type: AST_NODE_TYPES.BlockStatement,
-      body: node.statements.map(el => this.convertChild(el))
+      body: node.statements.map(el => this.convert(el))
     });
 
     result.body = this.convertBodyExpressionsToDirectives(node, result.body);
@@ -74,8 +74,8 @@ export default class Converter extends AbstractConverter {
   [SyntaxKind.WithStatement](node: ts.WithStatement): ESTreeNode {
     return this.createNode(node, {
       type: AST_NODE_TYPES.WithStatement,
-      object: this.convertChild(node.expression),
-      body: this.convertChild(node.statement)
+      object: this.convert(node.expression),
+      body: this.convert(node.statement)
     });
   }
 
@@ -84,29 +84,29 @@ export default class Converter extends AbstractConverter {
   [SyntaxKind.ReturnStatement](node: ts.ReturnStatement): ESTreeNode {
     return this.createNode(node, {
       type: AST_NODE_TYPES.ReturnStatement,
-      argument: this.convertChild(node.expression)
+      argument: this.convert(node.expression)
     });
   }
 
   [SyntaxKind.LabeledStatement](node: ts.LabeledStatement): ESTreeNode {
     return this.createNode(node, {
       type: AST_NODE_TYPES.LabeledStatement,
-      label: this.convertChild(node.label),
-      body: this.convertChild(node.statement)
+      label: this.convert(node.label),
+      body: this.convert(node.statement)
     });
   }
 
   [SyntaxKind.BreakStatement](node: ts.BreakStatement): ESTreeNode {
     return this.createNode(node, {
       type: SyntaxKind[node.kind],
-      label: this.convertChild(node.label)
+      label: this.convert(node.label)
     });
   }
 
   [SyntaxKind.ContinueStatement](node: ts.ContinueStatement): ESTreeNode {
     return this.createNode(node, {
       type: SyntaxKind[node.kind],
-      label: this.convertChild(node.label)
+      label: this.convert(node.label)
     });
   }
 
@@ -115,17 +115,17 @@ export default class Converter extends AbstractConverter {
   [SyntaxKind.IfStatement](node: ts.IfStatement): ESTreeNode {
     return this.createNode(node, {
       type: AST_NODE_TYPES.IfStatement,
-      test: this.convertChild(node.expression),
-      consequent: this.convertChild(node.thenStatement),
-      alternate: this.convertChild(node.elseStatement)
+      test: this.convert(node.expression),
+      consequent: this.convert(node.thenStatement),
+      alternate: this.convert(node.elseStatement)
     });
   }
 
   [SyntaxKind.SwitchStatement](node: ts.SwitchStatement): ESTreeNode {
     return this.createNode(node, {
       type: AST_NODE_TYPES.SwitchStatement,
-      discriminant: this.convertChild(node.expression),
-      cases: node.caseBlock.clauses.map(el => this.convertChild(el))
+      discriminant: this.convert(node.expression),
+      cases: node.caseBlock.clauses.map(el => this.convert(el))
     });
   }
 
@@ -133,8 +133,8 @@ export default class Converter extends AbstractConverter {
     return this.createNode(node, {
       type: AST_NODE_TYPES.SwitchCase,
       // expression is present in case only
-      test: this.convertChild(node.expression),
-      consequent: node.statements.map(el => this.convertChild(el))
+      test: this.convert(node.expression),
+      consequent: node.statements.map(el => this.convert(el))
     });
   }
 
@@ -143,7 +143,7 @@ export default class Converter extends AbstractConverter {
       type: AST_NODE_TYPES.SwitchCase,
       // expression is present in case only
       test: null,
-      consequent: node.statements.map(el => this.convertChild(el))
+      consequent: node.statements.map(el => this.convert(el))
     });
   }
 
@@ -152,16 +152,16 @@ export default class Converter extends AbstractConverter {
   [SyntaxKind.ThrowStatement](node: ts.ThrowStatement): ESTreeNode {
     return this.createNode(node, {
       type: AST_NODE_TYPES.ThrowStatement,
-      argument: this.convertChild(node.expression)
+      argument: this.convert(node.expression)
     });
   }
 
   [SyntaxKind.TryStatement](node: ts.TryStatement): ESTreeNode {
     return this.createNode(node, {
       type: AST_NODE_TYPES.TryStatement,
-      block: this.convertChild(node.tryBlock),
-      handler: this.convertChild(node.catchClause),
-      finalizer: this.convertChild(node.finallyBlock)
+      block: this.convert(node.tryBlock),
+      handler: this.convert(node.catchClause),
+      finalizer: this.convert(node.finallyBlock)
     });
   }
 
@@ -169,9 +169,9 @@ export default class Converter extends AbstractConverter {
     return this.createNode(node, {
       type: AST_NODE_TYPES.CatchClause,
       param: node.variableDeclaration
-        ? this.convertChild(node.variableDeclaration.name)
+        ? this.convert(node.variableDeclaration.name)
         : null,
-      body: this.convertChild(node.block)
+      body: this.convert(node.block)
     });
   }
 
@@ -180,8 +180,8 @@ export default class Converter extends AbstractConverter {
   [SyntaxKind.WhileStatement](node: ts.WhileStatement): ESTreeNode {
     return this.createNode(node, {
       type: AST_NODE_TYPES.WhileStatement,
-      test: this.convertChild(node.expression),
-      body: this.convertChild(node.statement)
+      test: this.convert(node.expression),
+      body: this.convert(node.statement)
     });
   }
 
@@ -192,36 +192,36 @@ export default class Converter extends AbstractConverter {
   [SyntaxKind.DoStatement](node: ts.DoStatement): ESTreeNode {
     return this.createNode(node, {
       type: AST_NODE_TYPES.DoWhileStatement,
-      test: this.convertChild(node.expression),
-      body: this.convertChild(node.statement)
+      test: this.convert(node.expression),
+      body: this.convert(node.statement)
     });
   }
 
   [SyntaxKind.ForStatement](node: ts.ForStatement): ESTreeNode {
     return this.createNode(node, {
       type: AST_NODE_TYPES.ForStatement,
-      init: this.convertChild(node.initializer),
-      test: this.convertChild(node.condition),
-      update: this.convertChild(node.incrementor),
-      body: this.convertChild(node.statement)
+      init: this.convert(node.initializer),
+      test: this.convert(node.condition),
+      update: this.convert(node.incrementor),
+      body: this.convert(node.statement)
     });
   }
 
   [SyntaxKind.ForInStatement](node: ts.ForInStatement): ESTreeNode {
     return this.createNode(node, {
       type: SyntaxKind[node.kind],
-      left: this.convertChild(node.initializer),
-      right: this.convertChild(node.expression),
-      body: this.convertChild(node.statement)
+      left: this.convert(node.initializer),
+      right: this.convert(node.expression),
+      body: this.convert(node.statement)
     });
   }
 
   [SyntaxKind.ForOfStatement](node: ts.ForOfStatement): ESTreeNode {
     return this.createNode(node, {
       type: SyntaxKind[node.kind],
-      left: this.convertChild(node.initializer),
-      right: this.convertChild(node.expression),
-      body: this.convertChild(node.statement),
+      left: this.convert(node.initializer),
+      right: this.convert(node.expression),
+      body: this.convert(node.statement),
       // await is only available in for of statement
       await: Boolean(
         node.awaitModifier && node.awaitModifier.kind === SyntaxKind.AwaitKeyword
@@ -239,12 +239,12 @@ export default class Converter extends AbstractConverter {
 
     const result = this.createNode(node, {
       type: functionDeclarationType,
-      id: this.convertChild(node.name),
+      id: this.convert(node.name),
       generator: !!node.asteriskToken,
       expression: false,
       async: nodeUtils.hasModifier(SyntaxKind.AsyncKeyword, node),
       params: this.convertParameters(node.parameters),
-      body: this.convertChild(node.body) || undefined
+      body: this.convert(node.body) || undefined
     });
 
     // Process returnType
@@ -270,8 +270,8 @@ export default class Converter extends AbstractConverter {
   [SyntaxKind.VariableDeclaration](node: ts.VariableDeclaration): ESTreeNode {
     const result = this.createNode(node, {
       type: AST_NODE_TYPES.VariableDeclarator,
-      id: this.convertChild(node.name),
-      init: this.convertChild(node.initializer)
+      id: this.convert(node.name),
+      init: this.convert(node.initializer)
     });
 
     if (node.exclamationToken) {
@@ -289,7 +289,7 @@ export default class Converter extends AbstractConverter {
     const result = this.createNode(node, {
       type: AST_NODE_TYPES.VariableDeclaration,
       declarations: node.declarationList.declarations.map(el =>
-        this.convertChild(el)
+        this.convert(el)
       ),
       kind: nodeUtils.getDeclarationKind(node.declarationList)
     });
@@ -308,7 +308,7 @@ export default class Converter extends AbstractConverter {
   ): ESTreeNode {
     return this.createNode(node, {
       type: AST_NODE_TYPES.VariableDeclaration,
-      declarations: node.declarations.map(el => this.convertChild(el)),
+      declarations: node.declarations.map(el => this.convert(el)),
       kind: nodeUtils.getDeclarationKind(node)
     });
   }
@@ -318,7 +318,7 @@ export default class Converter extends AbstractConverter {
   [SyntaxKind.ExpressionStatement](node: ts.ExpressionStatement): ESTreeNode {
     return this.createNode(node, {
       type: AST_NODE_TYPES.ExpressionStatement,
-      expression: this.convertChild(node.expression)
+      expression: this.convert(node.expression)
     });
   }
 
@@ -366,12 +366,12 @@ export default class Converter extends AbstractConverter {
     if (arrayIsInAssignment || arrayIsInForOf || arrayIsInForIn) {
       return this.createNode(node, {
         type: AST_NODE_TYPES.ArrayPattern,
-        elements: node.elements.map(el => this.convertChild(el))
+        elements: node.elements.map(el => this.convert(el))
       });
     } else {
       return this.createNode(node, {
         type: AST_NODE_TYPES.ArrayExpression,
-        elements: node.elements.map(el => this.convertChild(el))
+        elements: node.elements.map(el => this.convert(el))
       });
     }
   }
@@ -415,12 +415,12 @@ export default class Converter extends AbstractConverter {
     if (objectIsInAssignment) {
       return this.createNode(node, {
         type: AST_NODE_TYPES.ObjectPattern,
-        properties: node.properties.map(el => this.convertChild(el))
+        properties: node.properties.map(el => this.convert(el))
       });
     } else {
       return this.createNode(node, {
         type: AST_NODE_TYPES.ObjectExpression,
-        properties: node.properties.map(el => this.convertChild(el))
+        properties: node.properties.map(el => this.convert(el))
       });
     }
   }
@@ -428,8 +428,8 @@ export default class Converter extends AbstractConverter {
   [SyntaxKind.PropertyAssignment](node: ts.PropertyAssignment): ESTreeNode {
     return this.createNode(node, {
       type: AST_NODE_TYPES.Property,
-      key: this.convertChild(node.name),
-      value: this.convertChild(node.initializer),
+      key: this.convert(node.name),
+      value: this.convert(node.initializer),
       computed: nodeUtils.isComputedProperty(node.name),
       method: false,
       shorthand: false,
@@ -443,7 +443,7 @@ export default class Converter extends AbstractConverter {
     if (node.objectAssignmentInitializer) {
       const result = this.createNode(node, {
         type: AST_NODE_TYPES.Property,
-        key: this.convertChild(node.name),
+        key: this.convert(node.name),
         computed: false,
         method: false,
         shorthand: true,
@@ -451,8 +451,8 @@ export default class Converter extends AbstractConverter {
       });
       (result as any).value = {
         type: AST_NODE_TYPES.AssignmentPattern,
-        left: this.convertChild(node.name),
-        right: this.convertChild(node.objectAssignmentInitializer),
+        left: this.convert(node.name),
+        right: this.convert(node.objectAssignmentInitializer),
         loc: result.loc,
         range: result.range
       };
@@ -461,8 +461,8 @@ export default class Converter extends AbstractConverter {
       // TODO: this node has no initializer field
       return this.createNode(node, {
         type: AST_NODE_TYPES.Property,
-        key: this.convertChild(node.name),
-        value: this.convertChild((node as any).initializer || node.name),
+        key: this.convert(node.name),
+        value: this.convert((node as any).initializer || node.name),
         computed: false,
         method: false,
         shorthand: true,
@@ -479,15 +479,15 @@ export default class Converter extends AbstractConverter {
       // TODO: ComputedPropertyName has no name field
       return this.createNode(node, {
         type: AST_NODE_TYPES.Property,
-        key: this.convertChild((node as any).name),
-        value: this.convertChild((node as any).name),
+        key: this.convert((node as any).name),
+        value: this.convert((node as any).name),
         computed: false,
         method: false,
         shorthand: true,
         kind: 'init'
       });
     } else {
-      return this.convertChild(node.expression);
+      return this.convert(node.expression);
     }
   }
 
@@ -497,8 +497,8 @@ export default class Converter extends AbstractConverter {
       type: isAbstract
         ? AST_NODE_TYPES.TSAbstractClassProperty
         : AST_NODE_TYPES.ClassProperty,
-      key: this.convertChild(node.name),
-      value: this.convertChild(node.initializer),
+      key: this.convert(node.name),
+      value: this.convert(node.initializer),
       computed: nodeUtils.isComputedProperty(node.name),
       static: nodeUtils.hasModifier(SyntaxKind.StaticKeyword, node),
       readonly:
@@ -566,7 +566,7 @@ export default class Converter extends AbstractConverter {
         generator: !!node.asteriskToken,
         expression: false,
         async: nodeUtils.hasModifier(SyntaxKind.AsyncKeyword, node),
-        body: this.convertChild(node.body),
+        body: this.convert(node.body),
         range: [node.parameters.pos - 1, result.range[1]],
         loc: {
           start: {
@@ -582,12 +582,12 @@ export default class Converter extends AbstractConverter {
     }
 
     if (parent.kind === SyntaxKind.ObjectLiteralExpression) {
-      (method as any).params = node.parameters.map(el => this.convertChild(el));
+      (method as any).params = node.parameters.map(el => this.convert(el));
 
       // TODO: refactor me
       Object.assign(result, {
         type: AST_NODE_TYPES.Property,
-        key: this.convertChild(node.name),
+        key: this.convert(node.name),
         value: method,
         computed: nodeUtils.isComputedProperty(node.name),
         method: nodeIsMethod,
@@ -615,7 +615,7 @@ export default class Converter extends AbstractConverter {
       // TODO: refactor me
       Object.assign(result, {
         type: methodDefinitionType,
-        key: this.convertChild(node.name),
+        key: this.convert(node.name),
         value: method,
         computed: nodeUtils.isComputedProperty(node.name),
         static: nodeUtils.hasModifier(SyntaxKind.StaticKeyword, node),
@@ -706,7 +706,7 @@ export default class Converter extends AbstractConverter {
         generator: false,
         expression: false,
         async: false,
-        body: this.convertChild(node.body),
+        body: this.convert(node.body),
         range: [node.parameters.pos - 1, result.range[1]],
         loc: {
           start: {
@@ -792,10 +792,10 @@ export default class Converter extends AbstractConverter {
   [SyntaxKind.FunctionExpression](node: ts.FunctionExpression): ESTreeNode {
     const result = this.createNode(node, {
       type: AST_NODE_TYPES.FunctionExpression,
-      id: this.convertChild(node.name),
+      id: this.convert(node.name),
       generator: !!node.asteriskToken,
       params: this.convertParameters(node.parameters),
-      body: this.convertChild(node.body),
+      body: this.convert(node.body),
       async: nodeUtils.hasModifier(SyntaxKind.AsyncKeyword, node),
       expression: false
     });
@@ -823,7 +823,7 @@ export default class Converter extends AbstractConverter {
   [SyntaxKind.ArrayBindingPattern](node: ts.ArrayBindingPattern): ESTreeNode {
     return this.createNode(node, {
       type: AST_NODE_TYPES.ArrayPattern,
-      elements: node.elements.map(el => this.convertChild(el))
+      elements: node.elements.map(el => this.convert(el))
     });
   }
 
@@ -835,7 +835,7 @@ export default class Converter extends AbstractConverter {
   [SyntaxKind.ObjectBindingPattern](node: ts.ObjectBindingPattern): ESTreeNode {
     return this.createNode(node, {
       type: AST_NODE_TYPES.ObjectPattern,
-      properties: node.elements.map(el => this.convertChild(el))
+      properties: node.elements.map(el => this.convert(el))
     });
   }
 
@@ -850,7 +850,7 @@ export default class Converter extends AbstractConverter {
         return this.createNode(node, {
           type: AST_NODE_TYPES.AssignmentPattern,
           left: arrayItem,
-          right: this.convertChild(node.initializer)
+          right: this.convert(node.initializer)
         });
       } else if (node.dotDotDotToken) {
         return this.createNode(node, {
@@ -866,13 +866,13 @@ export default class Converter extends AbstractConverter {
       if (node.dotDotDotToken) {
         result = this.createNode(node, {
           type: AST_NODE_TYPES.RestElement,
-          argument: this.convertChild(node.propertyName || node.name)
+          argument: this.convert(node.propertyName || node.name)
         });
       } else {
         result = this.createNode(node, {
           type: AST_NODE_TYPES.Property,
-          key: this.convertChild(node.propertyName || node.name),
-          value: this.convertChild(node.name),
+          key: this.convert(node.propertyName || node.name),
+          value: this.convert(node.name),
           computed: Boolean(
             node.propertyName &&
             node.propertyName.kind === SyntaxKind.ComputedPropertyName
@@ -886,8 +886,8 @@ export default class Converter extends AbstractConverter {
       if (node.initializer) {
         (result as any).value = {
           type: AST_NODE_TYPES.AssignmentPattern,
-          left: this.convertChild(node.name),
-          right: this.convertChild(node.initializer),
+          left: this.convert(node.name),
+          right: this.convert(node.initializer),
           range: [node.name.getStart(this.ast), node.initializer.end],
           loc: nodeUtils.getLocFor(
             node.name.getStart(this.ast),
@@ -907,7 +907,7 @@ export default class Converter extends AbstractConverter {
       generator: false,
       id: null,
       params: this.convertParameters(node.parameters),
-      body: this.convertChild(node.body),
+      body: this.convert(node.body),
       async: nodeUtils.hasModifier(SyntaxKind.AsyncKeyword, node),
       expression: node.body.kind !== SyntaxKind.Block
     });
@@ -930,14 +930,14 @@ export default class Converter extends AbstractConverter {
     return this.createNode(node, {
       type: AST_NODE_TYPES.YieldExpression,
       delegate: !!node.asteriskToken,
-      argument: this.convertChild(node.expression)
+      argument: this.convert(node.expression)
     });
   }
 
   [SyntaxKind.AwaitExpression](node: ts.AwaitExpression): ESTreeNode {
     return this.createNode(node, {
       type: AST_NODE_TYPES.AwaitExpression,
-      argument: this.convertChild(node.expression)
+      argument: this.convert(node.expression)
     });
   }
 
@@ -968,15 +968,15 @@ export default class Converter extends AbstractConverter {
   [SyntaxKind.TemplateExpression](node: ts.TemplateExpression): ESTreeNode {
     const result = this.createNode(node, {
       type: AST_NODE_TYPES.TemplateLiteral,
-      quasis: [this.convertChild(node.head)],
+      quasis: [this.convert(node.head)],
       expressions: []
     });
 
     node.templateSpans.forEach(templateSpan => {
       (result as any).expressions.push(
-        this.convertChild(templateSpan.expression)
+        this.convert(templateSpan.expression)
       );
-      (result as any).quasis.push(this.convertChild(templateSpan.literal));
+      (result as any).quasis.push(this.convert(templateSpan.literal));
     });
     return result;
   }
@@ -989,8 +989,8 @@ export default class Converter extends AbstractConverter {
       typeParameters: node.typeArguments
         ? this.convertTypeArgumentsToTypeParameters(node.typeArguments)
         : undefined,
-      tag: this.convertChild(node.tag),
-      quasi: this.convertChild(node.template)
+      tag: this.convert(node.tag),
+      quasi: this.convert(node.template)
     });
   }
 
@@ -1044,7 +1044,7 @@ export default class Converter extends AbstractConverter {
 
     return this.createNode(node, {
       type,
-      argument: this.convertChild(node.expression)
+      argument: this.convert(node.expression)
     });
   }
   [SyntaxKind.SpreadAssignment](node: ts.SpreadAssignment): ESTreeNode {
@@ -1066,7 +1066,7 @@ export default class Converter extends AbstractConverter {
 
     return this.createNode(node, {
       type,
-      argument: this.convertChild(node.expression)
+      argument: this.convert(node.expression)
     });
   }
 
@@ -1078,17 +1078,17 @@ export default class Converter extends AbstractConverter {
     let result: ESTreeNode | null;
 
     if (node.dotDotDotToken) {
-      parameter = this.convertChild(node.name);
+      parameter = this.convert(node.name);
       result = this.createNode(node, {
         type: AST_NODE_TYPES.RestElement,
         argument: parameter
       });
     } else if (node.initializer) {
-      parameter = this.convertChild(node.name);
+      parameter = this.convert(node.name);
       result = this.createNode(node, {
         type: AST_NODE_TYPES.AssignmentPattern,
         left: parameter,
-        right: this.convertChild(node.initializer)
+        right: this.convert(node.initializer)
       });
     } else {
       parameter = this.convert(node.name, parent);
@@ -1208,7 +1208,7 @@ export default class Converter extends AbstractConverter {
 
     Object.assign(result, {
       type: classNodeType,
-      id: this.convertChild(node.name),
+      id: this.convert(node.name),
       body: {
         type: AST_NODE_TYPES.ClassBody,
         body: [],
@@ -1223,7 +1223,7 @@ export default class Converter extends AbstractConverter {
       },
       superClass:
         superClass && superClass.types[0]
-          ? this.convertChild(superClass.types[0].expression)
+          ? this.convert(superClass.types[0].expression)
           : null
     });
 
@@ -1244,7 +1244,7 @@ export default class Converter extends AbstractConverter {
     const filteredMembers = node.members.filter(nodeUtils.isESTreeClassMember);
 
     if (filteredMembers.length) {
-      result.body.body = filteredMembers.map(el => this.convertChild(el));
+      result.body.body = filteredMembers.map(el => this.convert(el));
     }
 
     // check for exports
@@ -1263,7 +1263,7 @@ export default class Converter extends AbstractConverter {
   [SyntaxKind.ModuleBlock](node: ts.ModuleBlock): ESTreeNode {
     const result = this.createNode(node, {
       type: AST_NODE_TYPES.TSModuleBlock,
-      body: node.statements.map(el => this.convertChild(el))
+      body: node.statements.map(el => this.convert(el))
     });
 
     result.body = this.convertBodyExpressionsToDirectives(node, result.body);
@@ -1273,13 +1273,13 @@ export default class Converter extends AbstractConverter {
   [SyntaxKind.ImportDeclaration](node: ts.ImportDeclaration): ESTreeNode {
     const result = this.createNode(node, {
       type: AST_NODE_TYPES.ImportDeclaration,
-      source: this.convertChild(node.moduleSpecifier),
+      source: this.convert(node.moduleSpecifier),
       specifiers: []
     });
 
     if (node.importClause) {
       if (node.importClause.name) {
-        (result as any).specifiers.push(this.convertChild(node.importClause));
+        (result as any).specifiers.push(this.convert(node.importClause));
       }
 
       if (node.importClause.namedBindings) {
@@ -1287,12 +1287,12 @@ export default class Converter extends AbstractConverter {
           node.importClause.namedBindings.kind === SyntaxKind.NamespaceImport
         ) {
           (result as any).specifiers.push(
-            this.convertChild(node.importClause.namedBindings)
+            this.convert(node.importClause.namedBindings)
           );
         } else {
           result.specifiers = (result as any).specifiers.concat(
             node.importClause.namedBindings.elements.map(el =>
-              this.convertChild(el)
+              this.convert(el)
             )
           );
         }
@@ -1304,22 +1304,22 @@ export default class Converter extends AbstractConverter {
   [SyntaxKind.NamespaceImport](node: ts.NamespaceImport): ESTreeNode {
     return this.createNode(node, {
       type: AST_NODE_TYPES.ImportNamespaceSpecifier,
-      local: this.convertChild(node.name)
+      local: this.convert(node.name)
     });
   }
 
   [SyntaxKind.ImportSpecifier](node: ts.ImportSpecifier): ESTreeNode {
     return this.createNode(node, {
       type: AST_NODE_TYPES.ImportSpecifier,
-      local: this.convertChild(node.name),
-      imported: this.convertChild(node.propertyName || node.name)
+      local: this.convert(node.name),
+      imported: this.convert(node.propertyName || node.name)
     });
   }
 
   [SyntaxKind.ImportClause](node: ts.ImportClause): ESTreeNode {
     const result = this.createNode(node, {
       type: AST_NODE_TYPES.ImportDefaultSpecifier,
-      local: this.convertChild(node.name)
+      local: this.convert(node.name)
     });
 
     // have to adjust location information due to tree differences
@@ -1336,7 +1336,7 @@ export default class Converter extends AbstractConverter {
     // TODO: node has no name field
     return this.createNode(node, {
       type: AST_NODE_TYPES.ImportDefaultSpecifier,
-      local: this.convertChild((node as any).name)
+      local: this.convert((node as any).name)
     });
   }
 
@@ -1344,14 +1344,14 @@ export default class Converter extends AbstractConverter {
     if (node.exportClause) {
       return this.createNode(node, {
         type: AST_NODE_TYPES.ExportNamedDeclaration,
-        source: this.convertChild(node.moduleSpecifier),
-        specifiers: node.exportClause.elements.map(el => this.convertChild(el)),
+        source: this.convert(node.moduleSpecifier),
+        specifiers: node.exportClause.elements.map(el => this.convert(el)),
         declaration: null
       });
     } else {
       return this.createNode(node, {
         type: AST_NODE_TYPES.ExportAllDeclaration,
-        source: this.convertChild(node.moduleSpecifier)
+        source: this.convert(node.moduleSpecifier)
       });
     }
   }
@@ -1359,8 +1359,8 @@ export default class Converter extends AbstractConverter {
   [SyntaxKind.ExportSpecifier](node: ts.ExportSpecifier): ESTreeNode {
     return this.createNode(node, {
       type: AST_NODE_TYPES.ExportSpecifier,
-      local: this.convertChild(node.propertyName || node.name),
-      exported: this.convertChild(node.name)
+      local: this.convert(node.propertyName || node.name),
+      exported: this.convert(node.name)
     });
   }
 
@@ -1368,12 +1368,12 @@ export default class Converter extends AbstractConverter {
     if (node.isExportEquals) {
       return this.createNode(node, {
         type: AST_NODE_TYPES.TSExportAssignment,
-        expression: this.convertChild(node.expression)
+        expression: this.convert(node.expression)
       });
     } else {
       return this.createNode(node, {
         type: AST_NODE_TYPES.ExportDefaultDeclaration,
-        declaration: this.convertChild(node.expression)
+        declaration: this.convert(node.expression)
       });
     }
   }
@@ -1392,7 +1392,7 @@ export default class Converter extends AbstractConverter {
         : AST_NODE_TYPES.UnaryExpression,
       operator,
       prefix: node.kind === SyntaxKind.PrefixUnaryExpression,
-      argument: this.convertChild(node.operand)
+      argument: this.convert(node.operand)
     });
   }
 
@@ -1413,7 +1413,7 @@ export default class Converter extends AbstractConverter {
       type: AST_NODE_TYPES.UnaryExpression,
       operator: 'delete',
       prefix: true,
-      argument: this.convertChild(node.expression)
+      argument: this.convert(node.expression)
     });
   }
 
@@ -1422,7 +1422,7 @@ export default class Converter extends AbstractConverter {
       type: AST_NODE_TYPES.UnaryExpression,
       operator: 'void',
       prefix: true,
-      argument: this.convertChild(node.expression)
+      argument: this.convert(node.expression)
     });
   }
 
@@ -1431,7 +1431,7 @@ export default class Converter extends AbstractConverter {
       type: AST_NODE_TYPES.UnaryExpression,
       operator: 'typeof',
       prefix: true,
-      argument: this.convertChild(node.expression)
+      argument: this.convert(node.expression)
     });
   }
 
@@ -1439,7 +1439,7 @@ export default class Converter extends AbstractConverter {
     return this.createNode(node, {
       type: AST_NODE_TYPES.TSTypeOperator,
       operator: nodeUtils.getTextForTokenKind(node.operator),
-      typeAnnotation: this.convertChild(node.type)
+      typeAnnotation: this.convert(node.type)
     });
   }
 
@@ -1453,8 +1453,8 @@ export default class Converter extends AbstractConverter {
         expressions: []
       });
 
-      const left = this.convertChild(node.left),
-        right = this.convertChild(node.right);
+      const left = this.convert(node.left),
+        right = this.convert(node.right);
 
       if ((left as any).type === AST_NODE_TYPES.SequenceExpression) {
         (result as any).expressions = (result as any).expressions.concat(
@@ -1476,8 +1476,8 @@ export default class Converter extends AbstractConverter {
       const result = this.createNode(node, {
         type: nodeUtils.getBinaryExpressionType(node.operatorToken),
         operator: nodeUtils.getTextForTokenKind(node.operatorToken.kind),
-        left: this.convertChild(node.left),
-        right: this.convertChild(node.right)
+        left: this.convert(node.left),
+        right: this.convert(node.right)
       });
 
       // if the binary expression is in a destructured array, switch it
@@ -1543,8 +1543,8 @@ export default class Converter extends AbstractConverter {
     } else {
       return this.createNode(node, {
         type: AST_NODE_TYPES.MemberExpression,
-        object: this.convertChild(node.expression),
-        property: this.convertChild(node.name),
+        object: this.convert(node.expression),
+        property: this.convert(node.name),
         computed: false
       });
     }
@@ -1555,8 +1555,8 @@ export default class Converter extends AbstractConverter {
   ): ESTreeNode {
     return this.createNode(node, {
       type: AST_NODE_TYPES.MemberExpression,
-      object: this.convertChild(node.expression),
-      property: this.convertChild(node.argumentExpression),
+      object: this.convert(node.expression),
+      property: this.convert(node.argumentExpression),
       computed: true
     });
   }
@@ -1566,17 +1566,17 @@ export default class Converter extends AbstractConverter {
   ): ESTreeNode {
     return this.createNode(node, {
       type: AST_NODE_TYPES.ConditionalExpression,
-      test: this.convertChild(node.condition),
-      consequent: this.convertChild(node.whenTrue),
-      alternate: this.convertChild(node.whenFalse)
+      test: this.convert(node.condition),
+      consequent: this.convert(node.whenTrue),
+      alternate: this.convert(node.whenFalse)
     });
   }
 
   [SyntaxKind.CallExpression](node: ts.CallExpression): ESTreeNode {
     const result = this.createNode(node, {
       type: AST_NODE_TYPES.CallExpression,
-      callee: this.convertChild(node.expression),
-      arguments: node.arguments.map(el => this.convertChild(el))
+      callee: this.convert(node.expression),
+      arguments: node.arguments.map(el => this.convert(el))
     });
     if (node.typeArguments && node.typeArguments.length) {
       result.typeParameters = this.convertTypeArgumentsToTypeParameters(
@@ -1589,9 +1589,9 @@ export default class Converter extends AbstractConverter {
   [SyntaxKind.NewExpression](node: ts.NewExpression): ESTreeNode {
     const result = this.createNode(node, {
       type: AST_NODE_TYPES.NewExpression,
-      callee: this.convertChild(node.expression),
+      callee: this.convert(node.expression),
       arguments: node.arguments
-        ? node.arguments.map(el => this.convertChild(el))
+        ? node.arguments.map(el => this.convert(el))
         : []
     });
     if (node.typeArguments && node.typeArguments.length) {
@@ -1612,7 +1612,7 @@ export default class Converter extends AbstractConverter {
         loc: newToken.loc,
         name: nodeUtils.getTextForTokenKind(node.keywordToken)
       },
-      property: this.convertChild(node.name)
+      property: this.convert(node.name)
     });
   }
 
@@ -1738,22 +1738,22 @@ export default class Converter extends AbstractConverter {
   [SyntaxKind.JsxElement](node: ts.JsxElement): ESTreeNode {
     return this.createNode(node, {
       type: AST_NODE_TYPES.JSXElement,
-      openingElement: this.convertChild(node.openingElement),
-      closingElement: this.convertChild(node.closingElement),
-      children: node.children.map(el => this.convertChild(el))
+      openingElement: this.convert(node.openingElement),
+      closingElement: this.convert(node.closingElement),
+      children: node.children.map(el => this.convert(el))
     });
   }
 
   [SyntaxKind.JsxFragment](node: ts.JsxFragment): ESTreeNode {
     return this.createNode(node, {
       type: AST_NODE_TYPES.JSXFragment,
-      openingFragment: this.convertChild(
+      openingFragment: this.convert(
         (node as ts.JsxFragment).openingFragment
       ),
-      closingFragment: this.convertChild(
+      closingFragment: this.convert(
         (node as ts.JsxFragment).closingFragment
       ),
-      children: node.children.map(el => this.convertChild(el))
+      children: node.children.map(el => this.convert(el))
     });
   }
 
@@ -1766,7 +1766,7 @@ export default class Converter extends AbstractConverter {
      */
     (node as any).kind = SyntaxKind.JsxOpeningElement;
 
-    const openingElement = this.convertChild(node);
+    const openingElement = this.convert(node);
     (openingElement as any).selfClosing = true;
 
     return this.createNode(node, {
@@ -1785,7 +1785,7 @@ export default class Converter extends AbstractConverter {
         : undefined,
       selfClosing: false,
       name: this.convertTypeScriptJSXTagNameToESTreeName(node, node.tagName),
-      attributes: node.attributes.properties.map(el => this.convertChild(el))
+      attributes: node.attributes.properties.map(el => this.convert(el))
     });
   }
 
@@ -1815,7 +1815,7 @@ export default class Converter extends AbstractConverter {
     });
 
     if (node.expression) {
-      result.expression = this.convertChild(node.expression);
+      result.expression = this.convert(node.expression);
     } else {
       const eloc = this.ast.getLineAndCharacterOfPosition(result.range[0] + 1);
       result.expression = {
@@ -1846,7 +1846,7 @@ export default class Converter extends AbstractConverter {
     return this.createNode(node, {
       type: AST_NODE_TYPES.JSXAttribute,
       name: attributeName,
-      value: this.convertChild(node.initializer)
+      value: this.convert(node.initializer)
     });
   }
 
@@ -1878,15 +1878,15 @@ export default class Converter extends AbstractConverter {
   [SyntaxKind.JsxSpreadAttribute](node: ts.JsxSpreadAttribute): ESTreeNode {
     return this.createNode(node, {
       type: AST_NODE_TYPES.JSXSpreadAttribute,
-      argument: this.convertChild(node.expression)
+      argument: this.convert(node.expression)
     });
   }
 
   [SyntaxKind.QualifiedName](node: ts.QualifiedName): ESTreeNode {
     return this.createNode(node, {
       type: AST_NODE_TYPES.TSQualifiedName,
-      left: this.convertChild(node.left),
-      right: this.convertChild(node.right)
+      left: this.convert(node.left),
+      right: this.convert(node.right)
     });
   }
 
@@ -1895,7 +1895,7 @@ export default class Converter extends AbstractConverter {
   [SyntaxKind.TypeReference](node: ts.TypeReferenceNode): ESTreeNode {
     return this.createNode(node, {
       type: AST_NODE_TYPES.TSTypeReference,
-      typeName: this.convertChildType(node.typeName),
+      typeName: this.convertType(node.typeName),
       typeParameters: node.typeArguments
         ? this.convertTypeArgumentsToTypeParameters(node.typeArguments)
         : undefined
@@ -1907,9 +1907,9 @@ export default class Converter extends AbstractConverter {
       type: AST_NODE_TYPES.TSTypeParameter,
       name: node.name.text,
       constraint: node.constraint
-        ? this.convertChildType(node.constraint)
+        ? this.convertType(node.constraint)
         : undefined,
-      default: node.default ? this.convertChildType(node.default) : undefined
+      default: node.default ? this.convertType(node.default) : undefined
     });
   }
 
@@ -1950,53 +1950,53 @@ export default class Converter extends AbstractConverter {
   [SyntaxKind.NonNullExpression](node: ts.NonNullExpression): ESTreeNode {
     return this.createNode(node, {
       type: AST_NODE_TYPES.TSNonNullExpression,
-      expression: this.convertChild(node.expression)
+      expression: this.convert(node.expression)
     });
   }
 
   [SyntaxKind.TypeLiteral](node: ts.TypeLiteralNode): ESTreeNode {
     return this.createNode(node, {
       type: AST_NODE_TYPES.TSTypeLiteral,
-      members: node.members.map(el => this.convertChild(el))
+      members: node.members.map(el => this.convert(el))
     });
   }
 
   [SyntaxKind.ArrayType](node: ts.ArrayTypeNode): ESTreeNode {
     return this.createNode(node, {
       type: AST_NODE_TYPES.TSArrayType,
-      elementType: this.convertChildType(node.elementType)
+      elementType: this.convertType(node.elementType)
     });
   }
 
   [SyntaxKind.IndexedAccessType](node: ts.IndexedAccessTypeNode): ESTreeNode {
     return this.createNode(node, {
       type: AST_NODE_TYPES.TSIndexedAccessType,
-      objectType: this.convertChildType(node.objectType),
-      indexType: this.convertChildType(node.indexType)
+      objectType: this.convertType(node.objectType),
+      indexType: this.convertType(node.indexType)
     });
   }
 
   [SyntaxKind.ConditionalType](node: ts.ConditionalTypeNode): ESTreeNode {
     return this.createNode(node, {
       type: AST_NODE_TYPES.TSConditionalType,
-      checkType: this.convertChildType(node.checkType),
-      extendsType: this.convertChildType(node.extendsType),
-      trueType: this.convertChildType(node.trueType),
-      falseType: this.convertChildType(node.falseType)
+      checkType: this.convertType(node.checkType),
+      extendsType: this.convertType(node.extendsType),
+      trueType: this.convertType(node.trueType),
+      falseType: this.convertType(node.falseType)
     });
   }
 
   [SyntaxKind.TypeQuery](node: ts.TypeQueryNode): ESTreeNode {
     return this.createNode(node, {
       type: AST_NODE_TYPES.TSTypeQuery,
-      exprName: this.convertChildType(node.exprName)
+      exprName: this.convertType(node.exprName)
     });
   }
 
   [SyntaxKind.MappedType](node: ts.MappedTypeNode): ESTreeNode {
     const result = this.createNode(node, {
       type: AST_NODE_TYPES.TSMappedType,
-      typeParameter: this.convertChildType(node.typeParameter)
+      typeParameter: this.convertType(node.typeParameter)
     });
 
     if (node.readonlyToken) {
@@ -2020,7 +2020,7 @@ export default class Converter extends AbstractConverter {
     }
 
     if (node.type) {
-      result.typeAnnotation = this.convertChildType(node.type);
+      result.typeAnnotation = this.convertType(node.type);
     }
     return result;
   }
@@ -2035,8 +2035,8 @@ export default class Converter extends AbstractConverter {
   [SyntaxKind.TypeAliasDeclaration](node: ts.TypeAliasDeclaration): ESTreeNode {
     const result = this.createNode(node, {
       type: AST_NODE_TYPES.TSTypeAliasDeclaration,
-      id: this.convertChild(node.name),
-      typeAnnotation: this.convertChildType(node.type)
+      id: this.convert(node.name),
+      typeAnnotation: this.convertType(node.type)
     });
 
     if (nodeUtils.hasModifier(SyntaxKind.DeclareKeyword, node)) {
@@ -2059,7 +2059,7 @@ export default class Converter extends AbstractConverter {
       type: AST_NODE_TYPES.TSMethodSignature,
       optional: nodeUtils.isOptional(node),
       computed: nodeUtils.isComputedProperty(node.name),
-      key: this.convertChild(node.name),
+      key: this.convert(node.name),
       params: this.convertParameters(node.parameters),
       typeAnnotation: node.type ? this.convertTypeAnnotation(node.type) : null,
       readonly:
@@ -2086,11 +2086,11 @@ export default class Converter extends AbstractConverter {
       type: AST_NODE_TYPES.TSPropertySignature,
       optional: nodeUtils.isOptional(node) || undefined,
       computed: nodeUtils.isComputedProperty(node.name),
-      key: this.convertChild(node.name),
+      key: this.convert(node.name),
       typeAnnotation: node.type
         ? this.convertTypeAnnotation(node.type)
         : undefined,
-      initializer: this.convertChild(node.initializer) || undefined,
+      initializer: this.convert(node.initializer) || undefined,
       readonly:
         nodeUtils.hasModifier(SyntaxKind.ReadonlyKeyword, node) || undefined,
       static:
@@ -2108,7 +2108,7 @@ export default class Converter extends AbstractConverter {
   [SyntaxKind.IndexSignature](node: ts.IndexSignatureDeclaration): ESTreeNode {
     const result = this.createNode(node, {
       type: AST_NODE_TYPES.TSIndexSignature,
-      index: this.convertChild(node.parameters[0]),
+      index: this.convert(node.parameters[0]),
       typeAnnotation: node.type ? this.convertTypeAnnotation(node.type) : null,
       readonly:
         nodeUtils.hasModifier(SyntaxKind.ReadonlyKeyword, node) || undefined,
@@ -2177,7 +2177,7 @@ export default class Converter extends AbstractConverter {
 
     const interfaceBody = {
       type: AST_NODE_TYPES.TSInterfaceBody,
-      body: node.members.map((member: any) => this.convertChild(member)),
+      body: node.members.map((member: any) => this.convert(member)),
       range: [interfaceOpenBrace.getStart(this.ast), result.range[1]],
       loc: nodeUtils.getLocFor(
         interfaceOpenBrace.getStart(this.ast),
@@ -2189,7 +2189,7 @@ export default class Converter extends AbstractConverter {
     Object.assign(result, {
       type: AST_NODE_TYPES.TSInterfaceDeclaration,
       body: interfaceBody,
-      id: this.convertChild(node.name),
+      id: this.convert(node.name),
       heritage: hasImplementsClause
         ? interfaceHeritageClauses[0].types.map((el) =>
           this.convertInterfaceHeritageClause(el)
@@ -2217,7 +2217,7 @@ export default class Converter extends AbstractConverter {
   [SyntaxKind.TypePredicate](node: ts.TypePredicateNode): ESTreeNode {
     const result = this.createNode(node, {
       type: AST_NODE_TYPES.TSTypePredicate,
-      parameterName: this.convertChild(node.parameterName),
+      parameterName: this.convert(node.parameterName),
       typeAnnotation: this.convertTypeAnnotation(node.type)
     });
     /**
@@ -2232,8 +2232,8 @@ export default class Converter extends AbstractConverter {
     return this.createNode(node, {
       type: AST_NODE_TYPES.TSImportType,
       isTypeOf: !!node.isTypeOf,
-      parameter: this.convertChild(node.argument),
-      qualifier: this.convertChild(node.qualifier),
+      parameter: this.convert(node.argument),
+      qualifier: this.convert(node.qualifier),
       typeParameters: node.typeArguments
         ? this.convertTypeArgumentsToTypeParameters(node.typeArguments)
         : null
@@ -2243,8 +2243,8 @@ export default class Converter extends AbstractConverter {
   [SyntaxKind.EnumDeclaration](node: ts.EnumDeclaration): ESTreeNode {
     let result = this.createNode(node, {
       type: AST_NODE_TYPES.TSEnumDeclaration,
-      id: this.convertChild(node.name),
-      members: node.members.map(el => this.convertChild(el))
+      id: this.convert(node.name),
+      members: node.members.map(el => this.convert(el))
     });
     // apply modifiers first...
     this.applyModifiersToResult(result, node.modifiers);
@@ -2264,10 +2264,10 @@ export default class Converter extends AbstractConverter {
   [SyntaxKind.EnumMember](node: ts.EnumMember): ESTreeNode {
     const result = this.createNode(node, {
       type: AST_NODE_TYPES.TSEnumMember,
-      id: this.convertChild(node.name)
+      id: this.convert(node.name)
     });
     if (node.initializer) {
-      (result as any).initializer = this.convertChild(node.initializer);
+      (result as any).initializer = this.convert(node.initializer);
     }
     return result;
   }
@@ -2279,10 +2279,10 @@ export default class Converter extends AbstractConverter {
   [SyntaxKind.ModuleDeclaration](node: ts.ModuleDeclaration): ESTreeNode {
     const result = this.createNode(node, {
       type: AST_NODE_TYPES.TSModuleDeclaration,
-      id: this.convertChild(node.name)
+      id: this.convert(node.name)
     });
     if (node.body) {
-      result.body = this.convertChild(node.body);
+      result.body = this.convert(node.body);
     }
     // apply modifiers first...
     this.applyModifiersToResult(result, node.modifiers);
@@ -2297,42 +2297,42 @@ export default class Converter extends AbstractConverter {
   [SyntaxKind.OptionalType](node: ts.OptionalTypeNode): ESTreeNode {
     return this.createNode(node, {
       type: AST_NODE_TYPES.TSOptionalType,
-      typeAnnotation: this.convertChildType(node.type)
+      typeAnnotation: this.convertType(node.type)
     });
   }
 
   [SyntaxKind.ParenthesizedType](node: ts.ParenthesizedTypeNode): ESTreeNode {
     return this.createNode(node, {
       type: AST_NODE_TYPES.TSParenthesizedType,
-      typeAnnotation: this.convertChildType(node.type)
+      typeAnnotation: this.convertType(node.type)
     });
   }
 
   [SyntaxKind.TupleType](node: ts.TupleTypeNode): ESTreeNode {
     return this.createNode(node, {
       type: AST_NODE_TYPES.TSTupleType,
-      elementTypes: node.elementTypes.map(type => this.convertChildType(type))
+      elementTypes: node.elementTypes.map(type => this.convertType(type))
     });
   }
 
   [SyntaxKind.UnionType](node: ts.UnionTypeNode): ESTreeNode {
     return this.createNode(node, {
       type: AST_NODE_TYPES.TSUnionType,
-      types: node.types.map(type => this.convertChildType(type))
+      types: node.types.map(type => this.convertType(type))
     });
   }
 
   [SyntaxKind.IntersectionType](node: ts.IntersectionTypeNode): ESTreeNode {
     return this.createNode(node, {
       type: AST_NODE_TYPES.TSIntersectionType,
-      types: node.types.map(type => this.convertChildType(type))
+      types: node.types.map(type => this.convertType(type))
     });
   }
 
   [SyntaxKind.RestType](node: ts.RestTypeNode): ESTreeNode {
     return this.createNode(node, {
       type: AST_NODE_TYPES.TSRestType,
-      typeAnnotation: this.convertChildType(node.type)
+      typeAnnotation: this.convertType(node.type)
     });
   }
 }

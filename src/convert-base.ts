@@ -52,20 +52,17 @@ export abstract class AbstractConverter {
    * @param {ts.Node} parent parentNode
    * @returns {ESTreeNode|null} the converted ESTree node
    */
-  protected convertChildType(node?: ts.Node): ESTreeNode | null {
-    return this.convert(node, undefined, true);
+  protected convertType(node?: ts.Node, parent?: ts.Node): ESTreeNode | null {
+    return this.convert(node, parent, true);
   }
 
   /**
    * Converts a TypeScript node into an ESTree node.
    * @param {ts.Node} node the child ts.Node
-   * @param {ts.Node} parent parentNode
+   * @param {?ts.Node} parent parentNode
+   * @param {?boolean} inTypeMode flag to determine if we are in typeMode
    * @returns {ESTreeNode|null} the converted ESTree node
    */
-  protected convertChild(node?: ts.Node): ESTreeNode | null {
-    return this.convert(node, undefined, false);
-  }
-
   protected convert(
     node?: ts.Node,
     parent?: ts.Node,
@@ -150,9 +147,7 @@ export abstract class AbstractConverter {
       type: AST_NODE_TYPES.TSTypeParameterInstantiation,
       range: [start, end],
       loc: nodeUtils.getLocFor(start, end, this.ast),
-      params: typeArguments.map(typeArgument =>
-        this.convertChildType(typeArgument)
-      )
+      params: typeArguments.map(typeArgument => this.convertType(typeArgument))
     };
   }
 
@@ -194,7 +189,7 @@ export abstract class AbstractConverter {
         this.ast
       ),
       params: typeParameters.map(typeParameter =>
-        this.convertChildType(typeParameter)
+        this.convertType(typeParameter)
       )
     };
   }
@@ -242,7 +237,7 @@ export abstract class AbstractConverter {
       type: AST_NODE_TYPES.TSTypeAnnotation,
       loc: nodeUtils.getLocFor(annotationStartCol, child.end, this.ast),
       range: [annotationStartCol, child.end],
-      typeAnnotation: this.convertChildType(child as any)
+      typeAnnotation: this.convertType(child as any)
     };
   }
 
@@ -256,7 +251,7 @@ export abstract class AbstractConverter {
       return [];
     }
     return parameters.map(param => {
-      const convertedParam = this.convertChild(param) as ESTreeNode;
+      const convertedParam = this.convert(param) as ESTreeNode;
       if (!param.decorators || !param.decorators.length) {
         return convertedParam;
       }
@@ -278,7 +273,7 @@ export abstract class AbstractConverter {
     return decorators.map(decorator => {
       return this.createNode(decorator, {
         type: AST_NODE_TYPES.Decorator,
-        expression: this.convertChild(decorator.expression)
+        expression: this.convert(decorator.expression)
       });
     });
   }
@@ -291,7 +286,7 @@ export abstract class AbstractConverter {
   convertInterfaceHeritageClause(
     child: ts.ExpressionWithTypeArguments
   ): ESTreeNode {
-    const id = this.convertChild(child.expression) as ESTreeNode;
+    const id = this.convert(child.expression) as ESTreeNode;
     const classImplementsNode: ESTreeNode = {
       type: AST_NODE_TYPES.TSInterfaceHeritage,
       loc: id.loc,
@@ -422,7 +417,7 @@ export abstract class AbstractConverter {
     if (!remainingModifiers || !remainingModifiers.length) {
       return;
     }
-    result.modifiers = remainingModifiers.map(el => this.convertChild(el));
+    result.modifiers = remainingModifiers.map(el => this.convert(el));
   }
 
   /**
@@ -432,7 +427,7 @@ export abstract class AbstractConverter {
    * @returns {ESTreeNode} The type annotation node.
    */
   convertClassImplements(child: ts.ExpressionWithTypeArguments): ESTreeNode {
-    const id = this.convertChild(child.expression) as ESTreeNode;
+    const id = this.convert(child.expression) as ESTreeNode;
     const classImplementsNode: ESTreeNode = {
       type: AST_NODE_TYPES.ClassImplements,
       loc: id.loc,
@@ -502,7 +497,7 @@ export abstract class AbstractConverter {
         } else {
           if (Array.isArray((node as any)[key])) {
             (result as any)[key] = (node as any)[key].map((el: any) =>
-              this.convertChild(el)
+              this.convert(el)
             );
           } else if (
             (node as any)[key] &&
@@ -510,7 +505,7 @@ export abstract class AbstractConverter {
             (node as any)[key].kind
           ) {
             // need to check node[key].kind to ensure we don't try to convert a symbol
-            (result as any)[key] = this.convertChild((node as any)[key]);
+            (result as any)[key] = this.convert((node as any)[key]);
           } else {
             (result as any)[key] = (node as any)[key];
           }

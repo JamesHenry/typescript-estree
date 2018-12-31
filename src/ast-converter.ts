@@ -32,7 +32,7 @@ export default (
     useJSXTextNode: extra.useJSXTextNode || false,
     shouldProvideParserServices
   });
-  const estree: any = instance.convertAll(ast);
+  const estree: any = instance.convertProgram(ast);
 
   /**
    * Optionally convert and include all tokens in the AST

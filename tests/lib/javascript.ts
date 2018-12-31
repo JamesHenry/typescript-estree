@@ -31,16 +31,13 @@ const testFiles = shelljs
 describe('javascript', () => {
   testFiles.forEach(filename => {
     const code = shelljs.cat(`${path.resolve(FIXTURES_DIR, filename)}.src.js`),
-      config = {
+      config: ParserOptions = {
         loc: true,
         range: true,
         tokens: true,
         errorOnUnknownASTType: true
       };
 
-    it(
-      `fixtures/${filename}.src`,
-      createSnapshotTestBlock(code, config as ParserOptions)
-    );
+    it(`fixtures/${filename}.src`, createSnapshotTestBlock(code, config));
   });
 });

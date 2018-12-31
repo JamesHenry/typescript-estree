@@ -35,7 +35,7 @@ export abstract class AbstractConverter {
     this.additionalOptions = additionalOptions;
   }
 
-  public convertAll(node: ts.SourceFile) {
+  public convertProgram(node: ts.SourceFile) {
     return this.convert(node);
   }
 
@@ -48,9 +48,9 @@ export abstract class AbstractConverter {
 
   /**
    * Converts a TypeScript node into an ESTree node.
-   * @param {ts.Node} node the child ts.Node
-   * @param {ts.Node} parent parentNode
-   * @returns {ESTreeNode|null} the converted ESTree node
+   * @param node the child ts.Node
+   * @param parent parentNode
+   * @returns the converted ESTree node
    */
   protected convertType(node?: ts.Node, parent?: ts.Node): ESTreeNode | null {
     return this.convert(node, parent, true);
@@ -58,10 +58,10 @@ export abstract class AbstractConverter {
 
   /**
    * Converts a TypeScript node into an ESTree node.
-   * @param {ts.Node} node the child ts.Node
-   * @param {?ts.Node} parent parentNode
-   * @param {?boolean} inTypeMode flag to determine if we are in typeMode
-   * @returns {ESTreeNode|null} the converted ESTree node
+   * @param node the child ts.Node
+   * @param parent parentNode
+   * @param inTypeMode flag to determine if we are in typeMode
+   * @returns the converted ESTree node
    */
   protected convert(
     node?: ts.Node,
@@ -280,7 +280,7 @@ export abstract class AbstractConverter {
   convertInterfaceHeritageClause(
     child: ts.ExpressionWithTypeArguments
   ): ESTreeNode {
-    const id = this.convert(child.expression) as ESTreeNode;
+    const id = this.convert(child.expression)!;
     const classImplementsNode: ESTreeNode = {
       type: AST_NODE_TYPES.TSInterfaceHeritage,
       loc: id.loc,

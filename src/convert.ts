@@ -2691,6 +2691,14 @@ export default function convert(config: ConvertConfig): ESTreeNode | null {
       break;
     }
 
+    case SyntaxKind.TypeAssertionExpression: {
+      Object.assign(result, {
+        type: AST_NODE_TYPES.TSTypeAssertion,
+        typeAnnotation: convertChildType(node.type),
+        expression: convertChild(node.expression)
+      });
+      break;
+    }
     default:
       deeplyCopy();
   }

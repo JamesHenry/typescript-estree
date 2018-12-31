@@ -398,7 +398,11 @@ let fixturePatternConfigsToTest = [
        * Not yet supported in Babel https://github.com/babel/babel/issues/9228
        * Directive field is not added to module and namespace
        */
-      'directive-in-namespace'
+      'directive-in-namespace',
+      /**
+       * there is difference in range between babel and tsep
+       */
+      'type-assertion'
     ],
     ignoreSourceType: [
       // https://github.com/babel/babel/issues/9213

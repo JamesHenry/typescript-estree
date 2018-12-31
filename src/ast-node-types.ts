@@ -146,6 +146,7 @@ export const AST_NODE_TYPES: { [key: string]: string } = {
   TSSymbolKeyword: 'TSSymbolKeyword',
   TSTypeAnnotation: 'TSTypeAnnotation',
   TSTypeAliasDeclaration: 'TSTypeAliasDeclaration',
+  TSTypeAssertion: 'TSTypeAssertion',
   TSTypeLiteral: 'TSTypeLiteral',
   TSTypeOperator: 'TSTypeOperator',
   TSTypeParameter: 'TSTypeParameter',

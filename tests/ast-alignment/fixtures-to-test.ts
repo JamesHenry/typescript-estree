@@ -6,11 +6,13 @@ import jsxKnownIssues from '../jsx-known-issues';
 
 interface Fixture {
   filename: string;
+  jsx: boolean;
   ignoreSourceType: boolean;
 }
 
 interface FixturePatternConfig {
   pattern: string;
+  jsx: boolean;
   ignoreSourceType: boolean;
 }
 
@@ -43,6 +45,7 @@ class FixturesTester {
     const ignore = config.ignore || [];
     const fileType = config.fileType || 'js';
     const ignoreSourceType = config.ignoreSourceType || [];
+    const jsx = fileType === 'jsx' || fileType === 'tsx';
 
     /**
      * The TypeScript compiler gives us the "externalModuleIndicator" to allow typescript-estree do dynamically detect the "sourceType".
@@ -56,14 +59,16 @@ class FixturesTester {
         this.fixtures.push({
           // It needs to be the full path from within fixtures/ for the pattern
           pattern: `${fixturesSubPath}/${fixture}.src.${config.fileType}`,
-          ignoreSourceType: true
+          ignoreSourceType: true,
+          jsx
         });
       }
     }
 
     this.fixtures.push({
       pattern: `${fixturesSubPath}/!(${ignore.join('|')}).src.${fileType}`,
-      ignoreSourceType: false
+      ignoreSourceType: false,
+      jsx
     });
   }
 
@@ -74,7 +79,8 @@ class FixturesTester {
           .sync(`${fixturesDirPath}/${fixture.pattern}`, {})
           .map(filename => ({
             filename,
-            ignoreSourceType: fixture.ignoreSourceType
+            ignoreSourceType: fixture.ignoreSourceType,
+            jsx: fixture.jsx
           }))
       )
       .reduce((acc, x) => acc.concat(x), []);

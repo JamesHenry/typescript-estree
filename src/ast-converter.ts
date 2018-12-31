@@ -50,7 +50,7 @@ export default (
 
   let astMaps = undefined;
   if (shouldProvideParserServices) {
-    astMaps = instance.getASTMaps()
+    astMaps = instance.getASTMaps();
   }
 
   return { estree, astMaps };

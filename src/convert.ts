@@ -283,28 +283,6 @@ export default function convert(config: ConvertConfig): ESTreeNode | null {
   }
 
   /**
-   * Converts a ts.NodeArray of ts.Decorators into an array of ESTreeNode decorators
-   * @param  {ts.NodeArray<ts.Decorator>} decorators A ts.NodeArray of ts.Decorators to be converted
-   * @returns {ESTreeNode[]}       an array of converted ESTreeNode decorators
-   */
-  function convertDecorators(
-    decorators: ts.NodeArray<ts.Decorator>
-  ): ESTreeNode[] {
-    if (!decorators || !decorators.length) {
-      return [];
-    }
-    return decorators.map(decorator => {
-      const expression = convertChild(decorator.expression);
-      return {
-        type: AST_NODE_TYPES.Decorator,
-        range: [decorator.getStart(ast), decorator.end],
-        loc: nodeUtils.getLoc(decorator, ast),
-        expression
-      };
-    });
-  }
-
-  /**
    * Converts an array of ts.Node parameters into an array of ESTreeNode params
    * @param  {ts.Node[]} parameters An array of ts.Node params to be converted
    * @returns {ESTreeNode[]}       an array of converted ESTreeNode params
@@ -319,7 +297,7 @@ export default function convert(config: ConvertConfig): ESTreeNode | null {
         return convertedParam;
       }
       return Object.assign(convertedParam, {
-        decorators: convertDecorators(param.decorators)
+        decorators: param.decorators.map(convertChild)
       });
     });
   }
@@ -366,9 +344,8 @@ export default function convert(config: ConvertConfig): ESTreeNode | null {
               )
             : null;
         } else if (key === 'decorators') {
-          const decorators = convertDecorators((node as any).decorators);
-          if (decorators && decorators.length) {
-            result.decorators = decorators;
+          if (node.decorators && node.decorators.length) {
+            result.decorators = node.decorators.map(convertChild);
           }
         } else {
           if (Array.isArray((node as any)[key])) {
@@ -966,7 +943,7 @@ export default function convert(config: ConvertConfig): ESTreeNode | null {
       }
 
       if (node.decorators) {
-        result.decorators = convertDecorators(node.decorators);
+        result.decorators = node.decorators.map(convertChild);
       }
 
       const accessibility = nodeUtils.getTSNodeAccessibility(node);
@@ -1071,7 +1048,7 @@ export default function convert(config: ConvertConfig): ESTreeNode | null {
         });
 
         if (node.decorators) {
-          result.decorators = convertDecorators(node.decorators);
+          result.decorators = node.decorators.map(convertChild);
         }
 
         const accessibility = nodeUtils.getTSNodeAccessibility(node);
@@ -1631,7 +1608,7 @@ export default function convert(config: ConvertConfig): ESTreeNode | null {
       }
 
       if (node.decorators) {
-        result.decorators = convertDecorators(node.decorators);
+        result.decorators = node.decorators.map(convertChild);
       }
 
       const filteredMembers = node.members.filter(
@@ -1979,6 +1956,14 @@ export default function convert(config: ConvertConfig): ESTreeNode | null {
       break;
     }
 
+    case SyntaxKind.Decorator: {
+      Object.assign(result, {
+        type: AST_NODE_TYPES.Decorator,
+        expression: convertChild(node.expression)
+      });
+      break;
+    }
+
     // Literals
 
     case SyntaxKind.StringLiteral:
@@ -2230,16 +2215,14 @@ export default function convert(config: ConvertConfig): ESTreeNode | null {
         type: AST_NODE_TYPES.JSXSpreadAttribute,
         argument: convertChild(node.expression)
       });
-
       break;
 
-    case SyntaxKind.FirstNode: {
+    case SyntaxKind.QualifiedName: {
       Object.assign(result, {
         type: AST_NODE_TYPES.TSQualifiedName,
         left: convertChild(node.left),
         right: convertChild(node.right)
       });
-
       break;
     }
 
@@ -2268,6 +2251,7 @@ export default function convert(config: ConvertConfig): ESTreeNode | null {
       break;
     }
 
+    case SyntaxKind.ThisType:
     case SyntaxKind.AnyKeyword:
     case SyntaxKind.BigIntKeyword:
     case SyntaxKind.BooleanKeyword:
@@ -2280,7 +2264,7 @@ export default function convert(config: ConvertConfig): ESTreeNode | null {
     case SyntaxKind.VoidKeyword:
     case SyntaxKind.UndefinedKeyword: {
       Object.assign(result, {
-        type: `TS${SyntaxKind[node.kind]}`
+        type: AST_NODE_TYPES[`TS${SyntaxKind[node.kind]}`]
       });
       break;
     }
@@ -2551,7 +2535,7 @@ export default function convert(config: ConvertConfig): ESTreeNode | null {
        * so we handle them here too.
        */
       if (node.decorators) {
-        result.decorators = convertDecorators(node.decorators);
+        result.decorators = node.decorators.map(convertChild);
       }
       if (nodeUtils.hasModifier(SyntaxKind.AbstractKeyword, node)) {
         result.abstract = true;
@@ -2606,7 +2590,7 @@ export default function convert(config: ConvertConfig): ESTreeNode | null {
        * so we handle them here too.
        */
       if (node.decorators) {
-        result.decorators = convertDecorators(node.decorators);
+        result.decorators = node.decorators.map(convertChild);
       }
       break;
     }
@@ -2690,7 +2674,21 @@ export default function convert(config: ConvertConfig): ESTreeNode | null {
       });
       break;
     }
-
+    case SyntaxKind.AsExpression: {
+      Object.assign(result, {
+        type: AST_NODE_TYPES.TSAsExpression,
+        expression: convertChild(node.expression),
+        typeAnnotation: convertChildType(node.type)
+      });
+      break;
+    }
+    case SyntaxKind.InferType: {
+      Object.assign(result, {
+        type: AST_NODE_TYPES.TSInferType,
+        typeParameter: convertChildType(node.typeParameter)
+      });
+      break;
+    }
     default:
       deeplyCopy();
   }

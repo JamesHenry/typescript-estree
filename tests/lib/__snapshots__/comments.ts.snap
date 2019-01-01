@@ -3888,28 +3888,7 @@ Object {
       "type": "VariableDeclaration",
     },
   ],
-  "comments": Array [
-    Object {
-      "loc": Object {
-        "end": Object {
-          "column": 9,
-          "line": 6,
-        },
-        "start": Object {
-          "column": 6,
-          "line": 4,
-        },
-      },
-      "range": Array [
-        48,
-        75,
-      ],
-      "type": "Block",
-      "value": "*
-       * test
-       ",
-    },
-  ],
+  "comments": Array [],
   "loc": Object {
     "end": Object {
       "column": 0,
@@ -4519,26 +4498,7 @@ Object {
       "type": "VariableDeclaration",
     },
   ],
-  "comments": Array [
-    Object {
-      "loc": Object {
-        "end": Object {
-          "column": 67,
-          "line": 1,
-        },
-        "start": Object {
-          "column": 48,
-          "line": 1,
-        },
-      },
-      "range": Array [
-        48,
-        67,
-      ],
-      "type": "Line",
-      "value": "example.com</a>);",
-    },
-  ],
+  "comments": Array [],
   "loc": Object {
     "end": Object {
       "column": 0,
@@ -5256,24 +5216,6 @@ Object {
       ],
       "type": "Block",
       "value": " Test ",
-    },
-    Object {
-      "loc": Object {
-        "end": Object {
-          "column": 29,
-          "line": 3,
-        },
-        "start": Object {
-          "column": 20,
-          "line": 3,
-        },
-      },
-      "range": Array [
-        59,
-        68,
-      ],
-      "type": "Line",
-      "value": "</test>",
     },
   ],
   "loc": Object {
@@ -6155,24 +6097,6 @@ Object {
       ],
       "type": "Block",
       "value": " Test ",
-    },
-    Object {
-      "loc": Object {
-        "end": Object {
-          "column": 29,
-          "line": 3,
-        },
-        "start": Object {
-          "column": 20,
-          "line": 3,
-        },
-      },
-      "range": Array [
-        59,
-        68,
-      ],
-      "type": "Line",
-      "value": "</test>",
     },
   ],
   "loc": Object {

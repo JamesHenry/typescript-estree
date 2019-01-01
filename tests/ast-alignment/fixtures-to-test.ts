@@ -397,7 +397,9 @@ tester.addFixturePatternConfig('typescript/basics', {
   ],
   ignoreSourceType: [
     // https://github.com/babel/babel/issues/9213
-    'export-assignment'
+    'export-assignment',
+    'import-equal-declaration',
+    'import-export-equal-declaration'
   ]
 });
 

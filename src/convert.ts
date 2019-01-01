@@ -2674,6 +2674,14 @@ export default function convert(config: ConvertConfig): ESTreeNode | null {
       });
       break;
     }
+    case SyntaxKind.AsExpression: {
+      Object.assign(result, {
+        type: AST_NODE_TYPES.TSAsExpression,
+        expression: convertChild(node.expression),
+        typeAnnotation: convertChildType(node.type)
+      });
+      break;
+    }
     case SyntaxKind.InferType: {
       Object.assign(result, {
         type: AST_NODE_TYPES.TSInferType,
@@ -2685,6 +2693,22 @@ export default function convert(config: ConvertConfig): ESTreeNode | null {
       Object.assign(result, {
         type: AST_NODE_TYPES.TSTypeAssertion,
         typeAnnotation: convertChildType(node.type),
+        expression: convertChild(node.expression)
+      });
+      break;
+    }
+    case SyntaxKind.ImportEqualsDeclaration: {
+      Object.assign(result, {
+        type: AST_NODE_TYPES.TSImportEqualsDeclaration,
+        id: convertChild(node.name),
+        moduleReference: convertChild(node.moduleReference),
+        isExport: nodeUtils.hasModifier(SyntaxKind.ExportKeyword, node)
+      });
+      break;
+    }
+    case SyntaxKind.ExternalModuleReference: {
+      Object.assign(result, {
+        type: AST_NODE_TYPES.TSExternalModuleReference,
         expression: convertChild(node.expression)
       });
       break;

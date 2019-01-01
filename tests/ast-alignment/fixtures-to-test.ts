@@ -45,7 +45,7 @@ class FixturesTester {
     const ignore = config.ignore || [];
     const fileType = config.fileType || 'js';
     const ignoreSourceType = config.ignoreSourceType || [];
-    const jsx = fileType === 'jsx' || fileType === 'tsx';
+    const jsx = fileType === 'js' || fileType === 'jsx' || fileType === 'tsx';
 
     /**
      * The TypeScript compiler gives us the "externalModuleIndicator" to allow typescript-estree do dynamically detect the "sourceType".
@@ -58,7 +58,7 @@ class FixturesTester {
       for (const fixture of ignoreSourceType) {
         this.fixtures.push({
           // It needs to be the full path from within fixtures/ for the pattern
-          pattern: `${fixturesSubPath}/${fixture}.src.${config.fileType}`,
+          pattern: `${fixturesSubPath}/${fixture}.src.${fileType}`,
           ignoreSourceType: true,
           jsx
         });

@@ -2215,16 +2215,14 @@ export default function convert(config: ConvertConfig): ESTreeNode | null {
         type: AST_NODE_TYPES.JSXSpreadAttribute,
         argument: convertChild(node.expression)
       });
-
       break;
 
-    case SyntaxKind.FirstNode: {
+    case SyntaxKind.QualifiedName: {
       Object.assign(result, {
         type: AST_NODE_TYPES.TSQualifiedName,
         left: convertChild(node.left),
         right: convertChild(node.right)
       });
-
       break;
     }
 
@@ -2253,6 +2251,7 @@ export default function convert(config: ConvertConfig): ESTreeNode | null {
       break;
     }
 
+    case SyntaxKind.ThisType:
     case SyntaxKind.AnyKeyword:
     case SyntaxKind.BigIntKeyword:
     case SyntaxKind.BooleanKeyword:
@@ -2265,7 +2264,7 @@ export default function convert(config: ConvertConfig): ESTreeNode | null {
     case SyntaxKind.VoidKeyword:
     case SyntaxKind.UndefinedKeyword: {
       Object.assign(result, {
-        type: `TS${SyntaxKind[node.kind]}`
+        type: AST_NODE_TYPES[`TS${SyntaxKind[node.kind]}`]
       });
       break;
     }
@@ -2675,7 +2674,13 @@ export default function convert(config: ConvertConfig): ESTreeNode | null {
       });
       break;
     }
-
+    case SyntaxKind.InferType: {
+      Object.assign(result, {
+        type: AST_NODE_TYPES.TSInferType,
+        typeParameter: convertChildType(node.typeParameter)
+      });
+      break;
+    }
     default:
       deeplyCopy();
   }

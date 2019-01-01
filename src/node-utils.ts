@@ -356,22 +356,17 @@ function isJSXToken(node: ts.Node): boolean {
 
 /**
  * Returns the declaration kind of the given ts.Node
- * @param  {ts.Node}  node TypeScript AST node
+ * @param  {ts.VariableDeclarationList}  node TypeScript AST node
  * @returns {string}     declaration kind
  */
-function getDeclarationKind(node: ts.Node): 'let' | 'const' | 'var' {
-  switch (node.kind) {
-    case SyntaxKind.VariableDeclarationList:
-      if (node.flags & ts.NodeFlags.Let) {
-        return 'let';
-      }
-      if (node.flags & ts.NodeFlags.Const) {
-        return 'const';
-      }
-      return 'var';
-    default:
-      throw 'Unable to determine declaration kind.';
+function getDeclarationKind(node: ts.VariableDeclarationList): 'let' | 'const' | 'var' {
+  if (node.flags & ts.NodeFlags.Let) {
+    return 'let';
   }
+  if (node.flags & ts.NodeFlags.Const) {
+    return 'const';
+  }
+  return 'var';
 }
 
 /**

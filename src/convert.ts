@@ -1096,7 +1096,7 @@ export default class Converter extends AbstractConverter {
 
     if (node.type) {
       (parameter as any).typeAnnotation = this.convertTypeAnnotation(node.type);
-      this.fixTypeAnnotationParentLocation(node, parameter as any);
+      this.fixTypeAnnotationParentLocation(node, parameter!);
     }
 
     if (node.questionToken) {
@@ -1278,18 +1278,18 @@ export default class Converter extends AbstractConverter {
 
     if (node.importClause) {
       if (node.importClause.name) {
-        (result as any).specifiers.push(this.convert(node.importClause));
+        result.specifiers!.push(this.convert(node.importClause));
       }
 
       if (node.importClause.namedBindings) {
         if (
           node.importClause.namedBindings.kind === SyntaxKind.NamespaceImport
         ) {
-          (result as any).specifiers.push(
+          result.specifiers!.push(
             this.convert(node.importClause.namedBindings)
           );
         } else {
-          result.specifiers = (result as any).specifiers.concat(
+          result.specifiers = result.specifiers!.concat(
             node.importClause.namedBindings.elements.map(el => this.convert(el))
           );
         }

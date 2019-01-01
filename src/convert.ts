@@ -1744,8 +1744,8 @@ export default class Converter extends AbstractConverter {
   [SyntaxKind.JsxFragment](node: ts.JsxFragment): ESTreeNode {
     return this.createNode(node, {
       type: AST_NODE_TYPES.JSXFragment,
-      openingFragment: this.convert((node as ts.JsxFragment).openingFragment),
-      closingFragment: this.convert((node as ts.JsxFragment).closingFragment),
+      openingFragment: this.convert(node.openingFragment),
+      closingFragment: this.convert(node.closingFragment),
       children: node.children.map(el => this.convert(el))
     });
   }

@@ -98,14 +98,14 @@ export default class Converter extends AbstractConverter {
 
   [SyntaxKind.BreakStatement](node: ts.BreakStatement): ESTreeNode {
     return this.createNode(node, {
-      type: SyntaxKind[node.kind],
+      type: AST_NODE_TYPES.BreakStatement,
       label: this.convert(node.label)
     });
   }
 
   [SyntaxKind.ContinueStatement](node: ts.ContinueStatement): ESTreeNode {
     return this.createNode(node, {
-      type: SyntaxKind[node.kind],
+      type: AST_NODE_TYPES.ContinueStatement,
       label: this.convert(node.label)
     });
   }
@@ -1719,15 +1719,11 @@ export default class Converter extends AbstractConverter {
   }
 
   [SyntaxKind.EmptyStatement](node: ts.EmptyStatement): ESTreeNode {
-    return this.createNode(node, {
-      type: SyntaxKind[node.kind]
-    });
+    return this.createSimpleNode(node, AST_NODE_TYPES.EmptyStatement);
   }
 
   [SyntaxKind.DebuggerStatement](node: ts.DebuggerStatement): ESTreeNode {
-    return this.createNode(node, {
-      type: SyntaxKind[node.kind]
-    });
+    return this.createSimpleNode(node, AST_NODE_TYPES.DebuggerStatement);
   }
 
   // JSX

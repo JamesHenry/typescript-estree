@@ -359,7 +359,9 @@ function isJSXToken(node: ts.Node): boolean {
  * @param  {ts.VariableDeclarationList}  node TypeScript AST node
  * @returns {string}     declaration kind
  */
-function getDeclarationKind(node: ts.VariableDeclarationList): 'let' | 'const' | 'var' {
+function getDeclarationKind(
+  node: ts.VariableDeclarationList
+): 'let' | 'const' | 'var' {
   if (node.flags & ts.NodeFlags.Let) {
     return 'let';
   }

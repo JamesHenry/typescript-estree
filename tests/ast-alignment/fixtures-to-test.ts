@@ -95,6 +95,11 @@ class FixturesTester {
 }
 
 /**
+ * An class with FixturePatternConfigs
+ */
+const tester = new FixturesTester();
+
+/**
  * JSX fixtures which have known issues for typescript-estree
  */
 const jsxFilesWithKnownIssues = jsxKnownIssues.map(f => f.replace('jsx/', ''));
@@ -121,11 +126,6 @@ function createFixturePatternConfigFor(
 ): void {
   tester.addFixturePatternConfig(fixturesSubPath, config);
 }
-
-/**
- * An class with FixturePatternConfigs
- */
-const tester = new FixturesTester();
 
 createFixturePatternConfigFor('javascript/basics');
 
@@ -344,7 +344,7 @@ createFixturePatternConfigFor('typescript/basics', {
     'interface-with-all-property-types', // babel parse errors
     'interface-with-construct-signature-with-parameter-accessibility', // babel parse errors
     /**
-     * typescript-estree erroring, but babel not.
+     * there is difference in range between babel and tsep
      */
     'arrow-function-with-type-parameters', // typescript-estree parse errors
     /**

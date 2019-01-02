@@ -13357,25 +13357,25 @@ Object {
             "expression": Object {
               "loc": Object {
                 "end": Object {
-                  "column": 21,
-                  "line": 1,
+                  "column": 5,
+                  "line": 2,
                 },
                 "start": Object {
-                  "column": 18,
-                  "line": 1,
+                  "column": 2,
+                  "line": 2,
                 },
               },
               "name": "bar",
               "range": Array [
-                18,
-                21,
+                28,
+                31,
               ],
               "type": "Identifier",
             },
             "loc": Object {
               "end": Object {
-                "column": 21,
-                "line": 1,
+                "column": 5,
+                "line": 2,
               },
               "start": Object {
                 "column": 12,
@@ -13384,7 +13384,7 @@ Object {
             },
             "range": Array [
               12,
-              21,
+              31,
             ],
             "type": "TSTypeAssertionExpression",
             "typeAnnotation": Object {
@@ -13442,8 +13442,8 @@ Object {
           },
           "loc": Object {
             "end": Object {
-              "column": 21,
-              "line": 1,
+              "column": 5,
+              "line": 2,
             },
             "start": Object {
               "column": 6,
@@ -13452,7 +13452,7 @@ Object {
           },
           "range": Array [
             6,
-            21,
+            31,
           ],
           "type": "VariableDeclarator",
         },
@@ -13460,8 +13460,8 @@ Object {
       "kind": "const",
       "loc": Object {
         "end": Object {
-          "column": 22,
-          "line": 1,
+          "column": 6,
+          "line": 2,
         },
         "start": Object {
           "column": 0,
@@ -13470,16 +13470,35 @@ Object {
       },
       "range": Array [
         0,
-        22,
+        32,
       ],
       "type": "VariableDeclaration",
     },
   ],
-  "comments": Array [],
+  "comments": Array [
+    Object {
+      "loc": Object {
+        "end": Object {
+          "column": 25,
+          "line": 1,
+        },
+        "start": Object {
+          "column": 18,
+          "line": 1,
+        },
+      },
+      "range": Array [
+        18,
+        25,
+      ],
+      "type": "Line",
+      "value": " test",
+    },
+  ],
   "loc": Object {
     "end": Object {
       "column": 0,
-      "line": 2,
+      "line": 3,
     },
     "start": Object {
       "column": 0,
@@ -13488,7 +13507,7 @@ Object {
   },
   "range": Array [
     0,
-    23,
+    33,
   ],
   "sourceType": "script",
   "tokens": Array [
@@ -13603,17 +13622,17 @@ Object {
     Object {
       "loc": Object {
         "end": Object {
-          "column": 21,
-          "line": 1,
+          "column": 5,
+          "line": 2,
         },
         "start": Object {
-          "column": 18,
-          "line": 1,
+          "column": 2,
+          "line": 2,
         },
       },
       "range": Array [
-        18,
-        21,
+        28,
+        31,
       ],
       "type": "Identifier",
       "value": "bar",
@@ -13621,17 +13640,17 @@ Object {
     Object {
       "loc": Object {
         "end": Object {
-          "column": 22,
-          "line": 1,
+          "column": 6,
+          "line": 2,
         },
         "start": Object {
-          "column": 21,
-          "line": 1,
+          "column": 5,
+          "line": 2,
         },
       },
       "range": Array [
-        21,
-        22,
+        31,
+        32,
       ],
       "type": "Punctuator",
       "value": ";",

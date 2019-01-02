@@ -1,1 +1,2 @@
-const foo = <Foo> bar;
+const foo = <Foo> // test
+  bar;

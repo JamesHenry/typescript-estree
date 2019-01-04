@@ -309,18 +309,18 @@ export default function convert(config: ConvertConfig): ESTreeNode | null {
    * @returns {void}
    */
   function deeplyCopy(): void {
-    const customType = `TS${SyntaxKind[node.kind]}`;
+    const customType = `TS${SyntaxKind[node.kind]}` as AST_NODE_TYPES;
     /**
      * If the "errorOnUnknownASTType" option is set to true, throw an error,
      * otherwise fallback to just including the unknown type as-is.
      */
     if (
       additionalOptions.errorOnUnknownASTType &&
-      !(customType in AST_NODE_TYPES)
+      !AST_NODE_TYPES[customType]
     ) {
       throw new Error(`Unknown AST_NODE_TYPE: "${customType}"`);
     }
-    (result as any).type = customType;
+    result.type = customType;
     Object.keys(node)
       .filter(
         key =>

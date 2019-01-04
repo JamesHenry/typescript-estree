@@ -110,7 +110,7 @@ exports[`Parse all fixtures with "errorOnTypeScriptSyntaticAndSemanticIssues" en
 
 exports[`Parse all fixtures with "errorOnTypeScriptSyntaticAndSemanticIssues" enabled fixtures/comments/template-string-block.src.js.src 1`] = `"TEST OUTPUT: No semantic or syntactic issues found"`;
 
-exports[`Parse all fixtures with "errorOnTypeScriptSyntaticAndSemanticIssues" enabled fixtures/comments/type-assertion-regression-test.src.ts.src 1`] = `[Error: Unknown AST_NODE_TYPE: "TSTypeAssertionExpression"]`;
+exports[`Parse all fixtures with "errorOnTypeScriptSyntaticAndSemanticIssues" enabled fixtures/comments/type-assertion-regression-test.src.ts.src 1`] = `"TEST OUTPUT: No semantic or syntactic issues found"`;
 
 exports[`Parse all fixtures with "errorOnTypeScriptSyntaticAndSemanticIssues" enabled fixtures/javascript/arrayLiteral/array-literal-in-lhs.src.js.src 1`] = `"TEST OUTPUT: No semantic or syntactic issues found"`;
 

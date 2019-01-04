@@ -13386,7 +13386,7 @@ Object {
               12,
               31,
             ],
-            "type": "TSTypeAssertionExpression",
+            "type": "TSTypeAssertion",
             "typeAnnotation": Object {
               "loc": Object {
                 "end": Object {
@@ -13394,16 +13394,16 @@ Object {
                   "line": 1,
                 },
                 "start": Object {
-                  "column": 12,
+                  "column": 13,
                   "line": 1,
                 },
               },
               "range": Array [
-                12,
+                13,
                 16,
               ],
-              "type": "TSTypeAnnotation",
-              "typeAnnotation": Object {
+              "type": "TSTypeReference",
+              "typeName": Object {
                 "loc": Object {
                   "end": Object {
                     "column": 16,
@@ -13414,29 +13414,12 @@ Object {
                     "line": 1,
                   },
                 },
+                "name": "Foo",
                 "range": Array [
                   13,
                   16,
                 ],
-                "type": "TSTypeReference",
-                "typeName": Object {
-                  "loc": Object {
-                    "end": Object {
-                      "column": 16,
-                      "line": 1,
-                    },
-                    "start": Object {
-                      "column": 13,
-                      "line": 1,
-                    },
-                  },
-                  "name": "Foo",
-                  "range": Array [
-                    13,
-                    16,
-                  ],
-                  "type": "Identifier",
-                },
+                "type": "Identifier",
               },
             },
           },

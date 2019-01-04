@@ -21,27 +21,29 @@ export interface ESTreeToken {
 export interface ESTreeNode {
   type: string;
   loc: ESTreeNodeLoc;
-  range: number[];
+  range: [number, number];
   declaration?: ESTreeNode;
-  specifiers?: any[];
+  specifiers?: (ESTreeNode | null)[];
   source?: any;
   typeAnnotation?: ESTreeNode | null;
   typeParameters?: ESTreeNode | null;
   id?: ESTreeNode | null;
   expression?: ESTreeNode | null;
-  decorators?: any;
+  decorators?: (ESTreeNode | null)[];
   const?: boolean;
   declare?: boolean;
   global?: boolean;
   modifiers?: any;
   body?: any;
   params?: any;
-  accessibility?: any;
+  accessibility?: 'public' | 'protected' | 'private';
   readonly?: boolean;
   static?: boolean;
   export?: boolean;
   parameter?: any;
   abstract?: boolean;
+  typeName?: ESTreeNode | null;
+  directive?: string;
 }
 
 export interface ESTreeComment extends ESTreeNode {}

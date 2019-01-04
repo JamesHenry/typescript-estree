@@ -200,6 +200,23 @@ let fixturePatternConfigsToTest = [
   createFixturePatternConfigFor('javascript/exponentiationOperators'),
   createFixturePatternConfigFor('javascript/experimentalOptionalCatchBinding'),
 
+  createFixturePatternConfigFor('javascript/for'),
+  createFixturePatternConfigFor('javascript/forIn', {
+    ignore: [
+      /**
+       * Error: AST difference
+       * tsep: AssignmentExpression
+       * babel: AssignmentPattern
+       */
+      'for-in-with-bare-assigment',
+      /**
+       * Expected babel parse errors - all of these files below produce parse errors in espree
+       * as well, but the TypeScript compiler is so forgiving during parsing that typescript-estree
+       * does not actually error on them and will produce an AST.
+       */
+      'for-in-with-assigment' // babel parse errors
+    ]
+  }),
   createFixturePatternConfigFor('javascript/forOf', {
     ignore: [
       /**
@@ -390,7 +407,9 @@ let fixturePatternConfigsToTest = [
     ],
     ignoreSourceType: [
       // https://github.com/babel/babel/issues/9213
-      'export-assignment'
+      'export-assignment',
+      'import-equal-declaration',
+      'import-export-equal-declaration'
     ]
   }),
 

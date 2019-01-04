@@ -113,23 +113,9 @@ const jsxFilesWithKnownIssues = jsxKnownIssues.map(f => f.replace('jsx/', ''));
  */
 jsxFilesWithKnownIssues.push('invalid-no-tag-name');
 
-/**
- * Utility to generate a FixturePatternConfig object containing the glob pattern for specific subsections of the fixtures/ directory,
- * including the capability to ignore specific nested patterns.
- *
- * @param {string} fixturesSubPath the sub-path within the fixtures/ directory
- * @param {CreateFixturePatternConfig?} config an optional configuration object with optional sub-paths to ignore and/or parse with sourceType: module
- */
-function createFixturePatternConfigFor(
-  fixturesSubPath: string,
-  config?: CreateFixturePatternConfig
-): void {
-  tester.addFixturePatternConfig(fixturesSubPath, config);
-}
+tester.addFixturePatternConfig('javascript/basics');
 
-createFixturePatternConfigFor('javascript/basics');
-
-createFixturePatternConfigFor('comments', {
+tester.addFixturePatternConfig('comments', {
   ignore: [
     /**
      * Template strings seem to also be affected by the difference in opinion between different parsers in:
@@ -140,17 +126,17 @@ createFixturePatternConfigFor('comments', {
   ]
 });
 
-createFixturePatternConfigFor('javascript/templateStrings', {
+tester.addFixturePatternConfig('javascript/templateStrings', {
   ignore: ['**/*']
 });
 
-createFixturePatternConfigFor('javascript/arrayLiteral');
+tester.addFixturePatternConfig('javascript/arrayLiteral');
 
-createFixturePatternConfigFor('javascript/simple-literals');
+tester.addFixturePatternConfig('javascript/simple-literals');
 
-createFixturePatternConfigFor('javascript/directives');
+tester.addFixturePatternConfig('javascript/directives');
 
-createFixturePatternConfigFor('javascript/experimentalObjectRestSpread', {
+tester.addFixturePatternConfig('javascript/experimentalObjectRestSpread', {
   ignore: [
     /**
      * Trailing comma is not permitted after a "RestElement" in Babel
@@ -159,7 +145,7 @@ createFixturePatternConfigFor('javascript/experimentalObjectRestSpread', {
   ]
 });
 
-createFixturePatternConfigFor('javascript/arrowFunctions', {
+tester.addFixturePatternConfig('javascript/arrowFunctions', {
   ignore: [
     /**
      * Expected babel parse errors - all of these files below produce parse errors in espree
@@ -173,11 +159,11 @@ createFixturePatternConfigFor('javascript/arrowFunctions', {
   ]
 });
 
-createFixturePatternConfigFor('javascript/bigIntLiterals');
-createFixturePatternConfigFor('javascript/binaryLiterals');
-createFixturePatternConfigFor('javascript/blockBindings');
+tester.addFixturePatternConfig('javascript/bigIntLiterals');
+tester.addFixturePatternConfig('javascript/binaryLiterals');
+tester.addFixturePatternConfig('javascript/blockBindings');
 
-createFixturePatternConfigFor('javascript/classes', {
+tester.addFixturePatternConfig('javascript/classes', {
   ignore: [
     /**
      * super() is being used outside of constructor. Other parsers (e.g. espree, acorn) do not error on this.
@@ -193,9 +179,9 @@ createFixturePatternConfigFor('javascript/classes', {
   ]
 });
 
-createFixturePatternConfigFor('javascript/defaultParams');
+tester.addFixturePatternConfig('javascript/defaultParams');
 
-createFixturePatternConfigFor('javascript/destructuring', {
+tester.addFixturePatternConfig('javascript/destructuring', {
   ignore: [
     /**
      * Expected babel parse errors - all of these files below produce parse errors in espree
@@ -206,12 +192,12 @@ createFixturePatternConfigFor('javascript/destructuring', {
   ]
 });
 
-createFixturePatternConfigFor('javascript/destructuring-and-arrowFunctions');
-createFixturePatternConfigFor('javascript/destructuring-and-blockBindings');
-createFixturePatternConfigFor('javascript/destructuring-and-defaultParams');
-createFixturePatternConfigFor('javascript/destructuring-and-forOf');
+tester.addFixturePatternConfig('javascript/destructuring-and-arrowFunctions');
+tester.addFixturePatternConfig('javascript/destructuring-and-blockBindings');
+tester.addFixturePatternConfig('javascript/destructuring-and-defaultParams');
+tester.addFixturePatternConfig('javascript/destructuring-and-forOf');
 
-createFixturePatternConfigFor('javascript/destructuring-and-spread', {
+tester.addFixturePatternConfig('javascript/destructuring-and-spread', {
   ignore: [
     /**
      * Expected babel parse errors - all of these files below produce parse errors in espree
@@ -223,13 +209,13 @@ createFixturePatternConfigFor('javascript/destructuring-and-spread', {
   ]
 });
 
-createFixturePatternConfigFor('javascript/experimentalAsyncIteration');
-createFixturePatternConfigFor('javascript/experimentalDynamicImport');
-createFixturePatternConfigFor('javascript/exponentiationOperators');
-createFixturePatternConfigFor('javascript/experimentalOptionalCatchBinding');
+tester.addFixturePatternConfig('javascript/experimentalAsyncIteration');
+tester.addFixturePatternConfig('javascript/experimentalDynamicImport');
+tester.addFixturePatternConfig('javascript/exponentiationOperators');
+tester.addFixturePatternConfig('javascript/experimentalOptionalCatchBinding');
 
-createFixturePatternConfigFor('javascript/for');
-createFixturePatternConfigFor('javascript/forIn', {
+tester.addFixturePatternConfig('javascript/for');
+tester.addFixturePatternConfig('javascript/forIn', {
   ignore: [
     /**
      * Error: AST difference
@@ -245,7 +231,7 @@ createFixturePatternConfigFor('javascript/forIn', {
     'for-in-with-assigment' // babel parse errors
   ]
 });
-createFixturePatternConfigFor('javascript/forOf', {
+tester.addFixturePatternConfig('javascript/forOf', {
   ignore: [
     /**
      * TypeScript, espree and acorn parse this fine - esprima, flow and babel do not...
@@ -254,10 +240,10 @@ createFixturePatternConfigFor('javascript/forOf', {
   ]
 });
 
-createFixturePatternConfigFor('javascript/generators');
-createFixturePatternConfigFor('javascript/globalReturn');
+tester.addFixturePatternConfig('javascript/generators');
+tester.addFixturePatternConfig('javascript/globalReturn');
 
-createFixturePatternConfigFor('javascript/modules', {
+tester.addFixturePatternConfig('javascript/modules', {
   ignore: [
     /**
      * Expected babel parse errors - all of these files below produce parse errors in espree
@@ -271,7 +257,7 @@ createFixturePatternConfigFor('javascript/modules', {
   ignoreSourceType: ['error-function', 'error-strict', 'error-delete']
 });
 
-createFixturePatternConfigFor('javascript/newTarget', {
+tester.addFixturePatternConfig('javascript/newTarget', {
   ignore: [
     /**
      * Expected babel parse errors - all of these files below produce parse errors in espree
@@ -283,10 +269,10 @@ createFixturePatternConfigFor('javascript/newTarget', {
   ]
 });
 
-createFixturePatternConfigFor('javascript/objectLiteral');
-createFixturePatternConfigFor('javascript/objectLiteralComputedProperties');
+tester.addFixturePatternConfig('javascript/objectLiteral');
+tester.addFixturePatternConfig('javascript/objectLiteralComputedProperties');
 
-createFixturePatternConfigFor('javascript/objectLiteralDuplicateProperties', {
+tester.addFixturePatternConfig('javascript/objectLiteralDuplicateProperties', {
   ignore: [
     /**
      * Expected babel parse errors - all of these files below produce parse errors in espree
@@ -298,14 +284,14 @@ createFixturePatternConfigFor('javascript/objectLiteralDuplicateProperties', {
   ]
 });
 
-createFixturePatternConfigFor('javascript/objectLiteralShorthandMethods');
-createFixturePatternConfigFor('javascript/objectLiteralShorthandProperties');
-createFixturePatternConfigFor('javascript/octalLiterals');
-createFixturePatternConfigFor('javascript/regex');
-createFixturePatternConfigFor('javascript/regexUFlag');
-createFixturePatternConfigFor('javascript/regexYFlag');
+tester.addFixturePatternConfig('javascript/objectLiteralShorthandMethods');
+tester.addFixturePatternConfig('javascript/objectLiteralShorthandProperties');
+tester.addFixturePatternConfig('javascript/octalLiterals');
+tester.addFixturePatternConfig('javascript/regex');
+tester.addFixturePatternConfig('javascript/regexUFlag');
+tester.addFixturePatternConfig('javascript/regexYFlag');
 
-createFixturePatternConfigFor('javascript/restParams', {
+tester.addFixturePatternConfig('javascript/restParams', {
   ignore: [
     /**
      * Expected babel parse errors - all of these files below produce parse errors in espree
@@ -317,15 +303,15 @@ createFixturePatternConfigFor('javascript/restParams', {
   ]
 });
 
-createFixturePatternConfigFor('javascript/spread');
-createFixturePatternConfigFor('javascript/unicodeCodePointEscapes');
+tester.addFixturePatternConfig('javascript/spread');
+tester.addFixturePatternConfig('javascript/unicodeCodePointEscapes');
 
 /* ================================================== */
 
-createFixturePatternConfigFor('jsx', {
+tester.addFixturePatternConfig('jsx', {
   ignore: jsxFilesWithKnownIssues
 });
-createFixturePatternConfigFor('jsx-useJSXTextNode');
+tester.addFixturePatternConfig('jsx-useJSXTextNode');
 
 /* ================================================== */
 
@@ -333,7 +319,7 @@ createFixturePatternConfigFor('jsx-useJSXTextNode');
  * TSX-SPECIFIC FILES
  */
 
-createFixturePatternConfigFor('tsx', {
+tester.addFixturePatternConfig('tsx', {
   fileType: 'tsx'
 });
 
@@ -343,11 +329,11 @@ createFixturePatternConfigFor('tsx', {
  * TYPESCRIPT-SPECIFIC FILES
  */
 
-createFixturePatternConfigFor('typescript/babylon-convergence', {
+tester.addFixturePatternConfig('typescript/babylon-convergence', {
   fileType: 'ts'
 });
 
-createFixturePatternConfigFor('typescript/basics', {
+tester.addFixturePatternConfig('typescript/basics', {
   fileType: 'ts',
   ignore: [
     /**
@@ -445,23 +431,23 @@ createFixturePatternConfigFor('typescript/basics', {
   ]
 });
 
-createFixturePatternConfigFor('typescript/decorators/accessor-decorators', {
+tester.addFixturePatternConfig('typescript/decorators/accessor-decorators', {
   fileType: 'ts'
 });
-createFixturePatternConfigFor('typescript/decorators/class-decorators', {
+tester.addFixturePatternConfig('typescript/decorators/class-decorators', {
   fileType: 'ts'
 });
-createFixturePatternConfigFor('typescript/decorators/method-decorators', {
+tester.addFixturePatternConfig('typescript/decorators/method-decorators', {
   fileType: 'ts'
 });
-createFixturePatternConfigFor('typescript/decorators/parameter-decorators', {
+tester.addFixturePatternConfig('typescript/decorators/parameter-decorators', {
   fileType: 'ts'
 });
-createFixturePatternConfigFor('typescript/decorators/property-decorators', {
+tester.addFixturePatternConfig('typescript/decorators/property-decorators', {
   fileType: 'ts'
 });
 
-createFixturePatternConfigFor('typescript/expressions', {
+tester.addFixturePatternConfig('typescript/expressions', {
   fileType: 'ts',
   ignore: [
     /**
@@ -471,7 +457,7 @@ createFixturePatternConfigFor('typescript/expressions', {
   ]
 });
 
-createFixturePatternConfigFor('typescript/errorRecovery', {
+tester.addFixturePatternConfig('typescript/errorRecovery', {
   fileType: 'ts',
   ignore: [
     /**
@@ -491,11 +477,11 @@ createFixturePatternConfigFor('typescript/errorRecovery', {
   ]
 });
 
-createFixturePatternConfigFor('typescript/types', {
+tester.addFixturePatternConfig('typescript/types', {
   fileType: 'ts'
 });
 
-createFixturePatternConfigFor('typescript/declare', {
+tester.addFixturePatternConfig('typescript/declare', {
   fileType: 'ts',
   ignore: [
     /**
@@ -513,7 +499,7 @@ createFixturePatternConfigFor('typescript/declare', {
   ]
 });
 
-createFixturePatternConfigFor('typescript/namespaces-and-modules', {
+tester.addFixturePatternConfig('typescript/namespaces-and-modules', {
   fileType: 'ts',
   ignore: [
     /**

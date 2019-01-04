@@ -1583,6 +1583,16 @@ exports[`Parse all fixtures with "errorOnTypeScriptSyntaticAndSemanticIssues" en
 
 exports[`Parse all fixtures with "errorOnTypeScriptSyntaticAndSemanticIssues" enabled fixtures/typescript/basics/async-function-with-var-declaration.src.ts.src 1`] = `"TEST OUTPUT: No semantic or syntactic issues found"`;
 
+exports[`Parse all fixtures with "errorOnTypeScriptSyntaticAndSemanticIssues" enabled fixtures/typescript/basics/cast-as-expression.src.ts.src 1`] = `"TEST OUTPUT: No semantic or syntactic issues found"`;
+
+exports[`Parse all fixtures with "errorOnTypeScriptSyntaticAndSemanticIssues" enabled fixtures/typescript/basics/cast-as-multi.src.ts.src 1`] = `"TEST OUTPUT: No semantic or syntactic issues found"`;
+
+exports[`Parse all fixtures with "errorOnTypeScriptSyntaticAndSemanticIssues" enabled fixtures/typescript/basics/cast-as-multi-assign.src.ts.src 1`] = `"TEST OUTPUT: No semantic or syntactic issues found"`;
+
+exports[`Parse all fixtures with "errorOnTypeScriptSyntaticAndSemanticIssues" enabled fixtures/typescript/basics/cast-as-operator.src.ts.src 1`] = `"TEST OUTPUT: No semantic or syntactic issues found"`;
+
+exports[`Parse all fixtures with "errorOnTypeScriptSyntaticAndSemanticIssues" enabled fixtures/typescript/basics/cast-as-simple.src.ts.src 1`] = `"TEST OUTPUT: No semantic or syntactic issues found"`;
+
 exports[`Parse all fixtures with "errorOnTypeScriptSyntaticAndSemanticIssues" enabled fixtures/typescript/basics/class-with-accessibility-modifiers.src.ts.src 1`] = `"TEST OUTPUT: No semantic or syntactic issues found"`;
 
 exports[`Parse all fixtures with "errorOnTypeScriptSyntaticAndSemanticIssues" enabled fixtures/typescript/basics/class-with-definite-assignment.src.ts.src 1`] = `"TEST OUTPUT: No semantic or syntactic issues found"`;
@@ -1688,6 +1698,10 @@ exports[`Parse all fixtures with "errorOnTypeScriptSyntaticAndSemanticIssues" en
 exports[`Parse all fixtures with "errorOnTypeScriptSyntaticAndSemanticIssues" enabled fixtures/typescript/basics/function-with-types.src.ts.src 1`] = `"TEST OUTPUT: No semantic or syntactic issues found"`;
 
 exports[`Parse all fixtures with "errorOnTypeScriptSyntaticAndSemanticIssues" enabled fixtures/typescript/basics/function-with-types-assignation.src.ts.src 1`] = `"TEST OUTPUT: No semantic or syntactic issues found"`;
+
+exports[`Parse all fixtures with "errorOnTypeScriptSyntaticAndSemanticIssues" enabled fixtures/typescript/basics/import-equal-declaration.src.ts.src 1`] = `"TEST OUTPUT: No semantic or syntactic issues found"`;
+
+exports[`Parse all fixtures with "errorOnTypeScriptSyntaticAndSemanticIssues" enabled fixtures/typescript/basics/import-export-equal-declaration.src.ts.src 1`] = `"TEST OUTPUT: No semantic or syntactic issues found"`;
 
 exports[`Parse all fixtures with "errorOnTypeScriptSyntaticAndSemanticIssues" enabled fixtures/typescript/basics/import-type.src.ts.src 1`] = `"TEST OUTPUT: No semantic or syntactic issues found"`;
 
@@ -1886,11 +1900,21 @@ exports[`Parse all fixtures with "errorOnTypeScriptSyntaticAndSemanticIssues" en
 
 exports[`Parse all fixtures with "errorOnTypeScriptSyntaticAndSemanticIssues" enabled fixtures/typescript/types/conditional.src.ts.src 1`] = `"TEST OUTPUT: No semantic or syntactic issues found"`;
 
+exports[`Parse all fixtures with "errorOnTypeScriptSyntaticAndSemanticIssues" enabled fixtures/typescript/types/conditional-infer.src.ts.src 1`] = `"TEST OUTPUT: No semantic or syntactic issues found"`;
+
+exports[`Parse all fixtures with "errorOnTypeScriptSyntaticAndSemanticIssues" enabled fixtures/typescript/types/conditional-infer-nested.src.ts.src 1`] = `"TEST OUTPUT: No semantic or syntactic issues found"`;
+
+exports[`Parse all fixtures with "errorOnTypeScriptSyntaticAndSemanticIssues" enabled fixtures/typescript/types/conditional-infer-simple.src.ts.src 1`] = `"TEST OUTPUT: No semantic or syntactic issues found"`;
+
 exports[`Parse all fixtures with "errorOnTypeScriptSyntaticAndSemanticIssues" enabled fixtures/typescript/types/conditional-with-null.src.ts.src 1`] = `"TEST OUTPUT: No semantic or syntactic issues found"`;
 
 exports[`Parse all fixtures with "errorOnTypeScriptSyntaticAndSemanticIssues" enabled fixtures/typescript/types/indexed.src.ts.src 1`] = `"TEST OUTPUT: No semantic or syntactic issues found"`;
 
 exports[`Parse all fixtures with "errorOnTypeScriptSyntaticAndSemanticIssues" enabled fixtures/typescript/types/intersection-type.src.ts.src 1`] = `"TEST OUTPUT: No semantic or syntactic issues found"`;
+
+exports[`Parse all fixtures with "errorOnTypeScriptSyntaticAndSemanticIssues" enabled fixtures/typescript/types/literal-number.src.ts.src 1`] = `"TEST OUTPUT: No semantic or syntactic issues found"`;
+
+exports[`Parse all fixtures with "errorOnTypeScriptSyntaticAndSemanticIssues" enabled fixtures/typescript/types/literal-string.src.ts.src 1`] = `"TEST OUTPUT: No semantic or syntactic issues found"`;
 
 exports[`Parse all fixtures with "errorOnTypeScriptSyntaticAndSemanticIssues" enabled fixtures/typescript/types/mapped.src.ts.src 1`] = `"TEST OUTPUT: No semantic or syntactic issues found"`;
 
@@ -1909,6 +1933,10 @@ exports[`Parse all fixtures with "errorOnTypeScriptSyntaticAndSemanticIssues" en
 exports[`Parse all fixtures with "errorOnTypeScriptSyntaticAndSemanticIssues" enabled fixtures/typescript/types/reference-generic.src.ts.src 1`] = `"TEST OUTPUT: No semantic or syntactic issues found"`;
 
 exports[`Parse all fixtures with "errorOnTypeScriptSyntaticAndSemanticIssues" enabled fixtures/typescript/types/reference-generic-nested.src.ts.src 1`] = `"TEST OUTPUT: No semantic or syntactic issues found"`;
+
+exports[`Parse all fixtures with "errorOnTypeScriptSyntaticAndSemanticIssues" enabled fixtures/typescript/types/this-type.src.ts.src 1`] = `"TEST OUTPUT: No semantic or syntactic issues found"`;
+
+exports[`Parse all fixtures with "errorOnTypeScriptSyntaticAndSemanticIssues" enabled fixtures/typescript/types/this-type-expanded.src.ts.src 1`] = `"TEST OUTPUT: No semantic or syntactic issues found"`;
 
 exports[`Parse all fixtures with "errorOnTypeScriptSyntaticAndSemanticIssues" enabled fixtures/typescript/types/tuple.src.ts.src 1`] = `"TEST OUTPUT: No semantic or syntactic issues found"`;
 

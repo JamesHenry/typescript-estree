@@ -378,18 +378,6 @@ let fixturePatternConfigsToTest = [
        */
       'typed-keyword-bigint',
       /**
-       * Awaiting feedback on Babel issue https://github.com/babel/babel/issues/9228
-       * Babel: BooleanLiteral
-       * tsep: Literal
-       */
-      'typed-keyword-true',
-      /**
-       * Not yet supported in Babel https://github.com/babel/babel/issues/9228
-       * Babel: BooleanLiteral
-       * tsep: Literal
-       */
-      'typed-keyword-false',
-      /**
        * Not yet supported in Babel https://github.com/babel/babel/issues/9228
        * Directive field is not added to module and namespace
        */
@@ -408,7 +396,9 @@ let fixturePatternConfigsToTest = [
     ],
     ignoreSourceType: [
       // https://github.com/babel/babel/issues/9213
-      'export-assignment'
+      'export-assignment',
+      'import-equal-declaration',
+      'import-export-equal-declaration'
     ]
   }),
 

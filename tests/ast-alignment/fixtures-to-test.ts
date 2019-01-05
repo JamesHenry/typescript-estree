@@ -480,7 +480,20 @@ tester.addFixturePatternConfig('typescript/errorRecovery', {
 });
 
 tester.addFixturePatternConfig('typescript/types', {
-  fileType: 'ts'
+  fileType: 'ts',
+  ignore: [
+    /**
+     * there is difference in range between babel and tsep
+     */
+    'function',
+    'function-generic',
+    'function-in-generic',
+    'function-with-this',
+    /**
+     * AST difference
+     */
+    'function-with-rest'
+  ]
 });
 
 tester.addFixturePatternConfig('typescript/declare', {

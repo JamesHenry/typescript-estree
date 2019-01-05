@@ -407,10 +407,10 @@ function getTSNodeAccessibility(
 /**
  * Finds the next token based on the previous one and its parent
  * Had to copy this from TS instead of using TS's version because theirs doesn't pass the ast to getChildren
- * @param {ts.Token} previousToken The previous TSToken
+ * @param {ts.Node} previousToken The previous TSToken
  * @param {ts.Node} parent The parent TSNode
  * @param {ts.SourceFile} ast The TS AST
- * @returns {ts.Token} the next TSToken
+ * @returns {ts.Node|undefined} the next TSToken
  */
 function findNextToken(
   previousToken: ts.Node,
@@ -439,11 +439,11 @@ function findNextToken(
 
 /**
  * Find the first matching token based on the given predicate function.
- * @param {ts.Token} previousToken The previous ts.Token
+ * @param {ts.Node} previousToken The previous ts.Token
  * @param {ts.Node} parent The parent ts.Node
  * @param {Function} predicate The predicate function to apply to each checked token
  * @param {ts.SourceFile} ast The TS AST
- * @returns {ts.Token|undefined} a matching ts.Token
+ * @returns {ts.Node|undefined} a matching ts.Token
  */
 function findFirstMatchingToken(
   previousToken: ts.Node | undefined,

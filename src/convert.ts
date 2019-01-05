@@ -687,7 +687,7 @@ export default function convert(config: ConvertConfig): ESTreeNode | null {
 
       // Process returnType
       if (node.type) {
-        (result as any).returnType = convertTypeAnnotation(node.type);
+        result.returnType = convertTypeAnnotation(node.type);
       }
 
       if (functionDeclarationType === AST_NODE_TYPES.TSDeclareFunction) {
@@ -1207,7 +1207,7 @@ export default function convert(config: ConvertConfig): ESTreeNode | null {
 
       // Process returnType
       if (node.type) {
-        (result as any).returnType = convertTypeAnnotation(node.type);
+        result.returnType = convertTypeAnnotation(node.type);
       }
 
       // Process typeParameters
@@ -1315,7 +1315,7 @@ export default function convert(config: ConvertConfig): ESTreeNode | null {
 
       // Process returnType
       if (node.type) {
-        (result as any).returnType = convertTypeAnnotation(node.type);
+        result.returnType = convertTypeAnnotation(node.type);
       }
 
       // Process typeParameters
@@ -2461,7 +2461,7 @@ export default function convert(config: ConvertConfig): ESTreeNode | null {
       });
 
       if (node.type) {
-        (result as any).returnType = convertTypeAnnotation(node.type);
+        result.returnType = convertTypeAnnotation(node.type);
       }
 
       if (node.typeParameters) {

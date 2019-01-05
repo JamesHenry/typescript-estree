@@ -254,7 +254,12 @@ function isJSDocComment(node: ts.Node): boolean {
  * @param  {ts.Token} operator the operator token
  * @returns {string}          the binary expression type
  */
-function getBinaryExpressionType(operator: ts.Token<any>): string {
+function getBinaryExpressionType(
+  operator: ts.Token<any>
+):
+  | AST_NODE_TYPES.AssignmentExpression
+  | AST_NODE_TYPES.LogicalExpression
+  | AST_NODE_TYPES.BinaryExpression {
   if (isAssignmentOperator(operator)) {
     return AST_NODE_TYPES.AssignmentExpression;
   } else if (isLogicalOperator(operator)) {
@@ -322,14 +327,11 @@ function canContainDirective(node: ts.Node): boolean {
 /**
  * Returns line and column data for the given ts.Node or ts.Token,
  * for the given AST
- * @param  {ts.Token|TSNode} nodeOrToken the ts.Node or ts.Token
+ * @param  {ts.Node} nodeOrToken the ts.Node or ts.Token
  * @param  {ts.SourceFile} ast         the AST object
  * @returns {ESTreeLoc}             the loc data
  */
-function getLoc(
-  nodeOrToken: TSNode | ts.Token<ts.SyntaxKind>,
-  ast: ts.SourceFile
-): ESTreeNodeLoc {
+function getLoc(nodeOrToken: ts.Node, ast: ts.SourceFile): ESTreeNodeLoc {
   return getLocFor(nodeOrToken.getStart(ast), nodeOrToken.end, ast);
 }
 
@@ -493,10 +495,13 @@ function findFirstMatchingAncestor(
 /**
  * Finds the first parent ts.Node which matches the given kind
  * @param {ts.Node} node The current ts.Node
- * @param {number} kind The ts.Node kind to match against
+ * @param {ts.SyntaxKind} kind The ts.Node kind to match against
  * @returns {ts.Node|undefined} a matching parent ts.Node
  */
-function findAncestorOfKind(node: ts.Node, kind: number): ts.Node | undefined {
+function findAncestorOfKind(
+  node: ts.Node,
+  kind: ts.SyntaxKind
+): ts.Node | undefined {
   return findFirstMatchingAncestor(node, parent => parent.kind === kind);
 }
 
@@ -563,8 +568,8 @@ function fixExports(
     result.loc = getLocFor(result.range[0], result.range[1], ast);
 
     const declarationType = declarationIsDefault
-      ? 'ExportDefaultDeclaration'
-      : 'ExportNamedDeclaration';
+      ? AST_NODE_TYPES.ExportDefaultDeclaration
+      : AST_NODE_TYPES.ExportNamedDeclaration;
 
     const newResult: any = {
       type: declarationType,

@@ -394,6 +394,7 @@ tester.addFixturePatternConfig('typescript/basics', {
     'declare-class-with-optional-method', // babel parse errors
     /**
      * Awaiting feedback on Babel issue https://github.com/babel/babel/issues/6679
+     * TODO: remove me in next babel > 7.2.3
      */
     'class-with-private-parameter-properties',
     'class-with-protected-parameter-properties',
@@ -422,6 +423,7 @@ tester.addFixturePatternConfig('typescript/basics', {
     'directive-in-namespace',
     /**
      * there is difference in range between babel and tsep
+     * https://github.com/babel/babel/issues/9282
      */
     'type-assertion'
   ],

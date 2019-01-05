@@ -384,7 +384,6 @@ tester.addFixturePatternConfig('typescript/basics', {
     'interface-with-optional-properties',
     'interface-without-type-annotation',
     'typed-this',
-    'export-type-function-declaration',
     'abstract-interface',
     /**
      * Babel bug for optional or abstract methods?
@@ -482,13 +481,6 @@ tester.addFixturePatternConfig('typescript/errorRecovery', {
 tester.addFixturePatternConfig('typescript/types', {
   fileType: 'ts',
   ignore: [
-    /**
-     * there is difference in range between babel and tsep
-     */
-    'function',
-    'function-generic',
-    'function-in-generic',
-    'function-with-this',
     /**
      * AST difference
      */

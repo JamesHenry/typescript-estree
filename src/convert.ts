@@ -122,7 +122,9 @@ export default function convert(config: ConvertConfig): ESTreeNode | null {
    */
   function convertTypeAnnotation(child: ts.TypeNode): ESTreeNode {
     const annotation = convertChildType(child);
-    const annotationStartCol = child.getFullStart() - 1;
+    const annotationStartCol =
+      // in FunctionType typeAnnotation has 2 characters `() => void` and in other places is just colon
+      child.getFullStart() - (node.kind === SyntaxKind.FunctionType ? 2 : 1);
     const loc = nodeUtils.getLocFor(annotationStartCol, child.end, ast);
     return {
       type: AST_NODE_TYPES.TSTypeAnnotation,
@@ -2449,7 +2451,23 @@ export default function convert(config: ConvertConfig): ESTreeNode | null {
 
       break;
     }
+    case SyntaxKind.FunctionType: {
+      Object.assign(result, {
+        type: AST_NODE_TYPES.TSFunctionType,
+        parameters: convertParameters(node.parameters)
+      });
 
+      if (node.type) {
+        (result as any).typeAnnotation = convertTypeAnnotation(node.type);
+      }
+
+      if (node.typeParameters) {
+        result.typeParameters = convertTSTypeParametersToTypeParametersDeclaration(
+          node.typeParameters
+        );
+      }
+      break;
+    }
     case SyntaxKind.ConstructSignature:
     case SyntaxKind.CallSignature: {
       Object.assign(result, {

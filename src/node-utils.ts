@@ -171,7 +171,9 @@ export default {
  * @param  {ts.Token}  operator the operator token
  * @returns {boolean}          is assignment
  */
-function isAssignmentOperator(operator: ts.Token<any>): boolean {
+function isAssignmentOperator(
+  operator: ts.Token<ts.AssignmentOperator>
+): boolean {
   return ASSIGNMENT_OPERATORS.indexOf(operator.kind) > -1;
 }
 
@@ -180,7 +182,7 @@ function isAssignmentOperator(operator: ts.Token<any>): boolean {
  * @param  {ts.Token}  operator the operator token
  * @returns {boolean}          is a logical operator
  */
-function isLogicalOperator(operator: ts.Token<any>): boolean {
+function isLogicalOperator(operator: ts.Token<ts.LogicalOperator>): boolean {
   return LOGICAL_OPERATORS.indexOf(operator.kind) > -1;
 }
 
@@ -221,10 +223,10 @@ function hasModifier(
 
 /**
  * Returns true if the given ts.Token is a comma
- * @param  {ts.Token}  token the TypeScript token
+ * @param  {ts.Node}  token the TypeScript token
  * @returns {boolean}       is comma
  */
-function isComma(token: ts.Token<any>): boolean {
+function isComma(token: ts.Node): boolean {
   return token.kind === SyntaxKind.CommaToken;
 }
 
@@ -411,13 +413,13 @@ function getTSNodeAccessibility(
  * @returns {ts.Token} the next TSToken
  */
 function findNextToken(
-  previousToken: ts.Token<any>,
+  previousToken: ts.Node,
   parent: ts.Node,
   ast: ts.SourceFile
-): ts.Token<any> | undefined {
+): ts.Node | undefined {
   return find(parent);
 
-  function find(n: ts.Node): ts.Token<any> | undefined {
+  function find(n: ts.Node): ts.Node | undefined {
     if (ts.isToken(n) && n.pos === previousToken.end) {
       // this is token that starts at the end of previous token - return it
       return n;
@@ -444,11 +446,11 @@ function findNextToken(
  * @returns {ts.Token|undefined} a matching ts.Token
  */
 function findFirstMatchingToken(
-  previousToken: ts.Token<any> | undefined,
+  previousToken: ts.Node | undefined,
   parent: ts.Node,
   predicate: (node: ts.Node) => boolean,
   ast: ts.SourceFile
-): ts.Token<any> | undefined {
+): ts.Node | undefined {
   while (previousToken) {
     if (predicate(previousToken)) {
       return previousToken;
@@ -698,11 +700,11 @@ function getTokenType(token: any): string {
 
 /**
  * Extends and formats a given ts.Token, for a given AST
- * @param  {ts.Token} token the ts.Token
+ * @param  {ts.Node} token the ts.Token
  * @param  {ts.SourceFile} ast   the AST object
  * @returns {ESTreeToken}       the converted ESTreeToken
  */
-function convertToken(token: ts.Token<any>, ast: ts.SourceFile): ESTreeToken {
+function convertToken(token: ts.Node, ast: ts.SourceFile): ESTreeToken {
   const start =
       token.kind === SyntaxKind.JsxText
         ? token.getFullStart()

@@ -13613,7 +13613,7 @@ Object {
             "line": 9,
           },
         },
-        "parameters": Array [
+        "params": Array [
           Object {
             "argument": Object {
               "loc": Object {
@@ -13705,20 +13705,19 @@ Object {
           180,
           205,
         ],
-        "type": "TSConstructorType",
-        "typeAnnotation": Object {
+        "returnType": Object {
           "loc": Object {
             "end": Object {
               "column": 47,
               "line": 9,
             },
             "start": Object {
-              "column": 44,
+              "column": 43,
               "line": 9,
             },
           },
           "range": Array [
-            202,
+            201,
             205,
           ],
           "type": "TSTypeAnnotation",
@@ -13758,7 +13757,7 @@ Object {
             },
           },
         },
-        "typeParameters": null,
+        "type": "TSConstructorType",
       },
       "typeParameters": Object {
         "loc": Object {
@@ -85049,7 +85048,7 @@ Object {
                     "line": 1,
                   },
                 },
-                "parameters": Array [
+                "params": Array [
                   Object {
                     "loc": Object {
                       "end": Object {
@@ -85160,20 +85159,19 @@ Object {
                   7,
                   42,
                 ],
-                "type": "TSConstructorType",
-                "typeAnnotation": Object {
+                "returnType": Object {
                   "loc": Object {
                     "end": Object {
                       "column": 42,
                       "line": 1,
                     },
                     "start": Object {
-                      "column": 36,
+                      "column": 35,
                       "line": 1,
                     },
                   },
                   "range": Array [
-                    36,
+                    35,
                     42,
                   ],
                   "type": "TSTypeAnnotation",
@@ -85195,7 +85193,7 @@ Object {
                     "type": "TSVoidKeyword",
                   },
                 },
-                "typeParameters": null,
+                "type": "TSConstructorType",
               },
             },
           },
@@ -85612,7 +85610,7 @@ Object {
                     "line": 1,
                   },
                 },
-                "parameters": Array [
+                "params": Array [
                   Object {
                     "loc": Object {
                       "end": Object {
@@ -85688,20 +85686,19 @@ Object {
                   7,
                   25,
                 ],
-                "type": "TSConstructorType",
-                "typeAnnotation": Object {
+                "returnType": Object {
                   "loc": Object {
                     "end": Object {
                       "column": 25,
                       "line": 1,
                     },
                     "start": Object {
-                      "column": 22,
+                      "column": 21,
                       "line": 1,
                     },
                   },
                   "range": Array [
-                    22,
+                    21,
                     25,
                   ],
                   "type": "TSTypeAnnotation",
@@ -85741,6 +85738,7 @@ Object {
                     },
                   },
                 },
+                "type": "TSConstructorType",
                 "typeParameters": Object {
                   "loc": Object {
                     "end": Object {
@@ -86204,25 +86202,24 @@ Object {
                           "line": 1,
                         },
                       },
-                      "parameters": Array [],
+                      "params": Array [],
                       "range": Array [
                         13,
                         29,
                       ],
-                      "type": "TSConstructorType",
-                      "typeAnnotation": Object {
+                      "returnType": Object {
                         "loc": Object {
                           "end": Object {
                             "column": 29,
                             "line": 1,
                           },
                           "start": Object {
-                            "column": 21,
+                            "column": 20,
                             "line": 1,
                           },
                         },
                         "range": Array [
-                          21,
+                          20,
                           29,
                         ],
                         "type": "TSTypeAnnotation",
@@ -86244,7 +86241,7 @@ Object {
                           "type": "TSStringKeyword",
                         },
                       },
-                      "typeParameters": null,
+                      "type": "TSConstructorType",
                     },
                   ],
                   "range": Array [
@@ -86579,7 +86576,7 @@ Object {
                     "line": 1,
                   },
                 },
-                "parameters": Array [
+                "params": Array [
                   Object {
                     "argument": Object {
                       "loc": Object {
@@ -86671,20 +86668,19 @@ Object {
                   7,
                   35,
                 ],
-                "type": "TSConstructorType",
-                "typeAnnotation": Object {
+                "returnType": Object {
                   "loc": Object {
                     "end": Object {
                       "column": 35,
                       "line": 1,
                     },
                     "start": Object {
-                      "column": 29,
+                      "column": 28,
                       "line": 1,
                     },
                   },
                   "range": Array [
-                    29,
+                    28,
                     35,
                   ],
                   "type": "TSTypeAnnotation",
@@ -86706,7 +86702,7 @@ Object {
                     "type": "TSVoidKeyword",
                   },
                 },
-                "typeParameters": null,
+                "type": "TSConstructorType",
               },
             },
           },

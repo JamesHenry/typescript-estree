@@ -181,6 +181,19 @@ export function preprocessBabylonAST(ast: any): any {
           node.params = node.parameters;
           delete node.parameters;
         }
+      },
+      /**
+       * Awaiting feedback on Babel issue https://github.com/babel/babel/issues/9231
+       */
+      TSConstructorType(node: any) {
+        if (node.typeAnnotation) {
+          node.returnType = node.typeAnnotation;
+          delete node.typeAnnotation;
+        }
+        if (node.parameters) {
+          node.params = node.parameters;
+          delete node.parameters;
+        }
       }
     }
   );

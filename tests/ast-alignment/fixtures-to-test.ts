@@ -484,7 +484,11 @@ tester.addFixturePatternConfig('typescript/types', {
     /**
      * AST difference
      */
-    'function-with-rest'
+    'function-with-rest',
+    'constructor',
+    'constructor-generic',
+    'constructor-in-generic',
+    'constructor-with-rest'
   ]
 });
 

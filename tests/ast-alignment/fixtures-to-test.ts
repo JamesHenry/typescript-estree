@@ -377,7 +377,8 @@ tester.addFixturePatternConfig('typescript/basics', {
     /**
      * Babel range bug, which will be fixed by https://github.com/babel/babel/pull/9284
      */
-    'type-assertion'
+    'type-assertion',
+    'function-overloads'
   ],
   ignoreSourceType: [
     // https://github.com/babel/babel/issues/9213

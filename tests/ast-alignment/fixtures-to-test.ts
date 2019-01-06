@@ -377,8 +377,7 @@ tester.addFixturePatternConfig('typescript/basics', {
     /**
      * Babel range bug, which will be fixed by https://github.com/babel/babel/pull/9284
      */
-    'type-assertion',
-    'function-overloads'
+    'type-assertion'
   ],
   ignoreSourceType: [
     // https://github.com/babel/babel/issues/9213
@@ -469,16 +468,12 @@ tester.addFixturePatternConfig('typescript/namespaces-and-modules', {
     /**
      * Minor AST difference
      */
-    'nested-internal-module',
-    /**
-     * Babel: TSDeclareFunction
-     * ts-estree: TSNamespaceFunctionDeclaration
-     */
-    'declare-namespace-with-exported-function'
+    'nested-internal-module'
   ],
   ignoreSourceType: [
     'module-with-default-exports',
-    'ambient-module-declaration-with-import'
+    'ambient-module-declaration-with-import',
+    'declare-namespace-with-exported-function'
   ]
 });
 

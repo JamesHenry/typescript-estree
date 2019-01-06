@@ -31677,7 +31677,7 @@ Object {
             "type": "TSNumberKeyword",
           },
         },
-        "type": "FunctionDeclaration",
+        "type": "TSDeclareFunction",
       },
       "loc": Object {
         "end": Object {
@@ -31822,7 +31822,7 @@ Object {
             "type": "TSStringKeyword",
           },
         },
-        "type": "FunctionDeclaration",
+        "type": "TSDeclareFunction",
       },
       "loc": Object {
         "end": Object {
@@ -79393,7 +79393,7 @@ Object {
                   },
                 },
               },
-              "type": "FunctionDeclaration",
+              "type": "TSDeclareFunction",
             },
             "loc": Object {
               "end": Object {

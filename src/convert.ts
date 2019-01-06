@@ -2082,6 +2082,10 @@ export default function convert(config: ConvertConfig): ESTreeNode | null {
     case SyntaxKind.JsxSelfClosingElement: {
       Object.assign(result, {
         type: AST_NODE_TYPES.JSXElement,
+        /**
+         * Convert SyntaxKind.JsxSelfClosingElement to SyntaxKind.JsxOpeningElement,
+         * TypeScript does not seem to have the idea of openingElement when tag is self-closing
+         */
         openingElement: {
           type: AST_NODE_TYPES.JSXOpeningElement,
           typeParameters: node.typeArguments

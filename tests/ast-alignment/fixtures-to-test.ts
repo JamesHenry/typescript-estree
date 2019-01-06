@@ -349,8 +349,10 @@ tester.addFixturePatternConfig('typescript/basics', {
     'interface-with-jsdoc',
     'interface-with-optional-properties',
     'interface-without-type-annotation',
+    'interface-with-method',
     'typed-this',
     'abstract-interface',
+    'typed-method-signature',
     /**
      * Babel bug for optional or abstract methods?
      */

@@ -383,7 +383,7 @@ tester.addFixturePatternConfig('typescript/basics', {
     'directive-in-module',
     'directive-in-namespace',
     /**
-     * PR for BigInt support has been merged into Babel: https://github.com/babel/babel/pull/9284
+     * PR for type assertions ranges has been merged into Babel: https://github.com/babel/babel/pull/9284
      * TODO: remove me in next babel > 7.2.3
      */
     'type-assertion'

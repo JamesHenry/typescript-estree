@@ -429,8 +429,8 @@ tester.addFixturePatternConfig('typescript/errorRecovery', {
   fileType: 'ts',
   ignore: [
     /**
-     * TypeScript reports it via the overloaded TS 1097 "'{0}' list cannot be empty."
-     * Babel does not currently throw, which will be fixed by https://github.com/babel/babel/pull/9292
+     * PR with errors in empty extends and implements has been merged into Babel: https://github.com/babel/babel/pull/9292
+     * TODO: remove me in next babel > 7.2.3
      */
     'interface-empty-extends',
     'class-extends-empty-implements'

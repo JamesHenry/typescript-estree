@@ -151,26 +151,28 @@ export default function convert(config: ConvertConfig): ESTreeNode | null {
     const unique: string[] = [];
     const allowDirectives = nodeUtils.canContainDirective(node);
 
-    // filter out unknown nodes for now
-    return nodes
-      .map(statement => {
-        const child = convertChild(statement);
-        if (
-          allowDirectives &&
-          child &&
-          child.expression &&
-          ts.isExpressionStatement(statement) &&
-          ts.isStringLiteral(statement.expression)
-        ) {
-          const raw = child.expression.raw!;
-          if (!unique.includes(raw)) {
-            child.directive = raw.slice(1, -1);
-            unique.push(raw);
+    return (
+      nodes
+        .map(statement => {
+          const child = convertChild(statement);
+          if (
+            allowDirectives &&
+            child &&
+            child.expression &&
+            ts.isExpressionStatement(statement) &&
+            ts.isStringLiteral(statement.expression)
+          ) {
+            const raw = child.expression.raw!;
+            if (!unique.includes(raw)) {
+              child.directive = raw.slice(1, -1);
+              unique.push(raw);
+            }
           }
-        }
-        return child!; // child can be null but it's filtered bellow
-      })
-      .filter(statement => statement);
+          return child!; // child can be null but it's filtered bellow
+        })
+        // filter out unknown nodes for now
+        .filter(statement => statement)
+    );
   }
 
   /**

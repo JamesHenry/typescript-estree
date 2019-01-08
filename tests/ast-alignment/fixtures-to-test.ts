@@ -314,8 +314,8 @@ tester.addFixturePatternConfig('typescript/basics', {
      */
     'interface-with-all-property-types', // babel parse errors
     /**
-     * there is difference in range between babel and ts-estree
-     * https://github.com/babel/babel/issues/9285
+     * PR for generic ArrowFunctionExpression ranges has been merged into Babel: https://github.com/babel/babel/pull/9295
+     * TODO: remove me in next babel > 7.2.3
      */
     'arrow-function-with-type-parameters',
     /**

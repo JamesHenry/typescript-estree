@@ -168,7 +168,7 @@ export default function convert(config: ConvertConfig): ESTreeNode | null {
               unique.push(raw);
             }
           }
-          return child!; // child can be null but it's filtered bellow
+          return child!; // child can be null but it's filtered below
         })
         // filter out unknown nodes for now
         .filter(statement => statement)

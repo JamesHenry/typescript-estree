@@ -350,9 +350,13 @@ tester.addFixturePatternConfig('typescript/basics', {
     'interface-with-optional-properties',
     'interface-without-type-annotation',
     'typed-this',
+    /**
+     * https://github.com/babel/babel/issues/9304
+     */
     'abstract-interface',
     /**
-     * Babel bug for optional or abstract methods?
+     * Babel bug for optional or abstract methods
+     * https://github.com/babel/babel/issues/9305
      */
     'abstract-class-with-abstract-method', // babel parse errors
     'abstract-class-with-optional-method', // babel parse errors
@@ -367,7 +371,7 @@ tester.addFixturePatternConfig('typescript/basics', {
     'class-with-readonly-parameter-properties',
     /**
      * Not yet supported in Babel https://github.com/babel/babel/issues/7749
-     * WIP PR is https://github.com/babel/babel/pull/8798
+     * WIP PR is https://github.com/babel/babel/pull/9302
      */
     'import-type',
     'import-type-with-type-parameters-in-type-reference',
@@ -444,7 +448,9 @@ tester.addFixturePatternConfig('typescript/types', {
      * AST difference
      */
     'function-with-rest',
-    'constructor-with-rest'
+    'constructor-with-rest',
+    'index-signature',
+    'literal-number-negative'
   ]
 });
 

@@ -352,6 +352,11 @@ tester.addFixturePatternConfig('typescript/basics', {
     'class-with-implements',
     'class-with-extends-and-implements',
     /**
+     * Babel error: parameterName is not included into range of TSTypeAnnotation
+     * TODO: report it to babel
+     */
+    'type-guard-in-method',
+    /**
      * there is difference in range between babel and ts-estree
      */
     'export-declare-const-named-enum',
@@ -369,6 +374,7 @@ tester.addFixturePatternConfig('typescript/basics', {
     'interface-with-optional-properties',
     'interface-without-type-annotation',
     'interface-with-method',
+    'type-guard-in-interface',
     'typed-method-signature',
     'typed-this',
     /**

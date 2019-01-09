@@ -196,6 +196,12 @@ tester.addFixturePatternConfig('javascript/forIn', {
   ignore: [
     /**
      * Error: AST difference
+     * ts-estree: ArrayPattern
+     * babel: ArrayExpression
+     */
+    'for-in-array',
+    /**
+     * Error: AST difference
      * ts-estree: AssignmentExpression
      * babel: AssignmentPattern
      */
@@ -213,7 +219,16 @@ tester.addFixturePatternConfig('javascript/forIn', {
   ]
 });
 
-tester.addFixturePatternConfig('javascript/forOf');
+tester.addFixturePatternConfig('javascript/forOf', {
+  ignore: [
+    /**
+     * Error: AST difference
+     * ts-estree: ArrayPattern
+     * babel: ArrayExpression
+     */
+    'for-of-array'
+  ]
+});
 tester.addFixturePatternConfig('javascript/generators');
 tester.addFixturePatternConfig('javascript/globalReturn');
 tester.addFixturePatternConfig('javascript/importMeta');
@@ -349,6 +364,8 @@ tester.addFixturePatternConfig('typescript/basics', {
     'interface-with-jsdoc',
     'interface-with-optional-properties',
     'interface-without-type-annotation',
+    'interface-with-method',
+    'typed-method-signature',
     'typed-this',
     /**
      * https://github.com/babel/babel/issues/9304

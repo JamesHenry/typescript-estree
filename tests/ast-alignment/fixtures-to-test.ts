@@ -352,6 +352,10 @@ tester.addFixturePatternConfig('typescript/basics', {
     'class-with-implements',
     'class-with-extends-and-implements',
     /**
+     * there is difference in range between babel and ts-estree
+     */
+    'export-declare-const-named-enum',
+    /**
      * Other major AST differences (e.g. fundamentally different node types)
      */
     'class-with-mixin',
@@ -368,6 +372,7 @@ tester.addFixturePatternConfig('typescript/basics', {
     'typed-method-signature',
     'typed-this',
     /**
+     * Babel bug for parsing exported abstract interface
      * https://github.com/babel/babel/issues/9304
      */
     'abstract-interface',

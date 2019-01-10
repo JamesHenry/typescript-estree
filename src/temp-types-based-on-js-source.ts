@@ -39,7 +39,7 @@ export interface ESTreeNode {
   body?: any;
   params?: any;
   accessibility?: 'public' | 'protected' | 'private';
-  readonly?: boolean;
+  readonly?: boolean | string;
   static?: boolean;
   export?: boolean;
   parameter?: any;
@@ -47,6 +47,7 @@ export interface ESTreeNode {
   typeName?: ESTreeNode | null;
   directive?: string;
   returnType?: ESTreeNode;
+  optional?: boolean | string;
 }
 
 export interface ESTreeComment {

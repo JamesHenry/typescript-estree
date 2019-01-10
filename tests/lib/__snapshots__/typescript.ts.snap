@@ -40530,15 +40530,12 @@ Object {
                 "line": 8,
               },
             },
-            "optional": false,
             "params": Array [],
             "range": Array [
               149,
               161,
             ],
-            "static": false,
-            "type": "TSMethodSignature",
-            "typeAnnotation": Object {
+            "returnType": Object {
               "loc": Object {
                 "end": Object {
                   "column": 15,
@@ -40572,6 +40569,7 @@ Object {
                 "type": "TSVoidKeyword",
               },
             },
+            "type": "TSMethodSignature",
           },
           Object {
             "computed": false,
@@ -40664,9 +40662,7 @@ Object {
               166,
               186,
             ],
-            "static": false,
-            "type": "TSMethodSignature",
-            "typeAnnotation": Object {
+            "returnType": Object {
               "loc": Object {
                 "end": Object {
                   "column": 23,
@@ -40700,6 +40696,7 @@ Object {
                 "type": "TSVoidKeyword",
               },
             },
+            "type": "TSMethodSignature",
           },
           Object {
             "computed": true,
@@ -40792,9 +40789,7 @@ Object {
               191,
               213,
             ],
-            "static": false,
-            "type": "TSMethodSignature",
-            "typeAnnotation": Object {
+            "returnType": Object {
               "loc": Object {
                 "end": Object {
                   "column": 25,
@@ -40828,6 +40823,7 @@ Object {
                 "type": "TSVoidKeyword",
               },
             },
+            "type": "TSMethodSignature",
           },
           Object {
             "computed": false,
@@ -40859,7 +40855,6 @@ Object {
                 "line": 11,
               },
             },
-            "optional": false,
             "params": Array [
               Object {
                 "loc": Object {
@@ -40920,9 +40915,7 @@ Object {
               218,
               240,
             ],
-            "static": false,
-            "type": "TSMethodSignature",
-            "typeAnnotation": Object {
+            "returnType": Object {
               "loc": Object {
                 "end": Object {
                   "column": 25,
@@ -40956,6 +40949,7 @@ Object {
                 "type": "TSVoidKeyword",
               },
             },
+            "type": "TSMethodSignature",
             "typeParameters": Object {
               "loc": Object {
                 "end": Object {
@@ -44406,7 +44400,6 @@ Object {
                 "line": 6,
               },
             },
-            "optional": false,
             "params": Array [
               Object {
                 "loc": Object {
@@ -44431,9 +44424,7 @@ Object {
               76,
               85,
             ],
-            "static": false,
             "type": "TSMethodSignature",
-            "typeAnnotation": null,
           },
         ],
         "loc": Object {
@@ -44707,7 +44698,6 @@ Object {
                 "line": 2,
               },
             },
-            "optional": false,
             "params": Array [
               Object {
                 "loc": Object {
@@ -44766,9 +44756,7 @@ Object {
               19,
               40,
             ],
-            "static": false,
-            "type": "TSMethodSignature",
-            "typeAnnotation": Object {
+            "returnType": Object {
               "loc": Object {
                 "end": Object {
                   "column": 22,
@@ -44802,6 +44790,7 @@ Object {
                 "type": "TSVoidKeyword",
               },
             },
+            "type": "TSMethodSignature",
           },
           Object {
             "computed": false,
@@ -44833,7 +44822,6 @@ Object {
                 "line": 3,
               },
             },
-            "optional": false,
             "params": Array [
               Object {
                 "loc": Object {
@@ -44910,9 +44898,7 @@ Object {
               43,
               59,
             ],
-            "static": false,
-            "type": "TSMethodSignature",
-            "typeAnnotation": Object {
+            "returnType": Object {
               "loc": Object {
                 "end": Object {
                   "column": 17,
@@ -44964,6 +44950,7 @@ Object {
                 },
               },
             },
+            "type": "TSMethodSignature",
             "typeParameters": Object {
               "loc": Object {
                 "end": Object {
@@ -45767,9 +45754,7 @@ Object {
               49,
               79,
             ],
-            "static": false,
             "type": "TSMethodSignature",
-            "typeAnnotation": null,
           },
         ],
         "loc": Object {
@@ -56336,7 +56321,6 @@ Object {
                 "line": 2,
               },
             },
-            "optional": false,
             "params": Array [
               Object {
                 "loc": Object {
@@ -56395,9 +56379,7 @@ Object {
               15,
               36,
             ],
-            "static": false,
-            "type": "TSMethodSignature",
-            "typeAnnotation": Object {
+            "returnType": Object {
               "loc": Object {
                 "end": Object {
                   "column": 22,
@@ -56431,6 +56413,7 @@ Object {
                 "type": "TSVoidKeyword",
               },
             },
+            "type": "TSMethodSignature",
           },
           Object {
             "computed": false,
@@ -56462,7 +56445,6 @@ Object {
                 "line": 3,
               },
             },
-            "optional": false,
             "params": Array [
               Object {
                 "loc": Object {
@@ -56539,9 +56521,7 @@ Object {
               39,
               55,
             ],
-            "static": false,
-            "type": "TSMethodSignature",
-            "typeAnnotation": Object {
+            "returnType": Object {
               "loc": Object {
                 "end": Object {
                   "column": 17,
@@ -56593,6 +56573,7 @@ Object {
                 },
               },
             },
+            "type": "TSMethodSignature",
             "typeParameters": Object {
               "loc": Object {
                 "end": Object {
@@ -57165,7 +57146,6 @@ Object {
                 "line": 2,
               },
             },
-            "optional": false,
             "params": Array [
               Object {
                 "loc": Object {
@@ -57382,9 +57362,7 @@ Object {
               23,
               87,
             ],
-            "static": false,
-            "type": "TSMethodSignature",
-            "typeAnnotation": Object {
+            "returnType": Object {
               "loc": Object {
                 "end": Object {
                   "column": 64,
@@ -57418,6 +57396,7 @@ Object {
                 "type": "TSVoidKeyword",
               },
             },
+            "type": "TSMethodSignature",
           },
         ],
         "loc": Object {
@@ -75974,7 +75953,6 @@ Object {
                 "line": 17,
               },
             },
-            "optional": false,
             "params": Array [
               Object {
                 "loc": Object {
@@ -76033,9 +76011,7 @@ Object {
               393,
               421,
             ],
-            "static": false,
-            "type": "TSMethodSignature",
-            "typeAnnotation": Object {
+            "returnType": Object {
               "loc": Object {
                 "end": Object {
                   "column": 31,
@@ -76069,6 +76045,7 @@ Object {
                 "type": "TSVoidKeyword",
               },
             },
+            "type": "TSMethodSignature",
           },
           Object {
             "accessibility": "private",
@@ -76101,7 +76078,6 @@ Object {
                 "line": 18,
               },
             },
-            "optional": false,
             "params": Array [
               Object {
                 "loc": Object {
@@ -76160,9 +76136,7 @@ Object {
               426,
               455,
             ],
-            "static": false,
-            "type": "TSMethodSignature",
-            "typeAnnotation": Object {
+            "returnType": Object {
               "loc": Object {
                 "end": Object {
                   "column": 32,
@@ -76196,6 +76170,7 @@ Object {
                 "type": "TSVoidKeyword",
               },
             },
+            "type": "TSMethodSignature",
           },
           Object {
             "accessibility": "protected",
@@ -76228,7 +76203,6 @@ Object {
                 "line": 19,
               },
             },
-            "optional": false,
             "params": Array [
               Object {
                 "loc": Object {
@@ -76287,9 +76261,7 @@ Object {
               460,
               491,
             ],
-            "static": false,
-            "type": "TSMethodSignature",
-            "typeAnnotation": Object {
+            "returnType": Object {
               "loc": Object {
                 "end": Object {
                   "column": 34,
@@ -76323,6 +76295,7 @@ Object {
                 "type": "TSVoidKeyword",
               },
             },
+            "type": "TSMethodSignature",
           },
           Object {
             "computed": false,
@@ -76354,7 +76327,6 @@ Object {
                 "line": 20,
               },
             },
-            "optional": false,
             "params": Array [
               Object {
                 "loc": Object {
@@ -76413,9 +76385,7 @@ Object {
               496,
               524,
             ],
-            "static": true,
-            "type": "TSMethodSignature",
-            "typeAnnotation": Object {
+            "returnType": Object {
               "loc": Object {
                 "end": Object {
                   "column": 31,
@@ -76449,6 +76419,8 @@ Object {
                 "type": "TSVoidKeyword",
               },
             },
+            "static": true,
+            "type": "TSMethodSignature",
           },
           Object {
             "computed": false,
@@ -76481,7 +76453,6 @@ Object {
                 "line": 21,
               },
             },
-            "optional": false,
             "params": Array [
               Object {
                 "loc": Object {
@@ -76540,9 +76511,7 @@ Object {
               529,
               557,
             ],
-            "static": false,
-            "type": "TSMethodSignature",
-            "typeAnnotation": Object {
+            "returnType": Object {
               "loc": Object {
                 "end": Object {
                   "column": 31,
@@ -76576,6 +76545,7 @@ Object {
                 "type": "TSVoidKeyword",
               },
             },
+            "type": "TSMethodSignature",
           },
           Object {
             "computed": false,
@@ -76607,7 +76577,6 @@ Object {
                 "line": 22,
               },
             },
-            "optional": false,
             "params": Array [
               Object {
                 "loc": Object {
@@ -76667,9 +76636,7 @@ Object {
               592,
             ],
             "readonly": true,
-            "static": false,
-            "type": "TSMethodSignature",
-            "typeAnnotation": Object {
+            "returnType": Object {
               "loc": Object {
                 "end": Object {
                   "column": 33,
@@ -76703,6 +76670,7 @@ Object {
                 "type": "TSVoidKeyword",
               },
             },
+            "type": "TSMethodSignature",
           },
         ],
         "loc": Object {

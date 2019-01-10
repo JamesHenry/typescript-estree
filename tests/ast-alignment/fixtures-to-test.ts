@@ -349,10 +349,14 @@ tester.addFixturePatternConfig('typescript/basics', {
     'interface-with-jsdoc',
     'interface-with-optional-properties',
     'interface-without-type-annotation',
-    'interface-with-method',
     'typed-this',
     'abstract-interface',
-    'typed-method-signature',
+    /**
+     * AST difference
+     * ts-estree: heritage = []
+     * babel: heritage = undefined
+     */
+    'interface-with-method',
     /**
      * Babel bug for optional or abstract methods?
      */

@@ -65,6 +65,7 @@ function whitelistSupportedDiagnostics(
       case 1121: // ts 3.2 "Octal literals are not allowed in strict mode."
       case 1123: // ts 3.2: "Variable declaration list cannot be empty."
       case 1141: // ts 3.2 "String literal expected."
+      case 1070: // ts 3.2 '{0}' modifier cannot appear on a type member.
       case 1173: // ts 3.2 "'extends' clause must precede 'implements' clause."
       case 1190: // ts 3.2 "The variable declaration of a 'for...of' statement cannot have an initializer."
       case 1200: // ts 3.2 "Line terminator not permitted before arrow."

@@ -398,8 +398,8 @@ tester.addFixturePatternConfig('typescript/basics', {
     'class-with-public-parameter-properties',
     'class-with-readonly-parameter-properties',
     /**
-     * Not yet supported in Babel https://github.com/babel/babel/issues/7749
-     * WIP PR is https://github.com/babel/babel/pull/9302
+     * PR for type import has been merged into Babel: https://github.com/babel/babel/pull/9302
+     * TODO: remove me in next babel > 7.2.3
      */
     'import-type',
     'import-type-with-type-parameters-in-type-reference',

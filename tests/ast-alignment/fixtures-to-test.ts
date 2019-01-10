@@ -196,6 +196,12 @@ tester.addFixturePatternConfig('javascript/forIn', {
   ignore: [
     /**
      * Error: AST difference
+     * ts-estree: ArrayPattern
+     * babel: ArrayExpression
+     */
+    'for-in-array',
+    /**
+     * Error: AST difference
      * ts-estree: AssignmentExpression
      * babel: AssignmentPattern
      */
@@ -213,7 +219,16 @@ tester.addFixturePatternConfig('javascript/forIn', {
   ]
 });
 
-tester.addFixturePatternConfig('javascript/forOf');
+tester.addFixturePatternConfig('javascript/forOf', {
+  ignore: [
+    /**
+     * Error: AST difference
+     * ts-estree: ArrayPattern
+     * babel: ArrayExpression
+     */
+    'for-of-array'
+  ]
+});
 tester.addFixturePatternConfig('javascript/generators');
 tester.addFixturePatternConfig('javascript/globalReturn');
 tester.addFixturePatternConfig('javascript/importMeta');
@@ -337,6 +352,15 @@ tester.addFixturePatternConfig('typescript/basics', {
     'class-with-implements',
     'class-with-extends-and-implements',
     /**
+     * Babel error: parameterName is not included into range of TSTypeAnnotation
+     * TODO: report it to babel
+     */
+    'type-guard-in-method',
+    /**
+     * there is difference in range between babel and ts-estree
+     */
+    'export-declare-const-named-enum',
+    /**
      * Other major AST differences (e.g. fundamentally different node types)
      */
     'class-with-mixin',
@@ -349,8 +373,8 @@ tester.addFixturePatternConfig('typescript/basics', {
     'interface-with-jsdoc',
     'interface-with-optional-properties',
     'interface-without-type-annotation',
+    'type-guard-in-interface',
     'typed-this',
-    'abstract-interface',
     /**
      * AST difference
      * ts-estree: heritage = []
@@ -358,7 +382,13 @@ tester.addFixturePatternConfig('typescript/basics', {
      */
     'interface-with-method',
     /**
-     * Babel bug for optional or abstract methods?
+     * Babel bug for parsing exported abstract interface
+     * https://github.com/babel/babel/issues/9304
+     */
+    'abstract-interface',
+    /**
+     * Babel bug for optional or abstract methods
+     * https://github.com/babel/babel/issues/9305
      */
     'abstract-class-with-abstract-method', // babel parse errors
     'abstract-class-with-optional-method', // babel parse errors
@@ -372,8 +402,8 @@ tester.addFixturePatternConfig('typescript/basics', {
     'class-with-public-parameter-properties',
     'class-with-readonly-parameter-properties',
     /**
-     * Not yet supported in Babel https://github.com/babel/babel/issues/7749
-     * WIP PR is https://github.com/babel/babel/pull/8798
+     * PR for type import has been merged into Babel: https://github.com/babel/babel/pull/9302
+     * TODO: remove me in next babel > 7.2.3
      */
     'import-type',
     'import-type-with-type-parameters-in-type-reference',
@@ -450,7 +480,10 @@ tester.addFixturePatternConfig('typescript/types', {
      * AST difference
      */
     'function-with-rest',
-    'constructor-with-rest'
+    'constructor-with-rest',
+    'index-signature',
+    'index-signature-readonly',
+    'literal-number-negative'
   ]
 });
 

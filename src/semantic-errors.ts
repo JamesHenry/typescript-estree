@@ -61,6 +61,7 @@ function whitelistSupportedDiagnostics(
       case 1049: // ts 3.2 "A 'set' accessor must have exactly one parameter."
       case 1070: // ts 3.2 "'{0}' modifier cannot appear on a type member."
       case 1090: // ts 3.2 "'{0}' modifier cannot appear on a parameter."
+      case 1096: // ts 3.2 "An index signature must have exactly one parameter."
       case 1097: // ts 3.2 "'{0}' list cannot be empty."
       case 1117: // ts 3.2 "An object literal cannot have multiple properties with the same name in strict mode."
       case 1121: // ts 3.2 "Octal literals are not allowed in strict mode."

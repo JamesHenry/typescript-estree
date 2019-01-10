@@ -478,6 +478,7 @@ tester.addFixturePatternConfig('typescript/types', {
     'function-with-rest',
     'constructor-with-rest',
     'index-signature',
+    'index-signature-readonly',
     'literal-number-negative'
   ]
 });

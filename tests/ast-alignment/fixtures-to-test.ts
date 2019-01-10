@@ -469,7 +469,15 @@ tester.addFixturePatternConfig('typescript/errorRecovery', {
      * TODO: remove me in next babel > 7.2.3
      */
     'interface-empty-extends',
-    'class-extends-empty-implements'
+    'class-extends-empty-implements',
+    /**
+     * TS1071
+     */
+    'interface-index-signature-export',
+    'interface-index-signature-private',
+    'interface-index-signature-protected',
+    'interface-index-signature-public',
+    'interface-index-signature-static'
   ]
 });
 

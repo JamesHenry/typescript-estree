@@ -488,6 +488,7 @@ tester.addFixturePatternConfig('typescript/types', {
      */
     'index-signature',
     'index-signature-readonly',
+    'index-signature-without-type',
     'literal-number-negative'
   ]
 });

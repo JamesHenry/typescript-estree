@@ -16,7 +16,7 @@ install:
 script:
   - commitlint-travis
   - yarn check-format
-  - yarn test
+  - yarn test --ci
   - yarn build
   - yarn global add codecov
 after_success:

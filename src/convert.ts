@@ -2426,13 +2426,15 @@ export default function convert(config: ConvertConfig): ESTreeNode | null {
       Object.assign(result, {
         type: AST_NODE_TYPES.TSInterfaceDeclaration,
         body: interfaceBody,
-        id: convertChild(node.name),
-        heritage: hasImplementsClause
-          ? interfaceHeritageClauses[0].types.map(el =>
-              convertHeritageClause(AST_NODE_TYPES.TSInterfaceHeritage, el)
-            )
-          : []
+        id: convertChild(node.name)
       });
+
+      if (hasImplementsClause) {
+        result.heritage = interfaceHeritageClauses[0].types.map(el =>
+          convertHeritageClause(AST_NODE_TYPES.TSInterfaceHeritage, el)
+        );
+      }
+
       /**
        * Semantically, decorators are not allowed on interface declarations,
        * but the TypeScript compiler will parse them and produce a valid AST,

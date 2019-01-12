@@ -2919,7 +2919,6 @@ Object {
           ],
           "type": "TSInterfaceBody",
         },
-        "heritage": Array [],
         "id": Object {
           "loc": Object {
             "end": Object {
@@ -13703,7 +13702,6 @@ Object {
         ],
         "type": "TSInterfaceBody",
       },
-      "heritage": Array [],
       "id": Object {
         "loc": Object {
           "end": Object {
@@ -42082,7 +42080,6 @@ Object {
         ],
         "type": "TSInterfaceBody",
       },
-      "heritage": Array [],
       "id": Object {
         "loc": Object {
           "end": Object {
@@ -43574,7 +43571,6 @@ Object {
         ],
         "type": "TSInterfaceBody",
       },
-      "heritage": Array [],
       "id": Object {
         "loc": Object {
           "end": Object {
@@ -45761,7 +45757,6 @@ Object {
         ],
         "type": "TSInterfaceBody",
       },
-      "heritage": Array [],
       "id": Object {
         "loc": Object {
           "end": Object {
@@ -46513,7 +46508,6 @@ Object {
         ],
         "type": "TSInterfaceBody",
       },
-      "heritage": Array [],
       "id": Object {
         "loc": Object {
           "end": Object {
@@ -46829,7 +46823,6 @@ Object {
         ],
         "type": "TSInterfaceBody",
       },
-      "heritage": Array [],
       "id": Object {
         "loc": Object {
           "end": Object {
@@ -47409,7 +47402,6 @@ Object {
         ],
         "type": "TSInterfaceBody",
       },
-      "heritage": Array [],
       "id": Object {
         "loc": Object {
           "end": Object {
@@ -48176,7 +48168,6 @@ Object {
         ],
         "type": "TSInterfaceBody",
       },
-      "heritage": Array [],
       "id": Object {
         "loc": Object {
           "end": Object {
@@ -48760,7 +48751,6 @@ Object {
         ],
         "type": "TSInterfaceBody",
       },
-      "heritage": Array [],
       "id": Object {
         "loc": Object {
           "end": Object {
@@ -56298,7 +56288,6 @@ Object {
         ],
         "type": "TSInterfaceBody",
       },
-      "heritage": Array [],
       "id": Object {
         "loc": Object {
           "end": Object {
@@ -62299,7 +62288,6 @@ Object {
         ],
         "type": "TSInterfaceBody",
       },
-      "heritage": Array [],
       "id": Object {
         "loc": Object {
           "end": Object {
@@ -65746,7 +65734,6 @@ Object {
         "type": "TSInterfaceBody",
       },
       "declare": true,
-      "heritage": Array [],
       "id": Object {
         "loc": Object {
           "end": Object {
@@ -78610,7 +78597,6 @@ Object {
           "type": "Decorator",
         },
       ],
-      "heritage": Array [],
       "id": Object {
         "loc": Object {
           "end": Object {
@@ -80327,7 +80313,6 @@ Object {
         ],
         "type": "TSInterfaceBody",
       },
-      "heritage": Array [],
       "id": Object {
         "loc": Object {
           "end": Object {
@@ -80747,7 +80732,6 @@ Object {
         ],
         "type": "TSInterfaceBody",
       },
-      "heritage": Array [],
       "id": Object {
         "loc": Object {
           "end": Object {
@@ -81167,7 +81151,6 @@ Object {
         ],
         "type": "TSInterfaceBody",
       },
-      "heritage": Array [],
       "id": Object {
         "loc": Object {
           "end": Object {
@@ -81587,7 +81570,6 @@ Object {
         ],
         "type": "TSInterfaceBody",
       },
-      "heritage": Array [],
       "id": Object {
         "loc": Object {
           "end": Object {
@@ -82007,7 +81989,6 @@ Object {
         ],
         "type": "TSInterfaceBody",
       },
-      "heritage": Array [],
       "id": Object {
         "loc": Object {
           "end": Object {
@@ -82446,7 +82427,6 @@ Object {
         ],
         "type": "TSInterfaceBody",
       },
-      "heritage": Array [],
       "id": Object {
         "loc": Object {
           "end": Object {
@@ -82903,7 +82883,6 @@ Object {
         ],
         "type": "TSInterfaceBody",
       },
-      "heritage": Array [],
       "id": Object {
         "loc": Object {
           "end": Object {
@@ -83360,7 +83339,6 @@ Object {
         ],
         "type": "TSInterfaceBody",
       },
-      "heritage": Array [],
       "id": Object {
         "loc": Object {
           "end": Object {
@@ -83817,7 +83795,6 @@ Object {
         ],
         "type": "TSInterfaceBody",
       },
-      "heritage": Array [],
       "id": Object {
         "loc": Object {
           "end": Object {
@@ -84274,7 +84251,6 @@ Object {
         ],
         "type": "TSInterfaceBody",
       },
-      "heritage": Array [],
       "id": Object {
         "loc": Object {
           "end": Object {
@@ -84677,7 +84653,6 @@ Object {
         ],
         "type": "TSInterfaceBody",
       },
-      "heritage": Array [],
       "id": Object {
         "loc": Object {
           "end": Object {
@@ -84990,7 +84965,6 @@ Object {
         ],
         "type": "TSInterfaceBody",
       },
-      "heritage": Array [],
       "id": Object {
         "loc": Object {
           "end": Object {
@@ -85303,7 +85277,6 @@ Object {
         ],
         "type": "TSInterfaceBody",
       },
-      "heritage": Array [],
       "id": Object {
         "loc": Object {
           "end": Object {
@@ -85616,7 +85589,6 @@ Object {
         ],
         "type": "TSInterfaceBody",
       },
-      "heritage": Array [],
       "id": Object {
         "loc": Object {
           "end": Object {
@@ -85929,7 +85901,6 @@ Object {
         ],
         "type": "TSInterfaceBody",
       },
-      "heritage": Array [],
       "id": Object {
         "loc": Object {
           "end": Object {
@@ -86260,7 +86231,6 @@ Object {
         ],
         "type": "TSInterfaceBody",
       },
-      "heritage": Array [],
       "id": Object {
         "loc": Object {
           "end": Object {
@@ -90388,7 +90358,6 @@ Object {
                         ],
                         "type": "TSInterfaceBody",
                       },
-                      "heritage": Array [],
                       "id": Object {
                         "loc": Object {
                           "end": Object {

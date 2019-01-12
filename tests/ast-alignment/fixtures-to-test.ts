@@ -356,12 +356,6 @@ tester.addFixturePatternConfig('typescript/basics', {
     'type-guard-in-interface',
     'typed-this',
     /**
-     * AST difference
-     * ts-estree: heritage = []
-     * babel: heritage = undefined
-     */
-    'interface-with-method',
-    /**
      * Babel bug for parsing exported abstract interface
      * https://github.com/babel/babel/issues/9304
      */

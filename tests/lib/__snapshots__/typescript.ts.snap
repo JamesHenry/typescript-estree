@@ -80297,7 +80297,6 @@ Object {
         ],
         "type": "TSInterfaceBody",
       },
-      "extends": Array [],
       "id": Object {
         "loc": Object {
           "end": Object {

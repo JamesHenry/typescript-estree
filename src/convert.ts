@@ -2428,26 +2428,32 @@ export default function convert(config: ConvertConfig): ESTreeNode | null {
       });
 
       if (interfaceHeritageClauses.length > 0) {
-        interfaceHeritageClauses.forEach(heritageClause => {
+        const interfaceExtends = [];
+        const interfaceImplements = [];
+
+        for (const heritageClause of interfaceHeritageClauses) {
           if (heritageClause.token === SyntaxKind.ExtendsKeyword) {
-            result.extends = result.extends || [];
-            result.extends = [
-              ...result.extends,
-              ...heritageClause.types.map(n =>
+            for (const n of heritageClause.types) {
+              interfaceExtends.push(
                 convertHeritageClause(AST_NODE_TYPES.TSInterfaceHeritage, n)
-              )
-            ];
-          }
-          if (heritageClause.token === SyntaxKind.ImplementsKeyword) {
-            result.implements = result.implements || [];
-            result.implements = [
-              ...result.implements,
-              ...heritageClause.types.map(n =>
+              );
+            }
+          } else if (heritageClause.token === SyntaxKind.ImplementsKeyword) {
+            for (const n of heritageClause.types) {
+              interfaceImplements.push(
                 convertHeritageClause(AST_NODE_TYPES.TSInterfaceHeritage, n)
-              )
-            ];
+              );
+            }
           }
-        });
+        }
+
+        if (interfaceExtends.length) {
+          result.extends = interfaceExtends;
+        }
+
+        if (interfaceImplements.length) {
+          result.implements = interfaceImplements;
+        }
       }
 
       /**

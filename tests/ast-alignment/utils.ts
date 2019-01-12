@@ -251,6 +251,27 @@ export function preprocessBabylonAST(ast: any): any {
           node.type = 'TSAbstractClassProperty';
           delete node.abstract;
         }
+      },
+      /**
+       * Babel has `expression` on TSExpressionWithTypeArguments
+       * which we convert to TSInterfaceHeritage and TSClassImplements
+       *
+       * TODO: Confirm how the value of this field could be anything
+       * other than an Identifier?
+       */
+      TSExpressionWithTypeArguments(node: any, parent: any) {
+        if (parent.type === 'TSInterfaceDeclaration') {
+          node.type = 'TSInterfaceHeritage';
+          node.id = node.expression;
+          delete node.expression;
+        } else if (
+          parent.type === 'ClassExpression' ||
+          parent.type === 'ClassDeclaration'
+        ) {
+          node.type = 'TSClassImplements';
+          node.id = node.expression;
+          delete node.expression;
+        }
       }
     }
   );

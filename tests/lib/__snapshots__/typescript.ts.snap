@@ -9771,7 +9771,7 @@ Object {
             66,
             77,
           ],
-          "type": "ClassImplements",
+          "type": "TSClassImplements",
         },
       ],
       "loc": Object {
@@ -11957,7 +11957,7 @@ Object {
             21,
             24,
           ],
-          "type": "ClassImplements",
+          "type": "TSClassImplements",
         },
       ],
       "loc": Object {
@@ -12181,7 +12181,7 @@ Object {
             45,
             56,
           ],
-          "type": "ClassImplements",
+          "type": "TSClassImplements",
         },
       ],
       "loc": Object {
@@ -12458,7 +12458,7 @@ Object {
             21,
             24,
           ],
-          "type": "ClassImplements",
+          "type": "TSClassImplements",
           "typeParameters": Object {
             "loc": Object {
               "end": Object {
@@ -12790,7 +12790,7 @@ Object {
             21,
             24,
           ],
-          "type": "ClassImplements",
+          "type": "TSClassImplements",
           "typeParameters": Object {
             "loc": Object {
               "end": Object {
@@ -13519,7 +13519,7 @@ Object {
             123,
             124,
           ],
-          "type": "ClassImplements",
+          "type": "TSClassImplements",
         },
       ],
       "loc": Object {
@@ -41563,7 +41563,7 @@ Object {
         ],
         "type": "TSInterfaceBody",
       },
-      "heritage": Array [
+      "extends": Array [
         Object {
           "id": Object {
             "loc": Object {
@@ -41786,7 +41786,7 @@ Object {
         ],
         "type": "TSInterfaceBody",
       },
-      "heritage": Array [
+      "extends": Array [
         Object {
           "id": Object {
             "loc": Object {
@@ -46069,7 +46069,7 @@ Object {
         ],
         "type": "TSInterfaceBody",
       },
-      "heritage": Array [
+      "extends": Array [
         Object {
           "id": Object {
             "loc": Object {
@@ -77923,7 +77923,7 @@ Object {
             29,
             32,
           ],
-          "type": "ClassImplements",
+          "type": "TSClassImplements",
         },
       ],
       "loc": Object {
@@ -80037,7 +80037,7 @@ Object {
         ],
         "type": "TSInterfaceBody",
       },
-      "heritage": Array [],
+      "extends": Array [],
       "id": Object {
         "loc": Object {
           "end": Object {

@@ -1500,9 +1500,8 @@ export default function convert(config: ConvertConfig): ESTreeNode | null {
       });
 
       if (implementsClause) {
-        (result as any).implements = implementsClause.types.map(el =>
-          // ClassImplements node to match what Flow does.
-          convertHeritageClause(AST_NODE_TYPES.ClassImplements, el)
+        result.implements = implementsClause.types.map(el =>
+          convertHeritageClause(AST_NODE_TYPES.TSClassImplements, el)
         );
       }
 
@@ -2405,7 +2404,6 @@ export default function convert(config: ConvertConfig): ESTreeNode | null {
         );
       }
 
-      const hasImplementsClause = interfaceHeritageClauses.length > 0;
       const interfaceOpenBrace = nodeUtils.findNextToken(
         interfaceLastClassToken,
         ast,
@@ -2429,8 +2427,8 @@ export default function convert(config: ConvertConfig): ESTreeNode | null {
         id: convertChild(node.name)
       });
 
-      if (hasImplementsClause) {
-        result.heritage = interfaceHeritageClauses[0].types.map(el =>
+      if (interfaceHeritageClauses.length > 0) {
+        result.extends = interfaceHeritageClauses[0].types.map(el =>
           convertHeritageClause(AST_NODE_TYPES.TSInterfaceHeritage, el)
         );
       }

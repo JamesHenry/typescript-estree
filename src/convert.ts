@@ -274,12 +274,12 @@ export default function convert(config: ConvertConfig): ESTreeNode | null {
     nodeType: AST_NODE_TYPES,
     child: ts.ExpressionWithTypeArguments
   ): ESTreeNode {
-    const id = convertChild(child.expression)!;
+    const expression = convertChild(child.expression)!;
     const classImplementsNode: ESTreeNode = {
       type: nodeType,
-      loc: id.loc,
-      range: id.range,
-      id
+      loc: expression.loc,
+      range: expression.range,
+      expression
     };
     if (child.typeArguments && child.typeArguments.length) {
       classImplementsNode.typeParameters = convertTypeArgumentsToTypeParameters(

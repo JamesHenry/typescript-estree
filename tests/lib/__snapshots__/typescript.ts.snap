@@ -9739,7 +9739,7 @@ Object {
       },
       "implements": Array [
         Object {
-          "id": Object {
+          "expression": Object {
             "loc": Object {
               "end": Object {
                 "column": 77,
@@ -11925,7 +11925,7 @@ Object {
       },
       "implements": Array [
         Object {
-          "id": Object {
+          "expression": Object {
             "loc": Object {
               "end": Object {
                 "column": 24,
@@ -12149,7 +12149,7 @@ Object {
       },
       "implements": Array [
         Object {
-          "id": Object {
+          "expression": Object {
             "loc": Object {
               "end": Object {
                 "column": 56,
@@ -12426,7 +12426,7 @@ Object {
       },
       "implements": Array [
         Object {
-          "id": Object {
+          "expression": Object {
             "loc": Object {
               "end": Object {
                 "column": 24,
@@ -12758,7 +12758,7 @@ Object {
       },
       "implements": Array [
         Object {
-          "id": Object {
+          "expression": Object {
             "loc": Object {
               "end": Object {
                 "column": 24,
@@ -13487,7 +13487,7 @@ Object {
       },
       "implements": Array [
         Object {
-          "id": Object {
+          "expression": Object {
             "loc": Object {
               "end": Object {
                 "column": 38,
@@ -41565,7 +41565,7 @@ Object {
       },
       "extends": Array [
         Object {
-          "id": Object {
+          "expression": Object {
             "loc": Object {
               "end": Object {
                 "column": 25,
@@ -41788,7 +41788,7 @@ Object {
       },
       "extends": Array [
         Object {
-          "id": Object {
+          "expression": Object {
             "loc": Object {
               "end": Object {
                 "column": 25,
@@ -41823,7 +41823,7 @@ Object {
           "type": "TSInterfaceHeritage",
         },
         Object {
-          "id": Object {
+          "expression": Object {
             "loc": Object {
               "end": Object {
                 "column": 29,
@@ -46071,7 +46071,7 @@ Object {
       },
       "extends": Array [
         Object {
-          "id": Object {
+          "expression": Object {
             "loc": Object {
               "end": Object {
                 "column": 28,
@@ -77891,7 +77891,7 @@ Object {
       },
       "implements": Array [
         Object {
-          "id": Object {
+          "expression": Object {
             "loc": Object {
               "end": Object {
                 "column": 32,
@@ -78356,7 +78356,7 @@ Object {
       },
       "implements": Array [
         Object {
-          "id": Object {
+          "expression": Object {
             "loc": Object {
               "end": Object {
                 "column": 20,
@@ -80486,7 +80486,7 @@ Object {
       },
       "implements": Array [
         Object {
-          "id": Object {
+          "expression": Object {
             "loc": Object {
               "end": Object {
                 "column": 24,
@@ -85066,7 +85066,7 @@ Object {
       },
       "extends": Array [
         Object {
-          "id": Object {
+          "expression": Object {
             "loc": Object {
               "end": Object {
                 "column": 25,
@@ -85101,7 +85101,7 @@ Object {
           "type": "TSInterfaceHeritage",
         },
         Object {
-          "id": Object {
+          "expression": Object {
             "loc": Object {
               "end": Object {
                 "column": 37,

@@ -6,7 +6,7 @@
  * MIT License
  */
 import ts from 'typescript';
-import nodeUtils from './node-utils';
+import * as nodeUtils from './node-utils';
 import { AST_NODE_TYPES } from './ast-node-types';
 import { ESTreeNode } from './temp-types-based-on-js-source';
 import { TSNode } from './ts-nodes';

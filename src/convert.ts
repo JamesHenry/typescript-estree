@@ -2428,9 +2428,26 @@ export default function convert(config: ConvertConfig): ESTreeNode | null {
       });
 
       if (interfaceHeritageClauses.length > 0) {
-        result.extends = interfaceHeritageClauses[0].types.map(el =>
-          convertHeritageClause(AST_NODE_TYPES.TSInterfaceHeritage, el)
-        );
+        interfaceHeritageClauses.forEach(heritageClause => {
+          if (heritageClause.token === SyntaxKind.ExtendsKeyword) {
+            result.extends = result.extends || [];
+            result.extends = [
+              ...result.extends,
+              ...heritageClause.types.map(n =>
+                convertHeritageClause(AST_NODE_TYPES.TSInterfaceHeritage, n)
+              )
+            ];
+          }
+          if (heritageClause.token === SyntaxKind.ImplementsKeyword) {
+            result.implements = result.implements || [];
+            result.implements = [
+              ...result.implements,
+              ...heritageClause.types.map(n =>
+                convertHeritageClause(AST_NODE_TYPES.TSInterfaceHeritage, n)
+              )
+            ];
+          }
+        });
       }
 
       /**

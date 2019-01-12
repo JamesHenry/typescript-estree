@@ -315,16 +315,6 @@ tester.addFixturePatternConfig('typescript/basics', {
      */
     'arrow-function-with-type-parameters',
     /**
-     * Babel: ClassDeclaration + abstract: true
-     * ts-estree: TSAbstractClassDeclaration
-     */
-    'abstract-class-with-abstract-properties',
-    /**
-     * Babel: ClassProperty + abstract: true
-     * ts-estree: TSAbstractClassProperty
-     */
-    'abstract-class-with-abstract-readonly-property',
-    /**
      * Babel: TSExpressionWithTypeArguments
      * ts-estree: ClassImplements
      */
@@ -465,21 +455,7 @@ tester.addFixturePatternConfig('typescript/types', {
 });
 
 tester.addFixturePatternConfig('typescript/declare', {
-  fileType: 'ts',
-  ignore: [
-    /**
-     * AST difference
-     * ts-estree: heritage = []
-     * babel: heritage = undefined
-     */
-    'interface',
-    /**
-     * AST difference
-     * ts-estree: TSAbstractClassDeclaration
-     * babel: ClassDeclaration[abstract=true]
-     */
-    'abstract-class'
-  ]
+  fileType: 'ts'
 });
 
 tester.addFixturePatternConfig('typescript/namespaces-and-modules', {

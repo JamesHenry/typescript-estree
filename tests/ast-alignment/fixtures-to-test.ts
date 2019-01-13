@@ -382,6 +382,12 @@ tester.addFixturePatternConfig('typescript/basics', {
      */
     'type-assertion-arrow-function',
     /**
+     * Babel parses this incorrectly
+     * https://github.com/babel/babel/issues/9325
+     */
+    'class-multi-line-keyword-declare',
+    'class-multi-line-keyword-abstract',
+    /**
      * ts-estree: missing returnType in constructor
      * babel: parses it correctly
      */

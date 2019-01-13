@@ -388,6 +388,10 @@ tester.addFixturePatternConfig('typescript/basics', {
     'class-multi-line-keyword-declare',
     'class-multi-line-keyword-abstract',
     /**
+     * There is difference in range between babel and ts-estree
+     */
+    'class-with-constructor-and-modifier',
+    /**
      * ts-estree: missing returnType in constructor
      * babel: parses it correctly
      */

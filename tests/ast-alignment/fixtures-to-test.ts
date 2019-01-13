@@ -396,7 +396,11 @@ tester.addFixturePatternConfig('typescript/basics', {
      * ts-estree: missing typeParameters in constructor
      * babel: parses it correctly
      */
-    'class-with-constructor-and-type-parameters'
+    'class-with-constructor-and-type-parameters',
+    /**
+     * There is deference in AST between babel and ts-estree
+     */
+    'object-with-typed-methods'
   ],
   ignoreSourceType: [
     /**

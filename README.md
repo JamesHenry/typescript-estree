@@ -1,3 +1,7 @@
+# This project has been moved to the TypeScript ESLint organization -> https://typescript-eslint.io
+
+---
+
 <h1 align="center">TypeScript ESTree</h1>
 
 <p align="center">A parser that converts TypeScript source code into an <a href="https://github.com/estree/estree">ESTree</a>-compatible form</p>

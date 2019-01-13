@@ -185,23 +185,26 @@ export default function convert(config: ConvertConfig): ESTreeNode | null {
   ): ESTreeNode[] {
     // directives has to be unique, if directive is registered twice pick only first one
     const unique: string[] = [];
-    const allowDirectives = canContainDirective(node);
+    let allowDirectives = canContainDirective(node);
 
     return (
       nodes
         .map(statement => {
           const child = convertChild(statement);
-          if (
-            allowDirectives &&
-            child &&
-            child.expression &&
-            ts.isExpressionStatement(statement) &&
-            ts.isStringLiteral(statement.expression)
-          ) {
-            const raw = child.expression.raw!;
-            if (!unique.includes(raw)) {
-              child.directive = raw.slice(1, -1);
-              unique.push(raw);
+          if (allowDirectives) {
+            if (
+              child &&
+              child.expression &&
+              ts.isExpressionStatement(statement) &&
+              ts.isStringLiteral(statement.expression)
+            ) {
+              const raw = child.expression.raw!;
+              if (!unique.includes(raw)) {
+                child.directive = raw.slice(1, -1);
+                unique.push(raw);
+              }
+            } else {
+              allowDirectives = false;
             }
           }
           return child!; // child can be null but it's filtered below

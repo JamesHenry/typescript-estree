@@ -183,8 +183,6 @@ export default function convert(config: ConvertConfig): ESTreeNode | null {
   function convertBodyExpressions(
     nodes: ts.NodeArray<ts.Statement>
   ): ESTreeNode[] {
-    // directives has to be unique, if directive is registered twice pick only first one
-    const unique: string[] = [];
     let allowDirectives = canContainDirective(node);
 
     return (
@@ -199,10 +197,8 @@ export default function convert(config: ConvertConfig): ESTreeNode | null {
               ts.isStringLiteral(statement.expression)
             ) {
               const raw = child.expression.raw!;
-              if (!unique.includes(raw)) {
-                child.directive = raw.slice(1, -1);
-                unique.push(raw);
-              }
+              child.directive = raw.slice(1, -1);
+              return child!; // child can be null but it's filtered below
             } else {
               allowDirectives = false;
             }
